@@ -5,17 +5,19 @@ import java.awt.*;
 
 public class Button extends JLabel implements ClickableObject {
 
-    public static final Color BUTTON_COLOR = new Color(50, 50, 70);
+    public static final int WIDTH = 200;
+    public static final int HEIGHT = 50;
+    public static final Color BUTTON_COLOR_IDLE = new Color(150, 190, 200);
+    public static final Color BUTTON_COLOR_PRESSED = new Color(120, 150, 180);
 
     int id;
 
     Button(String text) {
         super(text, CENTER);
-        setPreferredSize(new Dimension(200, 50));
-        setBackground(BUTTON_COLOR);
-
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setOpaque(true);
+        setBackground(BUTTON_COLOR_IDLE);
         setFont(getFont().deriveFont(18f));
-        setPreferredSize(new Dimension(200, 50));
     }
 
     @Override

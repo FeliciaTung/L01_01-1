@@ -10,7 +10,7 @@ public class UIManager {
     public UIManager() {
         frame = new JFrame("CSCC01 - Team01 Project");
         frame.setVisible(true);
-        frame.setResizable(true);
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         switchView(new AddQuestionPage());
     }
