@@ -16,6 +16,7 @@ public class Button extends JLabel implements ClickableObject {
         super(text, CENTER);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setOpaque(true);
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         setBackground(BUTTON_COLOR_IDLE);
         setFont(getFont().deriveFont(18f));
     }
