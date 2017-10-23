@@ -17,14 +17,20 @@ CREATE TABLE IF NOT EXISTS users(
 	PRIMARY KEY (uid),
 	FOREIGN KEY(cid) REFERENCES course(cid)
 );
+CREATE TABLE IF NOT EXISTS questionType(
+	qtid INT,
+	questionType VARCHAR(255),
+	PRIMARY KEY(qtid)
+);
 CREATE TABLE IF NOT EXISTS question(
 	qid INT AUTO_INCREMENT,
 	question LONGTEXT,
 	answer VARCHAR(255),
 	course INT,
-	type VARCHAR(255),
+	qtype INT,
 	PRIMARY KEY(qid),
-	FOREIGN KEY(course) REFERENCES course(cid)
+	FOREIGN KEY(course) REFERENCES course(cid),
+	FOREIGN KEY(qtype) REFERENCES questionType(qtid)
 );
 CREATE TABLE IF NOT EXISTS mc(
 	qid INT,
