@@ -1,5 +1,8 @@
 package ui;
 
+import backend.DatabaseManager;
+import holders.Question;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -131,18 +134,17 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
     private void saveQuestion() {
         String question = questionInput.getText();
-        String[] answerChoices = new String[4];
-        int correctAnswer = 0;
+        String correctAnswer = null;
+        String[] answerChoices = new String[3];
 
         for (int i = 0; i < multipleChoiceRadioButtons.length; i++) {
             if (multipleChoiceRadioButtons[i].isSelected()) {
-                correctAnswer = i;
-                break;
+                correctAnswer = multipleChoiceOptions[i].getText();
+            } else {
+                answerChoices[correctAnswer == null ? i : i - 1] = multipleChoiceOptions[i].getText();
             }
-
-            answerChoices[i] = multipleChoiceOptions[i].getText();
         }
 
-        // TODO: Send this info to backend
+        DatabaseManager.addQuestion(new Question(question, correctAnswer, "", answerChoices));
     }
 }
