@@ -1,13 +1,13 @@
 CREATE DATABASE IF NOT EXISTS C01ProjectDB;
 USE C01ProjectDB;
 
-CREATE TABLE course(
+CREATE TABLE IF NOT EXISTS course(
 	cid INT AUTO_INCREMENT,
 	course VARCHAR(255),
 	PRIMARY KEY(cid)
 );
 
-CREATE TABLE users(
+CREATE TABLE IF NOT EXISTS users(
 	uid INT AUTO_INCREMENT,
 	uname VARCHAR(255) NOT NULL,
 	email VARCHAR(255) NOT NULL,
@@ -17,22 +17,28 @@ CREATE TABLE users(
 	PRIMARY KEY (uid),
 	FOREIGN KEY(cid) REFERENCES course(cid)
 );
-CREATE TABLE question(
+CREATE TABLE IF NOT EXISTS questionType(
+	qtid INT,
+	questionType VARCHAR(255),
+	PRIMARY KEY(qtid)
+);
+CREATE TABLE IF NOT EXISTS question(
 	qid INT AUTO_INCREMENT,
 	question LONGTEXT,
 	answer VARCHAR(255),
 	course INT,
-	type VARCHAR(255),
+	qtype INT,
 	PRIMARY KEY(qid),
-	FOREIGN KEY(course) REFERENCES course(cid)
+	FOREIGN KEY(course) REFERENCES course(cid),
+	FOREIGN KEY(qtype) REFERENCES questionType(qtid)
 );
-CREATE TABLE mc(
+CREATE TABLE IF NOT EXISTS mc(
 	qid INT,
 	choice LONGTEXT,
 	PRIMARY KEY(qid),
 	FOREIGN KEY(qid) REFERENCES question(qid)
 );
-CREATE TABLE assignment(
+CREATE TABLE IF NOT EXISTS assignment(
 	aid INT AUTO_INCREMENT, 
 	qid INT,
 	cid INT,
@@ -40,7 +46,7 @@ CREATE TABLE assignment(
 	FOREIGN KEY(qid) REFERENCES question(qid),
 	FOREIGN KEY(cid) REFERENCES course(cid)
 );
-CREATE TABLE marks(
+CREATE TABLE IF NOT EXISTS marks(
 	student INT,
 	aid INT, 
 	cid INT,
