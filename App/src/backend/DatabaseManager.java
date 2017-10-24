@@ -17,7 +17,7 @@ public class DatabaseManager {
         	// SQL Query
         	String sql = "INSERT INTO question(question) VALUES(?)";
         	PreparedStatement pstmt = conn.prepareStatement(sql);
-        	pstmt.setString(1, question.question_string);
+        	pstmt.setString(1, question.question);
         	pstmt.executeUpdate();
     	} catch(SQLException e) {
     		System.out.println(e.getMessage());
