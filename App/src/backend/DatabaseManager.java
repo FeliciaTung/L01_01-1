@@ -1,5 +1,6 @@
 package backend;
 
+import holders.Assignment;
 import holders.Question;
 
 import java.sql.Connection;
@@ -39,4 +40,26 @@ public class DatabaseManager {
 
         }
     }
+
+    public static Question getQuestion(int questionID) {
+
+        // Dummy return value
+        return new Question("", "", "", new String[]{""});
+    }
+
+    public static Question[] getAllQuestions(int courseID) {
+
+        // Dummy return value
+        return new Question[]{new Question("", "", "", new String[]{""})};
+    }
+
+    public static void addAssignment(Assignment assignment) {
+
+    }
+
+    public static Assignment getAssignment(int assignmentID) {
+
+        return new Assignment("Assignment", 0, new int[]{});
+    }
+
 }
