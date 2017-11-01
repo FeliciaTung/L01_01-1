@@ -10,14 +10,14 @@ import java.awt.event.MouseListener;
 
 public class AddQuestionPage extends JPanel implements MouseListener {
 
-    private Button saveButon;
+    private Button saveButton;
     private InputField questionInput;
     private InputField[] multipleChoiceOptions;
     private RadioButton[] multipleChoiceRadioButtons;
 
     public AddQuestionPage() {
         super();
-        saveButon = new SaveQuestionButton();
+        saveButton = new SaveQuestionButton();
         questionInput = new InputField();
         multipleChoiceOptions = new InputField[4];
         multipleChoiceRadioButtons = new RadioButton[4];
@@ -77,8 +77,8 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
         add(UIManager.getSpacing(800, 40));
 
-        saveButon.addMouseListener(this);
-        add(saveButon);
+        saveButton.addMouseListener(this);
+        add(saveButton);
 
     }
 
@@ -118,7 +118,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
             case ClickableObject.SAVE_QUESTION:
-                saveButon.setBackground(Button.BUTTON_COLOR_PRESSED);
+                saveButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
         }
     }
@@ -127,7 +127,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
             case ClickableObject.SAVE_QUESTION:
-                saveButon.setBackground(Button.BUTTON_COLOR_IDLE);
+                saveButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
         }
     }
