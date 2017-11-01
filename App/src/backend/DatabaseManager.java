@@ -6,6 +6,7 @@ import holders.Question;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
@@ -26,9 +27,10 @@ public class DatabaseManager {
     public static void addQuestion(Question question) {
         // SQL Query
         try {
-            String sql = "INSERT INTO question(question) VALUES(?)";
+            String sql = "INSERT INTO question(question, answer) VALUES(?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, question.question);
+            pstmt.setString(2, question.answer);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -37,6 +39,32 @@ public class DatabaseManager {
 
         // If true we know the question is a multiple choice question
         if (question.multipleChoices != null) {
+            try {
+                String sql_get = "SELECT qid FROM question WHERE question=?";
+				PreparedStatement ret_id = conn.prepareStatement(sql_get);
+				ret_id = conn.prepareStatement(sql_get);
+				ret_id.setString(1, question.question);
+				// Result set for desired qid
+		        ResultSet rs = ret_id.executeQuery();
+            	
+		        
+		        Integer qid = null;
+		        if (rs.next()) {
+		            qid = rs.getInt(1);
+		        }
+		        
+                String sql = "INSERT INTO mc(qid, choice) VALUES(?, ?)";
+                PreparedStatement add_mc = conn.prepareStatement(sql);
+                add_mc.setInt(1, qid);
+                for (int i = 0; i < (question.multipleChoices).length; i++) {
+                    add_mc.setString(2, question.multipleChoices[i]);
+                    add_mc.executeUpdate();
+                	
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
         }
     }
