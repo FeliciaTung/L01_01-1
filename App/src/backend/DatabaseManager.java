@@ -70,9 +70,25 @@ public class DatabaseManager {
     }
 
     public static Question getQuestion(int questionID) {
+    	
+  
+        try {
+            String sql = "SELECT question, answer FROM question WHERE questionID=?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, questionID);
+            ResultSet rs = pstmt.executeQuery();
+            String question = null, answer = null;
+            while (rs.next()) {
+            	question = rs.getString(1);
+            	answer = rs.getString(2);
+            }
+            Question res_question = new Question(question, answer, null, null);
+            return res_question;
 
-        // Dummy return value
-        return new Question("", "", "", new String[]{""});
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static Question[] getAllQuestions(int courseID) {
