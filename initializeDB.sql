@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users(
 	FOREIGN KEY(cid) REFERENCES course(cid)
 );
 CREATE TABLE IF NOT EXISTS questionType(
-	qtid INT,
+	qtid INT AUTO_INCREMENT,
 	questionType VARCHAR(255),
 	PRIMARY KEY(qtid)
 );
@@ -42,12 +42,20 @@ CREATE TABLE IF NOT EXISTS mc(
 CREATE TABLE IF NOT EXISTS assignment(
 	aid INT AUTO_INCREMENT,
 	aname VARCHAR(255),
-	qid INT,
 	cid INT,
 	PRIMARY KEY(aid),
-	FOREIGN KEY(qid) REFERENCES question(qid),
 	FOREIGN KEY(cid) REFERENCES course(cid)
 );
+
+CREATE TABLE IF NOT EXISTS related_question(
+	aid INT ,
+	qid INT,
+	PRIMARY KEY(aid, qid),
+	FOREIGN KEY(qid) REFERENCES question(qid),
+	FOREIGN KEY(aid) REFERENCES assignment(aid)
+);
+
+
 CREATE TABLE IF NOT EXISTS marks(
 	student INT,
 	aid INT, 
@@ -58,3 +66,6 @@ CREATE TABLE IF NOT EXISTS marks(
 	FOREIGN KEY(cid) REFERENCES course(cid),
 	FOREIGN KEY(student) REFERENCES users(uid)
 );
+
+INSERT INTO questionType(questionType) VALUE("multiple choice");
+INSERT INTO questionType(questionType) VALUE ("short answerwer");

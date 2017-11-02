@@ -59,7 +59,7 @@ public class DatabaseManager {
                 for (int i = 0; i < (question.multipleChoices).length; i++) {
                     add_mc.setString(2, question.multipleChoices[i]);
                     add_mc.executeUpdate();
-                	
+
                 }
 
             } catch (SQLException e) {
@@ -70,8 +70,8 @@ public class DatabaseManager {
     }
 
     public static Question getQuestion(int questionID) {
-    	
-  
+
+
         try {
             String sql = "SELECT question, answer FROM question WHERE questionID=?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -94,11 +94,43 @@ public class DatabaseManager {
     public static Question[] getAllQuestions(int courseID) {
 
         // Dummy return value
-        return new Question[]{new Question("", "", "", new String[]{""})};
+        return new Question[]{new Question(0, "", "", "", new String[]{""})};
     }
 
     public static void addAssignment(Assignment assignment) {
+        // SQL Query
+        String sql;
+        PreparedStatement pstmt;
+        int aid = -1;
+        try {
+            // add assignment to table
+            sql = "INSERT INTO assignment(aname) VALUES(?)";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, assignment.name);
+            pstmt.executeUpdate();
 
+            // get the ID of the new assignment
+            sql = "SELECT aid FROM assignment ORDER BY aid DESC LIMIT 1";
+            pstmt  = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.first()) {
+                aid = rs.getInt(1);
+            }
+
+            // add related questions to the assignment
+            for (int qid : assignment.questions) {
+
+                sql = "INSERT INTO related_question(aid,qid) VALUES(?, ?)";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, aid);
+                pstmt.setInt(2, qid);
+                pstmt.executeUpdate();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Assignment getAssignment(int assignmentID) {
