@@ -1,6 +1,7 @@
 package ui;
 
 import backend.DatabaseManager;
+import holders.Assignment;
 import holders.Question;
 
 import javax.swing.*;
@@ -20,7 +21,6 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private Question[] questionList;
     private JLabel[] questionLabels;
     private CheckBox[] questionCheckBoxes;
-
 
 
     public AddAssignmentPage(Question[] questions) {
@@ -176,19 +176,28 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     }
 
     private void createAssignment() {
-        //TODO: get question list from db and addt the selected ones to assignment
+        //TODO: get question list from db and add to the selected ones to assignment
         String aname = assignmentInput.getText();
-//        String[] questionList = new Questions[3];
+        int numQuestion = 0;
+        int count = 0;
+        for (int j = 0; j < questionCheckBoxes.length; j++) {
+            if (questionCheckBoxes[j].isSelected()) {
+                numQuestion++;
+            }
+        }
+        int[] selectedQuestion = new int[numQuestion];
 
         for (int i = 0; i < questionCheckBoxes.length; i++) {
-            if (questionCheckBoxes[i].isSelected()) {
-//                questionList[i] = new Question(id);
+            if (questionCheckBoxes[i].isSelected() && questionList[i].id != -1) {
 
+                selectedQuestion[count] = questionList[i].id;
+                count++;
+            } else {
+                System.out.println("Invalid Question id: " + questionList[i].question);
             }
-
-//      DatabaseManager.addAssignment(new Assignment(aname, questionList));
 
 
         }
+        DatabaseManager.addAssignment(new Assignment(aname, 0, selectedQuestion));
     }
 }
