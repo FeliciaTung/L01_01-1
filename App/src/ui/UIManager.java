@@ -12,7 +12,7 @@ public class UIManager {
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        switchView(new AddQuestionPage());
+        switchView(new AssignmentPage());
     }
 
     public void switchView(JPanel view) {

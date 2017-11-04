@@ -94,7 +94,7 @@ public class DatabaseManager {
     public static Question[] getAllQuestions(int courseID) {
 
         // Dummy return value
-        return new Question[]{new Question(0, "", "", "", new String[]{""})};
+        return new Question[]{new Question("", "", "", new String[]{""})};
     }
 
     public static void addAssignment(Assignment assignment) {
