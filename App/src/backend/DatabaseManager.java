@@ -73,16 +73,31 @@ public class DatabaseManager {
 
 
         try {
-            String sql = "SELECT question, answer FROM question WHERE questionID=?";
+            String sql = "SELECT question, answer, qtype FROM question WHERE questionID=?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, questionID);
             ResultSet rs = pstmt.executeQuery();
-            String question = null, answer = null;
+            String question = null, answer = null, qid = null;
             while (rs.next()) {
             	question = rs.getString(1);
             	answer = rs.getString(2);
+            	qid = rs.getString(3);
             }
-            Question res_question = new Question(question, answer, null, null);
+            String[] mc_choices = null;
+            // If multiple choice, need mc_choices.
+            if (qid == "") {
+            	String sql_mc = "SELECT choice FROM mc WHERE questionID=?";
+                PreparedStatement pstmt_mc = conn.prepareStatement(sql_mc);
+                pstmt_mc.setInt(1, questionID);
+                ResultSet rs_mc = pstmt_mc.executeQuery();
+                String string_mc = null;
+                while (rs_mc.next()) {
+                	string_mc = rs_mc.getString(1);
+                }
+                mc_choices = string_mc.split(",");
+            }
+            
+            Question res_question = new Question(question, answer, null, mc_choices);
             return res_question;
 
         } catch (SQLException e) {
