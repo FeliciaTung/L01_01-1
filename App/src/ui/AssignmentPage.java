@@ -138,10 +138,10 @@ public class AssignmentPage extends JPanel implements MouseListener {
         if (currentQuestion > 0) {
             if (progressString.equals("")) {
                 progressString += "Final Score: " + correctAnswers + "/" + currentQuestion +
-                        " (" + ((int) ((float) correctAnswers / currentQuestion * 100)) + "%)";
+                        " (" + Math.round((float) correctAnswers / currentQuestion * 100) + "%)";
             } else {
                 progressString += " - Current Score: " + correctAnswers + "/" + currentQuestion +
-                        " (" + ((int) ((float) correctAnswers / currentQuestion * 100)) + "%)";
+                        " (" + Math.round((float) correctAnswers / currentQuestion * 100) + "%)";
             }
         }
 
