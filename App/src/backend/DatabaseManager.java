@@ -59,7 +59,7 @@ public class DatabaseManager {
                 for (int i = 0; i < (question.multipleChoices).length; i++) {
                     add_mc.setString(2, question.multipleChoices[i]);
                     add_mc.executeUpdate();
-                	
+
                 }
 
             } catch (SQLException e) {
@@ -71,18 +71,81 @@ public class DatabaseManager {
 
     public static Question getQuestion(int questionID) {
 
-        // Dummy return value
-        return new Question("", "", "", new String[]{""});
+
+        try {
+            String sql = "SELECT question, answer, qtype FROM question WHERE questionID=?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, questionID);
+            ResultSet rs = pstmt.executeQuery();
+            String question = null, answer = null, qid = null;
+            while (rs.next()) {
+            	question = rs.getString(1);
+            	answer = rs.getString(2);
+            	qid = rs.getString(3);
+            }
+            String[] mc_choices = null;
+            // If multiple choice, need mc_choices.
+            if (qid == "") {
+            	String sql_mc = "SELECT choice FROM mc WHERE questionID=?";
+                PreparedStatement pstmt_mc = conn.prepareStatement(sql_mc);
+                pstmt_mc.setInt(1, questionID);
+                ResultSet rs_mc = pstmt_mc.executeQuery();
+                String string_mc = null;
+                while (rs_mc.next()) {
+                	string_mc = rs_mc.getString(1);
+                }
+                mc_choices = string_mc.split(",");
+            }
+            
+            Question res_question = new Question(question, answer, null, mc_choices);
+            return res_question;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static Question[] getAllQuestions(int courseID) {
 
         // Dummy return value
-        return new Question[]{new Question("", "", "", new String[]{""})};
+        return new Question[]{new Question(0, "", "", "", new String[]{""})};
     }
 
     public static void addAssignment(Assignment assignment) {
+        // SQL Query
+        String sql;
+        PreparedStatement pstmt;
+        int aid = -1;
+        try {
+            // add assignment to table
+            sql = "INSERT INTO assignment(aname) VALUES(?)";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, assignment.name);
+            pstmt.executeUpdate();
 
+            // get the ID of the new assignment
+            sql = "SELECT aid FROM assignment ORDER BY aid DESC LIMIT 1";
+            pstmt  = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.first()) {
+                aid = rs.getInt(1);
+            }
+
+            // add related questions to the assignment
+            for (int qid : assignment.questions) {
+
+                sql = "INSERT INTO related_question(aid,qid) VALUES(?, ?)";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, aid);
+                pstmt.setInt(2, qid);
+                pstmt.executeUpdate();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Assignment getAssignment(int assignmentID) {
