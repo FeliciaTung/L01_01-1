@@ -78,8 +78,6 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             add(UIManager.getSpacing(800, 1));
         }
 
-        questionCheckBoxes[0].select();
-
         add(UIManager.getSpacing(800, 40));
 
         saveButton.addMouseListener(this);
@@ -95,7 +93,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 createAssignment();
                 break;
             case ClickableObject.CHECKBOX:
-                id = ((CheckBox ) e.getSource()).getQuestionID();
+                id = ((CheckBox) e.getSource()).getQuestionID();
                 for (CheckBox checkbox : questionCheckBoxes) {
                     if (id == checkbox.getQuestionID()) {
                         if (!checkbox.isSelected())
@@ -180,12 +178,13 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         ArrayList<Integer> selectedQuestion = new ArrayList<>();
 
         for (int i = 0; i < questionCheckBoxes.length; i++) {
-            if (questionCheckBoxes[i].isSelected() && questionList[i].id != -1) {
+            if (questionCheckBoxes[i].isSelected()) {
+                if (questionList[i].id != -1) {
+                    selectedQuestion.add(questionList[i].id);
 
-                selectedQuestion.add(questionList[i].id);
-
-            } else {
-                System.out.println("Invalid Question id: " + questionList[i].question);
+                } else {
+                    System.out.println("Invalid Question id: " + questionList[i].question);
+                }
             }
 
 
