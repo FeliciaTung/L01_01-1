@@ -61,7 +61,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
         add(UIManager.getSpacing(800, 30));
 
-        // topMenuOptions[0].select();
+        topMenuOptions[0].select();
 
         if (topMenuOptions[0].isSelected()) {
             addMultipleChoice();
