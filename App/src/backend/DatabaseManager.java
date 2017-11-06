@@ -109,9 +109,42 @@ public class DatabaseManager {
     }
 
     public static Question[] getAllQuestions(int courseID) {
-
-        // Dummy return value
-        return new Question[]{new Question(0, "", "", "", new String[]{""})};
+        try {
+            String sql = "SELECT question, answer, qtype, qid FROM question WHERE course=?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, courseID);
+            ResultSet rs = pstmt.executeQuery();
+            String question = null, answer = null;
+            int qtype = 0, qid = 0, index = 0;
+            Question[] question_list;
+            String[] mc_choices = null;
+            
+            while (rs.next()) {
+            	question = rs.getString(1);
+            	answer = rs.getString(2);
+            	qtype = rs.getInt(3);
+            	qid = rs.getInt(4);
+                // Again check for multiple choice.
+                if (qtype == 1) {
+                	String sql_mc = "SELECT choice FROM mc WHERE questionID=?";
+                    PreparedStatement pstmt_mc = conn.prepareStatement(sql_mc);
+                    pstmt_mc.setInt(1, qid);
+                    ResultSet rs_mc = pstmt_mc.executeQuery();
+                    String string_mc = null;
+                    while (rs_mc.next()) {
+                    	string_mc = rs_mc.getString(1);
+                    }
+                    mc_choices = string_mc.split(",");
+                }
+            	question_list[index] = new Question(qid, question, answer, null, mc_choices);
+            	index += 1;
+            }
+            return question_list;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void addAssignment(Assignment assignment) {
