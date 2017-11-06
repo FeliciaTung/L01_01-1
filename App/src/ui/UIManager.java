@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class UIManager {
 
-    private JFrame frame;
+    private static JFrame frame;
 
-    public UIManager() {
+    public static void createUI() {
         frame = new JFrame("CSCC01 - Team01 Project");
         frame.setVisible(true);
         frame.setResizable(false);
@@ -28,12 +28,12 @@ public class UIManager {
         ArrayList<Question> list = DatabaseManager.getAllQuestions(1);
         Question[] qlist = list.toArray(new Question[list.size()]);
 
-        switchView(new AddAssignmentPage(qlist));
+//        switchView(new AddAssignmentPage(qlist));
 
-//        switchView(new AddQuestionPage());
+        switchView(new AddQuestionPage());
     }
 
-    public void switchView(JPanel view) {
+    public static void switchView(JPanel view) {
         frame.setContentPane(view);
         frame.pack();
         view.updateUI();
