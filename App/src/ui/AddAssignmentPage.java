@@ -95,7 +95,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 createAssignment();
                 break;
             case ClickableObject.CHECKBOX:
-                id = ((CheckBox ) e.getSource()).getQuestionID();
+                id = ((CheckBox) e.getSource()).getQuestionID();
                 for (CheckBox checkbox : questionCheckBoxes) {
                     if (id == checkbox.getQuestionID()) {
                         if (!checkbox.isSelected())
@@ -180,15 +180,14 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         ArrayList<Integer> selectedQuestion = new ArrayList<>();
 
         for (int i = 0; i < questionCheckBoxes.length; i++) {
-            if (questionCheckBoxes[i].isSelected() && questionList[i].id != -1) {
+            if (questionCheckBoxes[i].isSelected()) {
+                if (questionList[i].id != -1) {
+                    selectedQuestion.add(questionList[i].id);
+                } else {
+                    System.out.println("Questions with invalid Question ID: " + questionList[i].question);
 
-                selectedQuestion.add(questionList[i].id);
-
-            } else {
-                System.out.println("Invalid Question id: " + questionList[i].question);
+                }
             }
-
-
         }
         DatabaseManager.addAssignment(new Assignment(aname, 0, selectedQuestion));
     }

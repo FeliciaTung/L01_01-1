@@ -6,6 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         DatabaseManager.connectDB();
-        uiManager = new UIManager();
+        UIManager.createUI();
+
     }
 }
