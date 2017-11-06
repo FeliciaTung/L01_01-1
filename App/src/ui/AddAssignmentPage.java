@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 
 public class AddAssignmentPage extends JPanel implements MouseListener {
@@ -56,7 +57,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         add(UIManager.getSpacing(800, 30));
 
         for (int i = 0; i < questionList.length; i++) {
-            questionCheckBoxes[i] = new CheckBox(ClickableObject.MULTIPLE_CHOICE_OPTIONS[i]);
+            questionCheckBoxes[i] = new CheckBox(questionList[i].id);
             questionCheckBoxes[i].addMouseListener(this);
             add(questionCheckBoxes[i]);
 
@@ -93,12 +94,10 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             case ClickableObject.SAVE_QUESTION:
                 createAssignment();
                 break;
-            case ClickableObject.MULTIPLE_CHOICE_OPTION_1:
-            case ClickableObject.MULTIPLE_CHOICE_OPTION_2:
-            case ClickableObject.MULTIPLE_CHOICE_OPTION_3:
-            case ClickableObject.MULTIPLE_CHOICE_OPTION_4:
+            case ClickableObject.CHECKBOX:
+                id = ((CheckBox ) e.getSource()).getQuestionID();
                 for (CheckBox checkbox : questionCheckBoxes) {
-                    if (id == checkbox.getID()) {
+                    if (id == checkbox.getQuestionID()) {
                         if (!checkbox.isSelected())
                             checkbox.select();
                         else
@@ -178,20 +177,13 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private void createAssignment() {
         //TODO: get question list from db and add to the selected ones to assignment
         String aname = assignmentInput.getText();
-        int numQuestion = 0;
-        int count = 0;
-        for (int j = 0; j < questionCheckBoxes.length; j++) {
-            if (questionCheckBoxes[j].isSelected()) {
-                numQuestion++;
-            }
-        }
-        int[] selectedQuestion = new int[numQuestion];
+        ArrayList<Integer> selectedQuestion = new ArrayList<>();
 
         for (int i = 0; i < questionCheckBoxes.length; i++) {
             if (questionCheckBoxes[i].isSelected() && questionList[i].id != -1) {
 
-                selectedQuestion[count] = questionList[i].id;
-                count++;
+                selectedQuestion.add(questionList[i].id);
+
             } else {
                 System.out.println("Invalid Question id: " + questionList[i].question);
             }

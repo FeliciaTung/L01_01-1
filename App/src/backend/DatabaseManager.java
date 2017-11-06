@@ -13,7 +13,9 @@ import java.util.ArrayList;
 
 public class DatabaseManager {
     public static Connection conn;
-
+    private static String sql;
+    private static PreparedStatement pstmt;
+    private static ResultSet rs;
     public static void connectDB(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -28,8 +30,8 @@ public class DatabaseManager {
     public static void addQuestion(Question question) {
         // SQL Query
         try {
-            String sql = "INSERT INTO question(question, answer) VALUES(?, ?)";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            sql = "INSERT INTO question(question, answer) VALUES(?, ?)";
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, question.question);
             pstmt.setString(2, question.answer);
             pstmt.executeUpdate();
@@ -74,10 +76,10 @@ public class DatabaseManager {
 
 
         try {
-            String sql = "SELECT question, answer, qtype, qid FROM question WHERE qid=?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            sql = "SELECT question, answer, qtype, qid FROM question WHERE questionID=?";
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, questionID);
-            ResultSet rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery();
             String question = null, answer = null;
             int qtype = 0, qid = 0;
             while (rs.next()) {
@@ -111,15 +113,15 @@ public class DatabaseManager {
 
     public static ArrayList<Question> getAllQuestions(int courseID) {
         try {
-            String sql = "SELECT question, answer, qtype, qid FROM question WHERE course=?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            sql = "SELECT question, answer, qtype, qid FROM question WHERE course=?";
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, courseID);
-            ResultSet rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery();
             String question = null, answer = null;
             int qtype = 0, qid = 0;
             ArrayList<Question> question_list = new ArrayList<Question>();
             String[] mc_choices = null;
-            
+
             while (rs.next()) {
             	question = rs.getString(1);
             	answer = rs.getString(2);
@@ -137,10 +139,10 @@ public class DatabaseManager {
                     }
                     mc_choices = string_mc.split(",");
                 }
-                question.add(new Question(qid, question, answer, null, mc_choices));
+                question_list.add(new Question(qid, question, answer, null, mc_choices));
             }
             return question_list;
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -148,10 +150,8 @@ public class DatabaseManager {
     }
 
     public static void addAssignment(Assignment assignment) {
-        // SQL Query
-        String sql;
-        PreparedStatement pstmt;
         int aid = -1;
+
         try {
             // add assignment to table
             sql = "INSERT INTO assignment(aname) VALUES(?)";
@@ -184,8 +184,37 @@ public class DatabaseManager {
     }
 
     public static Assignment getAssignment(int assignmentID) {
+        String aname = "";
+        ArrayList<Integer> qids  = new ArrayList<>();
+        int aid = -1;
+        Assignment assignment = null;
+        try {
+            // get assignment name and id
+            sql = "SELECT aid, aname FROM assignment WHERE aid=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, assignmentID);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                aid = rs.getInt(1);
+                aname = rs.getString(2);
+            }
+            // get question list for this assignment
+            sql = "SELECT qid FROM assignment WHERE aid=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, assignmentID);
+            rs = pstmt.executeQuery();
+            while(rs.next()){
+                qids.add(rs.getInt(1));
+            }
 
-        return new Assignment("Assignment", 0, new int[]{});
+            assignment = new Assignment(aid,aname, -1, qids);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return assignment;
     }
 
 }

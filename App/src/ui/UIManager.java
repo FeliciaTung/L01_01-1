@@ -1,9 +1,11 @@
 package ui;
 
+import backend.DatabaseManager;
 import holders.Question;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class UIManager {
 
@@ -14,17 +16,19 @@ public class UIManager {
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        //TODO: update the parameters
-//        Question[] list = DatabaseManager.getQuestionsList();
 
-        //TODO: create question function and db function to retrieve existing question name by id
+
+
+        /*
         Question one = new Question(1,"question1", "ans1", "algebra", null);
         Question two = new Question(2,"question2", "ans1", "algebra", null);
         Question three = new Question(3,"question3", "ans1", "algebra", null );
+*/
+        // get array list of question from database and convert into array
+        ArrayList<Question> list = DatabaseManager.getAllQuestions(1);
+        Question[] qlist = list.toArray(new Question[list.size()]);
 
-        Question[] list = {one, two, three};
-
-        switchView(new AddAssignmentPage(list));
+        switchView(new AddAssignmentPage(qlist));
 
 //        switchView(new AddQuestionPage());
     }
