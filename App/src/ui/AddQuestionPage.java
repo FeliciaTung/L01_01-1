@@ -23,7 +23,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         questionInput = new InputField();
         topMenuOptions = new RadioButton[2];
 
-        setPreferredSize(new Dimension(800, 660));
+        setPreferredSize(new Dimension(800, 680));
         setBackground(Color.WHITE);
 
         JLabel title = new JLabel("Add a Question", SwingConstants.CENTER);
@@ -59,7 +59,17 @@ public class AddQuestionPage extends JPanel implements MouseListener {
             }
         }
 
-        topMenuOptions[0].select();
+        add(UIManager.getSpacing(800, 30));
+
+        // topMenuOptions[0].select();
+
+        if (topMenuOptions[0].isSelected()) {
+            addMultipleChoice();
+        }
+
+        if (topMenuOptions[1].isSelected()) {
+            addShortAnswer();
+        }
 
         add(UIManager.getSpacing(800, 30));
 
