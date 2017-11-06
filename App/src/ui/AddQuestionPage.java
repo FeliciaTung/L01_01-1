@@ -10,19 +10,20 @@ import java.awt.event.MouseListener;
 
 public class AddQuestionPage extends JPanel implements MouseListener {
 
-    private Button saveButon;
+    private Button saveButton;
     private InputField questionInput;
-    private InputField[] multipleChoiceOptions;
-    private RadioButton[] multipleChoiceRadioButtons;
+    private InputField answerInput = new InputField();
+    private InputField[] multipleChoiceOptions = new InputField[4];
+    private RadioButton[] multipleChoiceRadioButtons = new RadioButton[4];
+    private RadioButton[] topMenuOptions;
 
     public AddQuestionPage() {
         super();
-        saveButon = new SaveQuestionButton();
+        saveButton = new SaveQuestionButton();
         questionInput = new InputField();
-        multipleChoiceOptions = new InputField[4];
-        multipleChoiceRadioButtons = new RadioButton[4];
+        topMenuOptions = new RadioButton[2];
 
-        setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(800, 660));
         setBackground(Color.WHITE);
 
         JLabel title = new JLabel("Add a Question", SwingConstants.CENTER);
@@ -40,6 +41,34 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
         add(UIManager.getSpacing(800, 30));
 
+        for (int i = 0; i < topMenuOptions.length; i++) {
+            topMenuOptions[i] = new RadioButton(ClickableObject.QUESTION_OPTIONS[i]);
+            topMenuOptions[i].addMouseListener(this);
+            add(topMenuOptions[i]);
+
+            if (topMenuOptions[i].getID() == (21 + i)) {
+                JLabel menuText = new JLabel("Multiple Choice", SwingConstants.LEFT);
+                menuText.setFont(getFont().deriveFont(16f));
+                menuText.setPreferredSize(new Dimension(InputField.WIDTH, 25));
+                add(menuText);
+            } else {
+                JLabel menuText = new JLabel("Short Answer", SwingConstants.LEFT);
+                menuText.setFont(getFont().deriveFont(16f));
+                menuText.setPreferredSize(new Dimension(InputField.WIDTH, 25));
+                add(menuText);
+            }
+        }
+
+        topMenuOptions[0].select();
+
+        add(UIManager.getSpacing(800, 30));
+
+        saveButton.addMouseListener(this);
+        add(saveButton);
+
+    }
+
+    public void addMultipleChoice() {
         for (int i = 0; i < multipleChoiceOptions.length; i++) {
             if (i % 2 == 0) {
                 if (i > 0) {
@@ -76,10 +105,13 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         multipleChoiceRadioButtons[0].select();
 
         add(UIManager.getSpacing(800, 40));
+    }
 
-        saveButon.addMouseListener(this);
-        add(saveButon);
-
+    public void addShortAnswer() {
+        JLabel typeAnswer = new JLabel("Answer:", SwingConstants.RIGHT);
+        typeAnswer.setFont(getFont().deriveFont(18f));
+        add(typeAnswer);
+        add(answerInput);
     }
 
     @Override
@@ -94,6 +126,16 @@ public class AddQuestionPage extends JPanel implements MouseListener {
             case ClickableObject.MULTIPLE_CHOICE_OPTION_3:
             case ClickableObject.MULTIPLE_CHOICE_OPTION_4:
                 for (RadioButton radioButton : multipleChoiceRadioButtons) {
+                    if (id == radioButton.getID()) {
+                        radioButton.select();
+                    } else {
+                        radioButton.deselect();
+                    }
+                }
+                break;
+            case ClickableObject.MC_BUTTON:
+            case ClickableObject.SA_BUTTON:
+                for (RadioButton radioButton : topMenuOptions) {
                     if (id == radioButton.getID()) {
                         radioButton.select();
                     } else {
@@ -118,7 +160,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
             case ClickableObject.SAVE_QUESTION:
-                saveButon.setBackground(Button.BUTTON_COLOR_PRESSED);
+                saveButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
         }
     }
@@ -127,7 +169,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
             case ClickableObject.SAVE_QUESTION:
-                saveButon.setBackground(Button.BUTTON_COLOR_IDLE);
+                saveButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
         }
     }
