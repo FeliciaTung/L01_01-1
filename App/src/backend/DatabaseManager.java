@@ -74,7 +74,7 @@ public class DatabaseManager {
 
 
         try {
-            String sql = "SELECT question, answer, qtype, qid FROM question WHERE questionID=?";
+            String sql = "SELECT question, answer, qtype, qid FROM question WHERE qid=?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, questionID);
             ResultSet rs = pstmt.executeQuery();
@@ -89,7 +89,7 @@ public class DatabaseManager {
             String[] mc_choices = null;
             // If multiple choice, need mc_choices.
             if (qtype == 1) {
-            	String sql_mc = "SELECT choice FROM mc WHERE questionID=?";
+            	String sql_mc = "SELECT choice FROM mc WHERE qid=?";
                 PreparedStatement pstmt_mc = conn.prepareStatement(sql_mc);
                 pstmt_mc.setInt(1, questionID);
                 ResultSet rs_mc = pstmt_mc.executeQuery();
@@ -127,7 +127,7 @@ public class DatabaseManager {
             	qid = rs.getInt(4);
                 // Again check for multiple choice.
                 if (qtype == 1) {
-                	String sql_mc = "SELECT choice FROM mc WHERE questionID=?";
+                	String sql_mc = "SELECT choice FROM mc WHERE qid=?";
                     PreparedStatement pstmt_mc = conn.prepareStatement(sql_mc);
                     pstmt_mc.setInt(1, qid);
                     ResultSet rs_mc = pstmt_mc.executeQuery();
