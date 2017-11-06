@@ -76,7 +76,7 @@ public class DatabaseManager {
 
 
         try {
-            sql = "SELECT question, answer, qtype, qid FROM question WHERE questionID=?";
+            sql = "SELECT question, answer, qtype, qid FROM question WHERE qid=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, questionID);
             rs = pstmt.executeQuery();
@@ -154,6 +154,7 @@ public class DatabaseManager {
 
         try {
             // add assignment to table
+            //TODO: add courseID
             sql = "INSERT INTO assignment(aname) VALUES(?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, assignment.name);
