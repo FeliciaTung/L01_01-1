@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 public class DatabaseManager {
@@ -108,15 +109,15 @@ public class DatabaseManager {
         return null;
     }
 
-    public static Question[] getAllQuestions(int courseID) {
+    public static ArrayList<Question> getAllQuestions(int courseID) {
         try {
             String sql = "SELECT question, answer, qtype, qid FROM question WHERE course=?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, courseID);
             ResultSet rs = pstmt.executeQuery();
             String question = null, answer = null;
-            int qtype = 0, qid = 0, index = 0;
-            Question[] question_list;
+            int qtype = 0, qid = 0;
+            ArrayList<Question> question_list = new ArrayList<Question>();
             String[] mc_choices = null;
             
             while (rs.next()) {
@@ -136,8 +137,7 @@ public class DatabaseManager {
                     }
                     mc_choices = string_mc.split(",");
                 }
-            	question_list[index] = new Question(qid, question, answer, null, mc_choices);
-            	index += 1;
+                question.add(new Question(qid, question, answer, null, mc_choices));
             }
             return question_list;
             
