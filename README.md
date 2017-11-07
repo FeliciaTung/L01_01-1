@@ -39,4 +39,15 @@ conn = DriverManager.getConnection("jdbc:mysql://localhost/C01ProjectDB", "root"
 6. Update your IDE to add the SQL jar dependency, you can find the jar in \App\dependencies\mysql-connector-java-5.0.8\mysql-connector-java-5.0.8-bin.jar
 
 ## Run the project
-1. Run the Main file after you have the local database set up 
+1. Run the [Main.java](https://github.com/CSCC01F17/L01_01/blob/master/App/src/Main.java) after you have the local database set up 
+* By default, it loads the add question page 
+* To see the add assignment page, go to [UIManager.java](https://github.com/CSCC01F17/L01_01/blob/master/App/src/ui/UIManager.java), 
+  1. comment the line below 
+  ```
+  switchView(new AddQuestionPage());
+  ```
+  2. uncomment the line below 
+  ```
+  switchView(new AddAssignmentPage(qlist));
+  ```
+  3. rerun Main.java 
