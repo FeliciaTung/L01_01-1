@@ -49,13 +49,13 @@ public class DatabaseManager {
 				ret_id.setString(1, question.question);
 				// Result set for desired qid
 		        ResultSet rs = ret_id.executeQuery();
-            	
-		        
+
+
 		        Integer qid = null;
 		        if (rs.next()) {
 		            qid = rs.getInt(1);
 		        }
-		        
+
                 String sql = "INSERT INTO mc(qid, choice) VALUES(?, ?)";
                 PreparedStatement add_mc = conn.prepareStatement(sql);
                 add_mc.setInt(1, qid);
@@ -101,7 +101,7 @@ public class DatabaseManager {
                 }
                 mc_choices = string_mc.split(",");
             }
-            
+
             Question res_question = new Question(qid, question, answer, null, mc_choices);
             return res_question;
 
@@ -200,7 +200,7 @@ public class DatabaseManager {
                 aname = rs.getString(2);
             }
             // get question list for this assignment
-            sql = "SELECT qid FROM assignment WHERE aid=?";
+            sql = "SELECT aid FROM assignment WHERE aid=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, assignmentID);
             rs = pstmt.executeQuery();
@@ -217,5 +217,41 @@ public class DatabaseManager {
 
         return assignment;
     }
+
+    public static ArrayList<Assignment> getAllAssignment(int courseID) {
+        String aname = null;
+        int assignid = -1, tempId = -1;
+        ArrayList<Integer >qid = new ArrayList<>();
+        ArrayList<Assignment> assign_list = new ArrayList<>();
+        try {
+            sql = "SELECT a.aid, aname, qid FROM assignment a LEFT OUTER JOIN related_question rq ON rq.aid=a.aid WHERE cid=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, courseID);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                tempId = rs.getInt(1);
+
+                if (tempId != assignid){
+                    // this is new assignment, store previous one to list if there is one
+                    if (assignid != -1) {
+                        assign_list.add(new Assignment(assignid, aname, courseID, qid));
+                    }
+                    // clear question list for new assignment
+                    assignid = tempId;
+                    qid.clear();
+                }
+                aname = rs.getString(2);
+                qid.add(rs.getInt(3));
+            }
+            // loop ends before storing the last assignment
+            assign_list.add(new Assignment(assignid, aname, -1, qid));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return assign_list;
+    }
+
 
 }

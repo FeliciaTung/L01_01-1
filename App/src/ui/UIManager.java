@@ -1,7 +1,9 @@
 package ui;
 
 import backend.DatabaseManager;
+import holders.Assignment;
 import holders.Question;
+import ui.pages.*;
 import ui.pages.AddQuestionPage;
 
 import javax.swing.*;
@@ -20,18 +22,19 @@ public class UIManager {
 
 
 
-        /*
-        Question one = new Question(1,"question1", "ans1", "algebra", null);
-        Question two = new Question(2,"question2", "ans1", "algebra", null);
-        Question three = new Question(3,"question3", "ans1", "algebra", null );
-*/
         // get array list of question from database and convert into array
-        ArrayList<Question> list = DatabaseManager.getAllQuestions(1);
-        Question[] qlist = list.toArray(new Question[list.size()]);
+//        ArrayList<Question> list = DatabaseManager.getAllQuestions(1, true);
+//        Question[] qlist = list.toArray(new Question[list.size()]);
 
 //        switchView(new AddAssignmentPage(qlist));
 
-        switchView(new AddQuestionPage());
+        ArrayList<Assignment> assignments = DatabaseManager.getAllAssignment(1);
+        Assignment[] alist = assignments.toArray(new Assignment[assignments.size()]);
+
+
+        switchView(new ViewAllAssignmentsPage(alist));
+
+//        switchView(new AddQuestionPage());
     }
 
     public static void switchView(JPanel view) {
