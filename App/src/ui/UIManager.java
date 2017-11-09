@@ -2,6 +2,7 @@ package ui;
 
 import backend.DatabaseManager;
 import holders.Question;
+import ui.pages.AddQuestionPage;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,8 +1,14 @@
-package ui;
+package ui.pages;
 
 import backend.DatabaseManager;
 import holders.Assignment;
 import holders.Question;
+import ui.components.Button;
+import ui.components.CheckBox;
+import ui.components.ClickableObject;
+import ui.components.InputField;
+import ui.components.SaveQuestionButton;
+import ui.UIManager;
 
 import javax.swing.*;
 import java.awt.*;

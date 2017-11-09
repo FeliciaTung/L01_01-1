@@ -1,8 +1,8 @@
-package ui;
+package ui.components;
 
 import javax.swing.*;
 
-interface ClickableObject {
+public interface ClickableObject {
 
     int SAVE_QUESTION = 1;
     int EDIT_QUESTION = 2;

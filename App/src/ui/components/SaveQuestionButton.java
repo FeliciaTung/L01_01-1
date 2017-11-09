@@ -1,8 +1,8 @@
-package ui;
+package ui.components;
 
 public class SaveQuestionButton extends Button {
 
-    SaveQuestionButton() {
+    public SaveQuestionButton() {
         super("SAVE");
         id = SAVE_QUESTION;
     }

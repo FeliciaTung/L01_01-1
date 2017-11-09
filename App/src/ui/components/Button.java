@@ -1,4 +1,4 @@
-package ui;
+package ui.components;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ public class Button extends JLabel implements ClickableObject {
 
     int id;
 
-    Button(String text) {
+    public Button(String text) {
         super(text, CENTER);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setOpaque(true);
