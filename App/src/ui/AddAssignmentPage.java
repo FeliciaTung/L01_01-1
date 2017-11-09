@@ -78,8 +78,6 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             add(UIManager.getSpacing(800, 1));
         }
 
-        questionCheckBoxes[0].select();
-
         add(UIManager.getSpacing(800, 40));
 
         saveButton.addMouseListener(this);
@@ -183,11 +181,13 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             if (questionCheckBoxes[i].isSelected()) {
                 if (questionList[i].id != -1) {
                     selectedQuestion.add(questionList[i].id);
-                } else {
-                    System.out.println("Questions with invalid Question ID: " + questionList[i].question);
 
+                } else {
+                    System.out.println("Invalid Question id: " + questionList[i].question);
                 }
             }
+
+
         }
         DatabaseManager.addAssignment(new Assignment(aname, 0, selectedQuestion));
     }
