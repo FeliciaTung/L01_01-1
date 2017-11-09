@@ -20,6 +20,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     public AddQuestionPage() {
         super();
         saveButton = new SaveQuestionButton();
+        saveButton.addMouseListener(this);
         questionInput = new InputField();
         topMenuOptions = new RadioButton[2];
 
@@ -63,7 +64,6 @@ public class AddQuestionPage extends JPanel implements MouseListener {
             }
             add(UIManager.getSpacing(800, 30));
 
-            saveButton.addMouseListener(this);
             add(saveButton);
 
         }
