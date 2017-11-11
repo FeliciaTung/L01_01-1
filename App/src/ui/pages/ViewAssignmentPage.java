@@ -3,13 +3,11 @@ package ui.pages;
 import backend.DatabaseManager;
 import holders.Assignment;
 import holders.Question;
-import ui.components.Button;
-import ui.components.CheckBox;
-import ui.components.ClickableObject;
-import ui.components.InputField;
-import ui.components.SaveQuestionButton;
-import ui.components.Label;
+import ui.Path;
 import ui.UIManager;
+import ui.components.Button;
+import ui.components.*;
+import ui.components.Label;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +16,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 
-public class AddAssignmentPage extends JPanel implements MouseListener {
+public class ViewAssignmentPage extends JPanel  implements MouseListener {
 
     private Button saveButton;
     /*
@@ -26,74 +24,48 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private DeleteQuestionButton[] deleteButton;
     */
     private InputField assignmentInput;
-    private Question[] questionList;
+    private ArrayList<Question> questionList;
     private Label[] questionLabels;
-    private CheckBox[] questionCheckBoxes;
+    private BackButton backButton;
     private int WINDOW_WIDTH = 800;
     private int LABEL_WIDTH = 600;
 
 
-    public AddAssignmentPage(Question[] questions) {
+    public ViewAssignmentPage(Assignment assignment) {
         super();
-
         saveButton = new SaveQuestionButton();
-        /*
-        editButton = new EditQuestionButton[question_num];
-        deleteButton = new DeleteQuestionButton[question_num];
-        */
         assignmentInput = new InputField();
-        questionList = questions;
-        questionLabels = new Label[questions.length];
-        questionCheckBoxes = new CheckBox[questions.length];
-
+        questionList = assignment.getQuestions();
+        questionLabels = new Label[assignment.questions.size()];
+        backButton = new BackButton(ClickableObject.BACK_TO_VIEW_ALL_ASSIGN);
         setPreferredSize(new Dimension(WINDOW_WIDTH, 600));
         setBackground(Color.WHITE);
 
-        JLabel title = new Label("Available Questions", SwingConstants.CENTER);
+        Label title = new Label("Assignment", SwingConstants.CENTER);
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));
         add(title);
 
         add(UIManager.getSpacing(WINDOW_WIDTH, 40));
 
-        JLabel typeAssignment = new Label("Create an Assignment:", SwingConstants.RIGHT);
+        Label typeAssignment = new Label("Assignment: " + assignment.name, SwingConstants.CENTER);
         typeAssignment.setFont(getFont().deriveFont(18f));
         add(typeAssignment);
 
-        add(assignmentInput);
-
         add(UIManager.getSpacing(WINDOW_WIDTH, 30));
 
-        addQuestions();
-
-        add(UIManager.getSpacing(WINDOW_WIDTH, 40));
-
-        saveButton.addMouseListener(this);
-        add(saveButton);
-
-    }
-
-    private void addQuestions() {
-        for (int i = 0; i < questionList.length; i++) {
-            // increase label height to deal with long assignment name
-            String text = "<html>" + questionList[i].question + "</html>";
+        for (int i = 0; i < questionList.size(); i++) {
+            // increase label height to deal with long question
+            String text = "<html>" + (i+1) + ". " + questionList.get(i).question + "</html>" ;
             int labelHeight = 25;
-            if (text.length() > 199) {
-                labelHeight = 65;
-            } else if (text.length() > 99) {
-                labelHeight = 45;
-            }
-
-            questionCheckBoxes[i] = new CheckBox(questionList[i].id);
-            questionCheckBoxes[i].addMouseListener(this);
-            add(questionCheckBoxes[i]);
-            add(UIManager.getSpacing(10, 0));
-
+            if (text.length() > 199){labelHeight = 65;}
+            else if (text.length() > 99){labelHeight = 45;}
 
             questionLabels[i] = new Label(text, SwingConstants.LEFT);
             questionLabels[i].setIndex(i);
             questionLabels[i].setPreferredSize(new Dimension(LABEL_WIDTH, labelHeight));
             questionLabels[i].setFont(getFont().deriveFont(16f));
+            questionLabels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             questionLabels[i].addMouseListener(this);
             add(questionLabels[i]);
             /*
@@ -107,32 +79,28 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             */
             add(UIManager.getSpacing(WINDOW_WIDTH, 1));
         }
+
+        add(UIManager.getSpacing(WINDOW_WIDTH, 40));
+
+        backButton.addMouseListener(this);
+        add(backButton);
+
     }
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
-            case ClickableObject.SAVE_QUESTION:
-                createAssignment();
+            case ClickableObject.BACK_TO_VIEW_ALL_ASSIGN:
+                gotoViewAllAssignments();
                 break;
-            case ClickableObject.CHECKBOX:
-                id = ((CheckBox) e.getSource()).getQuestionID();
-                for (CheckBox checkbox : questionCheckBoxes) {
-                    if (id == checkbox.getQuestionID()) {
-                        if (!checkbox.isSelected())
-                            checkbox.select();
-                        else
-                            checkbox.deselect();
-                        break;
-                    }
-                }
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
-                gotoViewQuestionPage(questionList[index]);
-
+                gotoViewQuestion(questionList.get(index));
         }
     }
+
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -148,13 +116,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
-            case ClickableObject.SAVE_QUESTION:
-                saveButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+            case ClickableObject.BACK_TO_VIEW_ALL_ASSIGN:
+                backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
-            case ClickableObject.LABEL:
-                int index = ((Label) e.getSource()).getIndex();
-                questionLabels[index].setForeground(Label.LABEL_COLOR_PRESSED);
-
             /*case ClickableObject.EDIT_QUESTION:
                 int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
                 for (EditQuestionButton button : editButton) {
@@ -175,13 +139,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
-            case ClickableObject.SAVE_QUESTION:
-                saveButton.setBackground(Button.BUTTON_COLOR_IDLE);
+            case ClickableObject.BACK_TO_VIEW_ALL_ASSIGN:
+                backButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
-            case ClickableObject.LABEL:
-                int index = ((Label) e.getSource()).getIndex();
-                questionLabels[index].setForeground(Label.LABEL_COLOR_PRESSED);
-
             /*case ClickableObject.EDIT_QUESTION:
                 int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
                 for (EditQuestionButton button : editButton) {
@@ -209,27 +169,11 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
 
     }
 
-    private void createAssignment() {
-        //TODO: get question list from db and add to the selected ones to assignment
-        String aname = assignmentInput.getText();
-        ArrayList<Integer> selectedQuestion = new ArrayList<>();
-
-        for (int i = 0; i < questionCheckBoxes.length; i++) {
-            if (questionCheckBoxes[i].isSelected()) {
-                if (questionList[i].id != -1) {
-                    selectedQuestion.add(questionList[i].id);
-
-                } else {
-                    System.out.println("Invalid Question id: " + questionList[i].question);
-                }
-            }
-
-
-        }
-        DatabaseManager.addAssignment(new Assignment(aname, 0, selectedQuestion));
+    private void gotoViewAllAssignments() {
+        //TODO: Go back to view all assignment page
     }
 
-    private void gotoViewQuestionPage(Question question) {
+    private void gotoViewQuestion(Question question) {
 //        UIManager.switchToQuestionView(question);
     }
 }

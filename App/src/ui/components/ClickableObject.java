@@ -14,8 +14,11 @@ public interface ClickableObject {
     int MC_BUTTON = 21;
     int SA_BUTTON = 22;
     int CHECKBOX = 31;
-    int NEXT_BUTTON = 51;
-    int BACK_BUTTON = 52;
+    int LABEL = 32;
+    int BACK_TO_VIEW_ALL_ASSIGN = 52;
+    int BACK_TO_VIEW_ASSIGN = 53;
+    int BACK_TO_ADD_ASSIGN = 54;
+    int NEXT_BUTTON = 61;
 
     int[] MULTIPLE_CHOICE_OPTIONS = {MULTIPLE_CHOICE_OPTION_1,
             MULTIPLE_CHOICE_OPTION_2, MULTIPLE_CHOICE_OPTION_3, MULTIPLE_CHOICE_OPTION_4};

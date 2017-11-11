@@ -95,11 +95,13 @@ public class DatabaseManager {
                 PreparedStatement pstmt_mc = conn.prepareStatement(sql_mc);
                 pstmt_mc.setInt(1, questionID);
                 ResultSet rs_mc = pstmt_mc.executeQuery();
-                String string_mc = null;
+
+                ArrayList<String> mc_list = new ArrayList<>();
+
                 while (rs_mc.next()) {
-                	string_mc = rs_mc.getString(1);
+                	mc_list.add(rs_mc.getString(1));
                 }
-                mc_choices = string_mc.split(",");
+                mc_choices = mc_list.toArray(new String[mc_list.size()]);
             }
 
             Question res_question = new Question(qid, question, answer, null, mc_choices);
@@ -111,15 +113,28 @@ public class DatabaseManager {
         return null;
     }
 
-    public static ArrayList<Question> getAllQuestions(int courseID) {
+    /**
+     * Get all questions that are related to a course or accessible to a user.
+     *
+     * @param id    id of course or user
+     * @param useCourseid   true if using courseid, false if using userid
+     * @return  questions
+     */
+    public static ArrayList<Question> getAllQuestions(int id, boolean useCourseid) {
         try {
-            sql = "SELECT question, answer, qtype, qid FROM question WHERE course=?";
+            if (useCourseid) {
+                sql = "SELECT question, answer, qtype, qid FROM question WHERE course=?";
+            } else {
+                sql = "SELECT question, answer, qtype, q.qid FROM question q JOIN " +
+                        "related_question rq ON rq.qid=q.qid where rq.aid=?";
+            }
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, courseID);
+            pstmt.setInt(1, id);
             rs = pstmt.executeQuery();
             String question = null, answer = null;
             int qtype = 0, qid = 0;
             ArrayList<Question> question_list = new ArrayList<Question>();
+            ArrayList<String> mc_list = new ArrayList<>();
             String[] mc_choices = null;
 
             while (rs.next()) {
@@ -135,9 +150,10 @@ public class DatabaseManager {
                     ResultSet rs_mc = pstmt_mc.executeQuery();
                     String string_mc = null;
                     while (rs_mc.next()) {
-                    	string_mc = rs_mc.getString(1);
+                    	mc_list.add(rs_mc.getString(1));
+
                     }
-                    mc_choices = string_mc.split(",");
+                    mc_choices = mc_list.toArray(new String[mc_list.size()]);
                 }
                 question_list.add(new Question(qid, question, answer, null, mc_choices));
             }
@@ -200,7 +216,7 @@ public class DatabaseManager {
                 aname = rs.getString(2);
             }
             // get question list for this assignment
-            sql = "SELECT aid FROM assignment WHERE aid=?";
+            sql = "SELECT qid FROM related_question WHERE aid=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, assignmentID);
             rs = pstmt.executeQuery();
@@ -218,9 +234,10 @@ public class DatabaseManager {
         return assignment;
     }
 
+    //may need refactor to get assignments by userID
     public static ArrayList<Assignment> getAllAssignment(int courseID) {
         String aname = null;
-        int assignid = -1, tempId = -1;
+        int assignid = -1, tempId;
         ArrayList<Integer >qid = new ArrayList<>();
         ArrayList<Assignment> assign_list = new ArrayList<>();
         try {
@@ -239,7 +256,7 @@ public class DatabaseManager {
                     }
                     // clear question list for new assignment
                     assignid = tempId;
-                    qid.clear();
+                    qid = new ArrayList<>();
                 }
                 aname = rs.getString(2);
                 qid.add(rs.getInt(3));

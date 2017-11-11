@@ -1,17 +1,13 @@
 package ui.pages;
 
-import backend.DatabaseManager;
 import holders.Assignment;
-import holders.Question;
 import ui.UIManager;
-import ui.components.Button;
-import ui.components.*;
+import ui.components.Label;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 
 
 public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
@@ -22,10 +18,11 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     */
 
 
-    private JLabel[] assignLabels;
-    private CheckBox[] assignCheckBoxes;
+    private Label[] assignLabels;
     private Assignment[] assignList;
     private float labelTextSize = 20f;
+    private int LABEL_WIDTH = 600;
+    private int WINDOW_WIDTH = 800;
 
     public ViewAllAssignmentsPage(Assignment[] assignments) {
         super();
@@ -36,45 +33,49 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
         */
 
         assignList = assignments;
-        assignLabels = new JLabel[assign_num];
-        assignCheckBoxes = new CheckBox[assign_num];
+        assignLabels = new Label[assign_num];
 
-        setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(WINDOW_WIDTH, 600));
         setBackground(Color.WHITE);
 
-        JLabel title = new JLabel("Available Assignments", SwingConstants.CENTER);
-        title.setPreferredSize(new Dimension(800, 50));
+        JLabel title = new Label("Available Assignments", SwingConstants.CENTER);
+        title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));
         add(title);
 
-        add(UIManager.getSpacing(800, 40));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 40));
 
         for (int i = 0; i < assignList.length; i++) {
+            // increase label height to deal with long assignment name
+            String text = "<html>" + (i + 1) + ". " + assignList[i].name + "</html>";
+            int labelHeight = 25;
+            if (text.length() > 199) {
+                labelHeight = 65;
+            } else if (text.length() > 99) {
+                labelHeight = 45;
+            }
 
-            assignLabels[i] = new JLabel(assignList[i].name, SwingConstants.LEFT);
-            assignLabels[i].setPreferredSize(new Dimension(InputField.WIDTH, 25));
+            assignLabels[i] = new Label(text, SwingConstants.LEFT);
+            assignLabels[i].setIndex(i);
+            assignLabels[i].setPreferredSize(new Dimension(LABEL_WIDTH, labelHeight));
             assignLabels[i].setFont(getFont().deriveFont(labelTextSize));
             assignLabels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
+            assignLabels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             assignLabels[i].addMouseListener(this);
             add(assignLabels[i]);
 
-            add(UIManager.getSpacing(800, 1));
+            add(UIManager.getSpacing(WINDOW_WIDTH, 1));
         }
 
-        add(UIManager.getSpacing(800, 40));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 40));
 
 
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        JLabel clickedLabel = (JLabel) e.getSource();
-        for (int i = 0; i < assignLabels.length; i++){
-            if (clickedLabel == assignLabels[i]){
-                gotoAssignment(assignList[i]);
-            }
-        }
+        int clickedLabelIndex = ((Label) e.getSource()).getIndex();
+        gotoAssignment(assignList[clickedLabelIndex]);
 
     }
 
@@ -90,24 +91,15 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        JLabel clickedLabel = (JLabel) e.getSource();
-        for (int i = 0; i < assignLabels.length; i++){
-            if (clickedLabel == assignLabels[i]){
-                assignLabels[i].setForeground(Color.BLUE);
-                break;
-            }
-        }
+        int clickedLabelIndex = ((Label) e.getSource()).getIndex();
+        assignLabels[clickedLabelIndex].setForeground(Label.LABEL_COLOR_PRESSED);
+
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        JLabel clickedLabel = (JLabel) e.getSource();
-        for (int i = 0; i < assignLabels.length; i++){
-            if (clickedLabel == assignLabels[i]){
-                assignLabels[i].setForeground(Color.BLACK);
-                break;
-            }
-        }
+        int clickedLabelIndex = ((Label) e.getSource()).getIndex();
+        assignLabels[clickedLabelIndex].setForeground(Label.LABEL_COLOR_IDLE);
     }
 
     private void editQuestion() {
@@ -122,5 +114,6 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
 
     private void gotoAssignment(Assignment assign) {
         //TODO: switch view to individual assignment page
+//        UIManager.switchToAssignmentView(assign);
     }
 }

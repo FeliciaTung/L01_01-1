@@ -1,5 +1,7 @@
 package holders;
 
+import backend.DatabaseManager;
+
 import java.util.ArrayList;
 
 public class Assignment {
@@ -21,5 +23,10 @@ public class Assignment {
         this.name = name;
         this.courseID = courseID;
         this.questions = questions;
+    }
+
+    public ArrayList<Question> getQuestions(){
+        ArrayList<Question> questionList = DatabaseManager.getAllQuestions(id, false);
+        return questionList;
     }
 }
