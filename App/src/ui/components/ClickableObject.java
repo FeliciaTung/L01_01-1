@@ -4,9 +4,14 @@ import javax.swing.*;
 
 public interface ClickableObject {
 
+    int STUDENT_BUTTON = -10;
+    int INSTRUCTOR_BUTTON = -11;
     int SAVE_QUESTION = 1;
     int EDIT_QUESTION = 2;
     int DELETE_QUESTION = 3;
+    int ADD_QUESTION = 4;
+    int ADD_ASSIGNMENT = 5;
+    int VIEW_ASSIGNMENTS = 6;
     int MULTIPLE_CHOICE_OPTION_1 = 11;
     int MULTIPLE_CHOICE_OPTION_2 = 12;
     int MULTIPLE_CHOICE_OPTION_3 = 13;
