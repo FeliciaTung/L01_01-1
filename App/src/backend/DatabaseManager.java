@@ -159,7 +159,6 @@ public class DatabaseManager {
                 question_list.add(new Question(qid, question, answer, null, mc_choices));
             }
             return question_list;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
