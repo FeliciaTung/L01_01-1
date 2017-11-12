@@ -20,9 +20,11 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
 
     private Label[] assignLabels;
     private Assignment[] assignList;
-    private float labelTextSize = 20f;
+    private float labelTextSize = 16f;
     private int LABEL_WIDTH = 600;
     private int WINDOW_WIDTH = 800;
+    private Label title;
+    private Label viewAssignLabel;
 
     public ViewAllAssignmentsPage(Assignment[] assignments) {
         super();
@@ -38,12 +40,17 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
         setPreferredSize(new Dimension(WINDOW_WIDTH, 600));
         setBackground(Color.WHITE);
 
-        JLabel title = new Label("Available Assignments", SwingConstants.CENTER);
+        title = new Label("View All Assignments", SwingConstants.CENTER);
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));
         add(title);
 
         add(UIManager.getSpacing(WINDOW_WIDTH, 40));
+
+        viewAssignLabel = new Label("Available Assignments", SwingConstants.CENTER);
+        viewAssignLabel.setFont(getFont().deriveFont(18f));
+        add(viewAssignLabel);
+
 
         for (int i = 0; i < assignList.length; i++) {
             // increase label height to deal with long assignment name
@@ -114,6 +121,6 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
 
     private void gotoAssignment(Assignment assign) {
         //TODO: switch view to individual assignment page
-//        UIManager.switchToAssignmentView(assign);
+        UIManager.switchToAssignmentView(assign);
     }
 }

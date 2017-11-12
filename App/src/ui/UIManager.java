@@ -5,14 +5,12 @@ import holders.*;
 import ui.pages.*;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class UIManager {
 
     private static JFrame frame;
-    private static Path path = Path.getInstance();
     public static void createUI() {
         frame = new JFrame("CSCC01 - Team01 Project");
         frame.setVisible(true);
@@ -23,14 +21,17 @@ public class UIManager {
 //        Question[] qlist = list.toArray(new Question[list.size()]);
 //        switchView(new AddAssignmentPage(qlist));
 
-//        ArrayList<Assignment> assignments = DatabaseManager.getAllAssignment(1);
-//        Assignment[] alist = assignments.toArray(new Assignment[assignments.size()]);
-//        switchView(new ViewAllAssignmentsPage(alist));
+        ArrayList<Assignment> assignments = DatabaseManager.getAllAssignment(1);
+        Assignment[] alist = assignments.toArray(new Assignment[assignments.size()]);
+        switchView(new ViewAllAssignmentsPage(alist));
 
-        Assignment a = DatabaseManager.getAssignment(1);
-        switchView(new ViewAssignmentPage(a));
+//        Assignment a = DatabaseManager.getAssignment(1);
+//        switchView(new ViewAssignmentPage(a));
 
 //        switchView(new AddQuestionPage());
+
+//        Question q = DatabaseManager.getQuestion(1);
+//        switchView(new ViewQuestionPage(q));
     }
 
     public static void switchView(JPanel view) {

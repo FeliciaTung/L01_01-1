@@ -31,6 +31,8 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private CheckBox[] questionCheckBoxes;
     private int WINDOW_WIDTH = 800;
     private int LABEL_WIDTH = 600;
+    private Label title;
+    private Label typeAssignment;
 
 
     public AddAssignmentPage(Question[] questions) {
@@ -49,14 +51,14 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         setPreferredSize(new Dimension(WINDOW_WIDTH, 600));
         setBackground(Color.WHITE);
 
-        JLabel title = new Label("Available Questions", SwingConstants.CENTER);
+        title = new Label("Available Questions", SwingConstants.CENTER);
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));
         add(title);
 
         add(UIManager.getSpacing(WINDOW_WIDTH, 40));
 
-        JLabel typeAssignment = new Label("Create an Assignment:", SwingConstants.RIGHT);
+        typeAssignment = new Label("Create an Assignment:", SwingConstants.RIGHT);
         typeAssignment.setFont(getFont().deriveFont(18f));
         add(typeAssignment);
 
@@ -180,7 +182,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 break;
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
-                questionLabels[index].setForeground(Label.LABEL_COLOR_PRESSED);
+                questionLabels[index].setForeground(Label.LABEL_COLOR_IDLE);
 
             /*case ClickableObject.EDIT_QUESTION:
                 int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
@@ -230,6 +232,6 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     }
 
     private void gotoViewQuestionPage(Question question) {
-//        UIManager.switchToQuestionView(question);
+        UIManager.switchToQuestionView(question);
     }
 }

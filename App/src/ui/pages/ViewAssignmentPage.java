@@ -3,7 +3,6 @@ package ui.pages;
 import backend.DatabaseManager;
 import holders.Assignment;
 import holders.Question;
-import ui.Path;
 import ui.UIManager;
 import ui.components.Button;
 import ui.components.*;
@@ -16,9 +15,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 
-public class ViewAssignmentPage extends JPanel  implements MouseListener {
+public class ViewAssignmentPage extends JPanel implements MouseListener {
 
-    private Button saveButton;
     /*
     private EditQuestionButton[] editButton;
     private DeleteQuestionButton[] deleteButton;
@@ -29,11 +27,11 @@ public class ViewAssignmentPage extends JPanel  implements MouseListener {
     private BackButton backButton;
     private int WINDOW_WIDTH = 800;
     private int LABEL_WIDTH = 600;
-
+    private Label title;
+    private Label assignmentLabel;
 
     public ViewAssignmentPage(Assignment assignment) {
         super();
-        saveButton = new SaveQuestionButton();
         assignmentInput = new InputField();
         questionList = assignment.getQuestions();
         questionLabels = new Label[assignment.questions.size()];
@@ -41,25 +39,28 @@ public class ViewAssignmentPage extends JPanel  implements MouseListener {
         setPreferredSize(new Dimension(WINDOW_WIDTH, 600));
         setBackground(Color.WHITE);
 
-        Label title = new Label("Assignment", SwingConstants.CENTER);
+        title = new Label("Assignment", SwingConstants.CENTER);
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));
         add(title);
 
         add(UIManager.getSpacing(WINDOW_WIDTH, 40));
 
-        Label typeAssignment = new Label("Assignment: " + assignment.name, SwingConstants.CENTER);
-        typeAssignment.setFont(getFont().deriveFont(18f));
-        add(typeAssignment);
+        assignmentLabel = new Label("Assignment: " + assignment.name, SwingConstants.CENTER);
+        assignmentLabel.setFont(getFont().deriveFont(18f));
+        add(assignmentLabel);
 
         add(UIManager.getSpacing(WINDOW_WIDTH, 30));
 
         for (int i = 0; i < questionList.size(); i++) {
             // increase label height to deal with long question
-            String text = "<html>" + (i+1) + ". " + questionList.get(i).question + "</html>" ;
+            String text = "<html>" + (i + 1) + ". " + questionList.get(i).question + "</html>";
             int labelHeight = 25;
-            if (text.length() > 199){labelHeight = 65;}
-            else if (text.length() > 99){labelHeight = 45;}
+            if (text.length() > 199) {
+                labelHeight = 65;
+            } else if (text.length() > 99) {
+                labelHeight = 45;
+            }
 
             questionLabels[i] = new Label(text, SwingConstants.LEFT);
             questionLabels[i].setIndex(i);
@@ -119,6 +120,9 @@ public class ViewAssignmentPage extends JPanel  implements MouseListener {
             case ClickableObject.BACK_TO_VIEW_ALL_ASSIGN:
                 backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
+            case ClickableObject.LABEL:
+                int index = ((Label) e.getSource()).getIndex();
+                questionLabels[index].setForeground(Label.LABEL_COLOR_PRESSED);
             /*case ClickableObject.EDIT_QUESTION:
                 int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
                 for (EditQuestionButton button : editButton) {
@@ -142,6 +146,9 @@ public class ViewAssignmentPage extends JPanel  implements MouseListener {
             case ClickableObject.BACK_TO_VIEW_ALL_ASSIGN:
                 backButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
+            case ClickableObject.LABEL:
+                int index = ((Label) e.getSource()).getIndex();
+                questionLabels[index].setForeground(Label.LABEL_COLOR_IDLE);
             /*case ClickableObject.EDIT_QUESTION:
                 int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
                 for (EditQuestionButton button : editButton) {
@@ -174,6 +181,6 @@ public class ViewAssignmentPage extends JPanel  implements MouseListener {
     }
 
     private void gotoViewQuestion(Question question) {
-//        UIManager.switchToQuestionView(question);
+        UIManager.switchToQuestionView(question);
     }
 }

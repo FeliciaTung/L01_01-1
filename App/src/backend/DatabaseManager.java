@@ -114,10 +114,10 @@ public class DatabaseManager {
     }
 
     /**
-     * Get all questions that are related to a course or accessible to a user.
+     * Get all questions that are related to a course or a course
      *
-     * @param id    id of course or user
-     * @param useCourseid   true if using courseid, false if using userid
+     * @param id    id of course or course
+     * @param useCourseid   true if using courseid, false if using assignemnt id
      * @return  questions
      */
     public static ArrayList<Question> getAllQuestions(int id, boolean useCourseid) {
@@ -135,20 +135,20 @@ public class DatabaseManager {
             int qtype = 0, qid = 0;
             ArrayList<Question> question_list = new ArrayList<Question>();
             ArrayList<String> mc_list = new ArrayList<>();
-            String[] mc_choices = null;
+            String[] mc_choices;
 
             while (rs.next()) {
             	question = rs.getString(1);
             	answer = rs.getString(2);
             	qtype = rs.getInt(3);
             	qid = rs.getInt(4);
+            	mc_choices = null; // reset for each question
                 // Again check for multiple choice.
                 if (qtype == 1) {
                 	String sql_mc = "SELECT choice FROM mc WHERE qid=?";
                     PreparedStatement pstmt_mc = conn.prepareStatement(sql_mc);
                     pstmt_mc.setInt(1, qid);
                     ResultSet rs_mc = pstmt_mc.executeQuery();
-                    String string_mc = null;
                     while (rs_mc.next()) {
                     	mc_list.add(rs_mc.getString(1));
 
