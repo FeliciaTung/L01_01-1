@@ -28,9 +28,9 @@ Our Sprints can be found here:
 2. Start Server and Workbench
 3. In MySQL, open and execute the following database scripts:
   
-  * [initializeDB.sql](https://github.com/CSCC01F17/L01_01/master/initializeDB.sql): this will drop the existing database and create a new database
+  * [initializeDB.sql](https://github.com/CSCC01F17/L01_01/blob/master/initializeDB.sql): this will drop the existing database and create a new database
   
-  * [mockData.sql](https://github.com/CSCC01F17/L01_01/master/mockData.sql): this will create mock data in the database (not including the user related data)
+  * [mockData.sql](https://github.com/CSCC01F17/L01_01/blob/master/mockData.sql): this will create mock data in the database (not including the user related data)
 4. Open DatabaseManager.java from \App\src\backend\
 5. Update the following line with your local database server user(first "root") and password (second "root")
 ```
