@@ -14,6 +14,7 @@ public class InputField extends JTextArea {
         setBackground(new Color(240, 240, 240));
         setMargin(new Insets(10, 10, 10 , 10));
         setLineWrap(true);
+        setTabSize(0);
         setFont(getFont().deriveFont(24f));
     }
 }
