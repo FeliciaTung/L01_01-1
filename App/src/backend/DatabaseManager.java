@@ -2,6 +2,7 @@ package backend;
 
 import holders.Assignment;
 import holders.Question;
+import holders.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -216,6 +217,46 @@ public class DatabaseManager {
         }
 
         return assignment;
+    }
+    
+    public static void addUser(User user) {
+    	try {
+            sql = "INSERT INTO users(uname, email, password, cid, type) VALUES(?, ?, ?, ?, ?)";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, user.name);
+            pstmt.setString(2, user.email);
+            // This may need to change. Should we really store raw password text?
+            pstmt.setString(3, user.input_pass);
+            pstmt.setInt(4, user.courseID);
+            pstmt.setInt(5, user.type);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static User getUser(int uid) {
+        try {
+            sql = "SELECT uname, email, password, cid, type FROM users WHERE uid=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, uid);
+            rs = pstmt.executeQuery();
+            String uname = null, email = null, password = null;
+            int cid = -1, type = -1;
+            while (rs.next()) {
+            	uname = rs.getString(1);
+            	email = rs.getString(2);
+            	password = rs.getString(3);
+            	cid = rs.getInt(4);
+            	type = rs.getInt(5);
+            }
+            User res_user = new User(uname, email, password, cid, type);
+            return res_user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
