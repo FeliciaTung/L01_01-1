@@ -14,10 +14,18 @@ CREATE TABLE IF NOT EXISTS users(
 	email VARCHAR(255) NOT NULL,
 	password VARCHAR(255) NOT NULL,
 	cid INT,
-	type VARCHAR(255),
+	type INT,
 	PRIMARY KEY (uid),
-	FOREIGN KEY(cid) REFERENCES course(cid)
+	FOREIGN KEY(cid) REFERENCES course(cid),
+	FOREIGN KEY(type) REFERENCES userType(typeid)
+
 );
+
+CREATE TABLE IF NOT EXISTS userType(
+    typeid INT AUTO_INCREMENT,
+    userType VARCHAR(255) NOT NULL
+)
+
 CREATE TABLE IF NOT EXISTS questionType(
 	qtid INT AUTO_INCREMENT,
 	questionType VARCHAR(255),
@@ -68,3 +76,8 @@ CREATE TABLE IF NOT EXISTS marks(
 
 INSERT INTO questionType(questionType) VALUE("multiple choice");
 INSERT INTO questionType(questionType) VALUE ("short answerwer");
+
+
+INSERT INTO userType(userType) VALUE("instructor");
+INSERT INTO userType(userType) VALUE("ta");
+INSERT INTO userType(userType) VALUE("student");
