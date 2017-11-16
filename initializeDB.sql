@@ -8,19 +8,29 @@ CREATE TABLE IF NOT EXISTS course(
 	PRIMARY KEY(cid)
 );
 
+CREATE TABLE IF NOT EXISTS user_type(
+    typeid INT AUTO_INCREMENT,
+    user_type VARCHAR(255) NOT NULL,
+    PRIMARY KEY (typeid)
+);
+
 CREATE TABLE IF NOT EXISTS users(
 	uid INT AUTO_INCREMENT,
 	uname VARCHAR(255) NOT NULL,
 	email VARCHAR(255) NOT NULL,
 	password VARCHAR(255) NOT NULL,
 	cid INT,
-	type VARCHAR(255),
+	type INT,
 	PRIMARY KEY (uid),
-	FOREIGN KEY(cid) REFERENCES course(cid)
+	FOREIGN KEY(cid) REFERENCES course(cid),
+	FOREIGN KEY(type) REFERENCES user_type(typeid)
+
 );
-CREATE TABLE IF NOT EXISTS questionType(
+
+
+CREATE TABLE IF NOT EXISTS question_type(
 	qtid INT AUTO_INCREMENT,
-	questionType VARCHAR(255),
+	question_type VARCHAR(255),
 	PRIMARY KEY(qtid)
 );
 CREATE TABLE IF NOT EXISTS question(
@@ -31,7 +41,7 @@ CREATE TABLE IF NOT EXISTS question(
 	qtype INT,
 	PRIMARY KEY(qid),
 	FOREIGN KEY(course) REFERENCES course(cid),
-	FOREIGN KEY(qtype) REFERENCES questionType(qtid)
+	FOREIGN KEY(qtype) REFERENCES question_type(qtid)
 );
 CREATE TABLE IF NOT EXISTS mc(
 	qid INT,
@@ -66,5 +76,10 @@ CREATE TABLE IF NOT EXISTS marks(
 	FOREIGN KEY(student) REFERENCES users(uid)
 );
 
-INSERT INTO questionType(questionType) VALUE("multiple choice");
-INSERT INTO questionType(questionType) VALUE ("short answerwer");
+INSERT INTO question_type(question_type) VALUE("multiple choice");
+INSERT INTO question_type(question_type) VALUE ("short answerwer");
+
+
+INSERT INTO user_type(user_type) VALUE("instructor");
+INSERT INTO user_type(user_type) VALUE("ta");
+INSERT INTO user_type(user_type) VALUE("student");
