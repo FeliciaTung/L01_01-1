@@ -23,6 +23,7 @@ public class AvailableAssignments extends JPanel implements MouseListener {
     private JLabel assignmentNames[];
     private JLabel assignmentMarks[];
     private List<Button> takeAssignmentButtons;
+    private Button backButton;
 
 
     public AvailableAssignments(List<Assignment> assignments) {
@@ -37,8 +38,14 @@ public class AvailableAssignments extends JPanel implements MouseListener {
         assignmentNames = new JLabel[assignments.size()];
         assignmentMarks = new JLabel[assignments.size()];
         takeAssignmentButtons = new ArrayList<>();
+        backButton = new Button("Back");
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+
+        backButton.id = ClickableObject.BACK_BUTTON;
+        backButton.addMouseListener(this);
+        add(backButton);
+        add(UIManager.getSpacing(WINDOW_WIDTH - 220, 1));
 
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));
@@ -62,14 +69,11 @@ public class AvailableAssignments extends JPanel implements MouseListener {
 
             takeAssignmentButtons.add(new Button(assignmentCompleted ? "Retake Assignment" : "Take Assignment"));
             takeAssignmentButtons.get(i).id = ClickableObject.DO_ASSIGNMENT;
-            takeAssignmentButtons.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             takeAssignmentButtons.get(i).addMouseListener(this);
             add(takeAssignmentButtons.get(i));
 
             add(UIManager.getSpacing(WINDOW_WIDTH, 10));
-
         }
-
     }
 
     @Override
@@ -78,6 +82,9 @@ public class AvailableAssignments extends JPanel implements MouseListener {
         switch (id) {
             case ClickableObject.DO_ASSIGNMENT:
                 UIManager.switchView(new AssignmentPage(assignments.get(takeAssignmentButtons.indexOf(e.getSource()))));
+                break;
+            case ClickableObject.BACK_BUTTON:
+                UIManager.switchView(new StudentHomePage());
                 break;
         }
     }
@@ -94,6 +101,10 @@ public class AvailableAssignments extends JPanel implements MouseListener {
         switch (id) {
             case ClickableObject.DO_ASSIGNMENT:
                 takeAssignmentButtons.get(takeAssignmentButtons.indexOf(e.getSource())).setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
+            case ClickableObject.BACK_BUTTON:
+                backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
         }
     }
 
@@ -102,6 +113,10 @@ public class AvailableAssignments extends JPanel implements MouseListener {
         switch (((ClickableObject) e.getSource()).getID()) {
             case ClickableObject.DO_ASSIGNMENT:
                 takeAssignmentButtons.get(takeAssignmentButtons.indexOf(e.getSource())).setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
+            case ClickableObject.BACK_BUTTON:
+                backButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
         }
     }
 }

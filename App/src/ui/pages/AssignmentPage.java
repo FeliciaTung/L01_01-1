@@ -2,6 +2,7 @@ package ui.pages;
 
 import holders.Assignment;
 import holders.Question;
+import ui.UIManager;
 import ui.components.MultipleChoiceAnswer;
 import ui.components.Button;
 import ui.components.ClickableObject;
@@ -74,6 +75,9 @@ public class AssignmentPage extends JPanel implements MouseListener {
             case ClickableObject.NEXT_QUESTION:
                 setNextQuestion();
                 break;
+            case ClickableObject.BACK_BUTTON:
+                UIManager.switchView(new AvailableAssignments(null));
+                break;
         }
     }
 
@@ -90,14 +94,19 @@ public class AssignmentPage extends JPanel implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
-
+            case ClickableObject.BACK_BUTTON:
+                nextQuestion.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
         }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
-
+            case ClickableObject.NEXT_QUESTION:
+            case ClickableObject.BACK_BUTTON:
+                nextQuestion.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
         }
     }
 
@@ -132,12 +141,17 @@ public class AssignmentPage extends JPanel implements MouseListener {
             }
 
             progressString += "Question " + (currentQuestion + 1 + " of " + questions.size());
+            nextQuestion.setVisible(false);
         } else {
+            removeAll();
+            revalidate();
+            repaint();
+            add(question);
+            add(progress);
+            add(nextQuestion);
+            question.setText("Assignment Complete!");
+            nextQuestion.id = ClickableObject.BACK_BUTTON;
             nextQuestion.setText("DONE");
-            question.setVisible(false);
-            for (MultipleChoiceAnswer answerLabel: answerLabels) {
-                answerLabel.setVisible(false);
-            }
         }
 
         if (currentQuestion > 0) {
@@ -151,8 +165,6 @@ public class AssignmentPage extends JPanel implements MouseListener {
         }
 
         progress.setText(progressString + "     ");
-
-        nextQuestion.setVisible(false);
     }
 
     private void resize() {

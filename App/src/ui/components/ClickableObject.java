@@ -14,6 +14,7 @@ public interface ClickableObject {
     int ADD_ASSIGNMENT = 6;
     int VIEW_ASSIGNMENTS = 7;
     int DO_ASSIGNMENT = 8;
+    int BACK_BUTTON = 9;
     int MULTIPLE_CHOICE_OPTION_1 = 11;
     int MULTIPLE_CHOICE_OPTION_2 = 12;
     int MULTIPLE_CHOICE_OPTION_3 = 13;
