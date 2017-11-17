@@ -1,6 +1,8 @@
-package ui;
+package ui.pages;
 
+import holders.Assignment;
 import holders.Question;
+import ui.components.MultipleChoiceAnswer;
 import ui.components.Button;
 import ui.components.ClickableObject;
 
@@ -15,7 +17,7 @@ import java.util.List;
 
 public class AssignmentPage extends JPanel implements MouseListener {
 
-    private Question[] questionsLabel;
+    private List<Question> questions;
     private int currentQuestion;
     private int correctAnswers;
 
@@ -24,11 +26,12 @@ public class AssignmentPage extends JPanel implements MouseListener {
     private Button nextQuestion;
     private MultipleChoiceAnswer[] answerLabels;
 
-    public AssignmentPage() {
+    public AssignmentPage(Assignment assignment) {
         super();
-        questionsLabel = new Question[]{new Question("What's 2 + 2?", "4", "", new String[]{"1", "5", "42"}),
+        // questions = assignment.getQuestions()
+        questions = new ArrayList<>(Arrays.asList(new Question("What's 2 + 2?", "4", "", new String[]{"1", "5", "42"}),
                 new Question("What's 4 * 2?", "8", "", new String[]{"16", "6", "24"}),
-                new Question("What's 30 / 5?", "6", "", new String[]{"4", "5", "25"})};
+                new Question("What's 30 / 5?", "6", "", new String[]{"4", "5", "25"})));
         currentQuestion = -1;
         correctAnswers = 0;
         progress = new JLabel("", SwingConstants.RIGHT);
@@ -99,13 +102,13 @@ public class AssignmentPage extends JPanel implements MouseListener {
     }
 
     private void answerSelected(MultipleChoiceAnswer selectedAnswer) {
-        if (questionsLabel[currentQuestion].answer.equals(selectedAnswer.getText())) {
+        if (questions.get(currentQuestion).answer.equals(selectedAnswer.getText())) {
             selectedAnswer.setBackground(Color.green);
             correctAnswers++;
         } else {
             selectedAnswer.setBackground(Color.red);
             for (MultipleChoiceAnswer answer: answerLabels) {
-                if (questionsLabel[currentQuestion].answer.equals(answer.getText())) {
+                if (questions.get(currentQuestion).answer.equals(answer.getText())) {
                     answer.setBackground(Color.green);
                 }
             }
@@ -117,18 +120,18 @@ public class AssignmentPage extends JPanel implements MouseListener {
     private void setNextQuestion() {
         currentQuestion++;
         String progressString = "";
-        if (currentQuestion < questionsLabel.length) {
-            question.setText(questionsLabel[currentQuestion].question);
+        if (currentQuestion < questions.size()) {
+            question.setText(questions.get(currentQuestion).question);
 
-            List<String> answers = new ArrayList<>(Arrays.asList(questionsLabel[currentQuestion].multipleChoices));
-            answers.add(questionsLabel[currentQuestion].answer);
+            List<String> answers = new ArrayList<>(Arrays.asList(questions.get(currentQuestion).multipleChoices));
+            answers.add(questions.get(currentQuestion).answer);
             Collections.shuffle(answers);
             for (int i = 0; i < answers.size(); i++) {
                 answerLabels[i].setText(answers.get(i));
                 answerLabels[i].setBackground(Color.white);
             }
 
-            progressString += "Question " + (currentQuestion + 1 + " of " + questionsLabel.length);
+            progressString += "Question " + (currentQuestion + 1 + " of " + questions.size());
         } else {
             nextQuestion.setText("DONE");
             question.setVisible(false);

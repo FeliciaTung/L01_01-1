@@ -68,7 +68,6 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
             assignLabels[i].setPreferredSize(new Dimension(LABEL_WIDTH, labelHeight));
             assignLabels[i].setFont(getFont().deriveFont(labelTextSize));
             assignLabels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            assignLabels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             assignLabels[i].addMouseListener(this);
             add(assignLabels[i]);
 

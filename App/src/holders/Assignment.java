@@ -10,19 +10,22 @@ public class Assignment {
     public int courseID;
     public int id;
     public List<Integer> questions;
+    public float mark;
 
-    public Assignment(String name, int courseID, List<Integer> questions) {
-        this.id = -1; // assignment does not exist in database
-        this.name = name;
-        this.courseID = courseID;
-        this.questions = questions;
-    }
-
-    public Assignment(int id, String name, int courseID, List<Integer> questions) {
+    public Assignment(int id, String name, int courseID, List<Integer> questions, float mark) {
         this.id = id;
         this.name = name;
         this.courseID = courseID;
         this.questions = questions;
+        this.mark = mark;
+    }
+
+    public Assignment(int id, String name, int courseID, List<Integer> questions) {
+        this(-1, name, courseID, questions, -1);
+    }
+
+    public Assignment(String name, int courseID, List<Integer> questions) {
+        this(-1, name, courseID, questions);
     }
 
     public List<Question> getQuestions(){

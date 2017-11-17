@@ -1,6 +1,4 @@
-package ui;
-
-import ui.components.ClickableObject;
+package ui.components;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +7,7 @@ public class MultipleChoiceAnswer extends JLabel implements ClickableObject {
 
     public static final int MULTIPLE_CHOICE_ANSWER = 53;
 
-    MultipleChoiceAnswer() {
+    public MultipleChoiceAnswer() {
         setHorizontalAlignment(SwingConstants.CENTER);
         setVerticalTextPosition(SwingConstants.CENTER);
         setOpaque(true);

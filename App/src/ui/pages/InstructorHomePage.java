@@ -8,32 +8,52 @@ import ui.components.Button;
 import ui.components.ClickableObject;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
 public class InstructorHomePage extends JPanel implements MouseListener {
 
+    private static int WINDOW_WIDTH = 800;
+    private static int WINDOW_HEIGHT = 600;
+
+    private JLabel title;
     private Button addQuestionButton;
     private Button addAssignmentButton;
     private Button viewAssignmentsButton;
 
     public InstructorHomePage() {
+        title = new JLabel("Welcome \"Instructor\"", SwingConstants.CENTER);
         addQuestionButton = new Button("Add Question");
         addAssignmentButton = new Button("Add Assignment");
         viewAssignmentsButton = new Button("View All Assignments");
 
+        setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+
+        title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
+        title.setFont(getFont().deriveFont(24f));
+        add(title);
+
+        add(UIManager.getSpacing(WINDOW_WIDTH, 100));
+
         addQuestionButton.id = ClickableObject.ADD_QUESTION;
         addQuestionButton.addMouseListener(this);
+        add(UIManager.getSpacing(250, 60));
         add(addQuestionButton);
+        add(UIManager.getSpacing(250, 60));
 
         addAssignmentButton.id = ClickableObject.ADD_ASSIGNMENT;
         addAssignmentButton.addMouseListener(this);
+        add(UIManager.getSpacing(250, 80));
         add(addAssignmentButton);
+        add(UIManager.getSpacing(250, 80));
 
         viewAssignmentsButton.id = ClickableObject.VIEW_ASSIGNMENTS;
         viewAssignmentsButton.addMouseListener(this);
+        add(UIManager.getSpacing(250, 60));
         add(viewAssignmentsButton);
+        add(UIManager.getSpacing(250, 60));
     }
 
     @Override
