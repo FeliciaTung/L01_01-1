@@ -19,26 +19,29 @@ import ui.components.ClickableObject;
 import ui.components.Label;
 
 public class LoginPage extends JPanel implements MouseListener {
-    private Button studentButton;
-    private Button instructorButton;
-    private Button saveButton;
+
+    //private Button studentButton;
+    //private Button instructorButton;
+    private Button loginButton;
     private InputField[] input;
     private String[] labelText;
     private JPasswordField[] password;
     private Label title;
 
     public LoginPage() {
-        studentButton = new Button("student");
-        instructorButton = new Button("instructor");
 
-        studentButton.id = ClickableObject.STUDENT_BUTTON;
-        studentButton.addMouseListener(this);
-        add(studentButton);
+        //studentButton = new Button("student");
+        //instructorButton = new Button("instructor");
 
-        instructorButton.id = ClickableObject.INSTRUCTOR_BUTTON;
-        instructorButton.addMouseListener(this);
-        add(instructorButton);
-        saveButton = new SaveQuestionButton();
+        //studentButton.id = ClickableObject.STUDENT_BUTTON;
+        //studentButton.addMouseListener(this);
+        //add(studentButton);
+
+        //instructorButton.id = ClickableObject.INSTRUCTOR_BUTTON;
+        //instructorButton.addMouseListener(this);
+        //add(instructorButton);
+
+        loginButton = new SaveQuestionButton();
         labelText = new String[]{"UTORid", "password"};
         input = new InputField[2]; // UTORid and password
         password = new JPasswordField[1];
@@ -71,8 +74,8 @@ public class LoginPage extends JPanel implements MouseListener {
 
         add(UIManager.getSpacing(800, 40));
 
-        saveButton.addMouseListener(this);
-        add(saveButton);
+        loginButton.addMouseListener(this);
+        add(loginButton);
     }
 
     @Override
@@ -99,7 +102,7 @@ public class LoginPage extends JPanel implements MouseListener {
         title.setForeground(Color.WHITE);
         title.setBackground(Color.RED);
         title.setOpaque(true);
-
+        /*
         Timer t = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -112,10 +115,15 @@ public class LoginPage extends JPanel implements MouseListener {
         });
         t.setRepeats(false);
         t.start();
+        */
     }
 
     private boolean validatePassword() {
         // TODO: validate password from backend
+    }
+
+    private void loginButton() {
+
     }
 
     @Override
@@ -132,11 +140,8 @@ public class LoginPage extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
-            case ClickableObject.STUDENT_BUTTON:
-                studentButton.setBackground(Button.BUTTON_COLOR_PRESSED);
-                break;
-            case ClickableObject.INSTRUCTOR_BUTTON:
-                instructorButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+            case ClickableObject.SAVE_QUESTION:
+                loginButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
         }
     }
@@ -144,14 +149,8 @@ public class LoginPage extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
             case ClickableObject.SAVE_QUESTION:
-                saveButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                loginButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
-        }
-            case ClickableObject.STUDENT_BUTTON:
-                studentButton.setBackground(Button.BUTTON_COLOR_IDLE);
-                break;
-            case ClickableObject.INSTRUCTOR_BUTTON:
-                instructorButton.setBackground(Button.BUTTON_COLOR_IDLE);
-                break;
+            }
         }
 }
