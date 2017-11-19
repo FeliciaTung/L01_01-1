@@ -12,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class ViewAssignmentPage extends JPanel implements MouseListener {
@@ -22,7 +22,7 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
     private DeleteQuestionButton[] deleteButton;
     */
     private InputField assignmentInput;
-    private ArrayList<Question> questionList;
+    private List<Question> questionList;
     private Label[] questionLabels;
     private BackButton backButton;
     private int WINDOW_WIDTH = 800;

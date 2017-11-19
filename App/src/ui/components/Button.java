@@ -10,7 +10,7 @@ public class Button extends JLabel implements ClickableObject {
     public static final Color BUTTON_COLOR_IDLE = new Color(150, 190, 200);
     public static final Color BUTTON_COLOR_PRESSED = new Color(120, 150, 180);
 
-    int id;
+    public int id;
 
     public Button(String text) {
         super(text, CENTER);

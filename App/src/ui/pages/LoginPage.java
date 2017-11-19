@@ -15,8 +15,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 
-public class LoginPage extends JPanel implements MouseListener {
+import ui.components.ClickableObject;
+import ui.components.Label;
 
+public class LoginPage extends JPanel implements MouseListener {
+    private Button studentButton;
+    private Button instructorButton;
     private Button saveButton;
     private InputField[] input;
     private String[] labelText;
@@ -24,7 +28,16 @@ public class LoginPage extends JPanel implements MouseListener {
     private Label title;
 
     public LoginPage() {
-        super();
+        studentButton = new Button("student");
+        instructorButton = new Button("instructor");
+
+        studentButton.id = ClickableObject.STUDENT_BUTTON;
+        studentButton.addMouseListener(this);
+        add(studentButton);
+
+        instructorButton.id = ClickableObject.INSTRUCTOR_BUTTON;
+        instructorButton.addMouseListener(this);
+        add(instructorButton);
         saveButton = new SaveQuestionButton();
         labelText = new String[]{"UTORid", "password"};
         input = new InputField[2]; // UTORid and password
@@ -62,7 +75,6 @@ public class LoginPage extends JPanel implements MouseListener {
         add(saveButton);
     }
 
-
     @Override
     public void mouseClicked(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
@@ -73,6 +85,11 @@ public class LoginPage extends JPanel implements MouseListener {
                 } else {
                     showErrorMessage();
                 }
+            case ClickableObject.STUDENT_BUTTON:
+                UIManager.switchView(new StudentHomePage());
+                break;
+            case ClickableObject.INSTRUCTOR_BUTTON:
+                UIManager.switchView(new InstructorHomePage());
                 break;
         }
     }
@@ -113,21 +130,28 @@ public class LoginPage extends JPanel implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        switch (((ClickableObject) e.getSource()).getID()) {
-            case ClickableObject.SAVE_QUESTION:
-                saveButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+        int id = ((ClickableObject) e.getSource()).getID();
+        switch (id) {
+            case ClickableObject.STUDENT_BUTTON:
+                studentButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
-
+            case ClickableObject.INSTRUCTOR_BUTTON:
+                instructorButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
         }
     }
 
-    @Override
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
             case ClickableObject.SAVE_QUESTION:
                 saveButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
         }
-    }
-
+            case ClickableObject.STUDENT_BUTTON:
+                studentButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
+            case ClickableObject.INSTRUCTOR_BUTTON:
+                instructorButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
+        }
 }
