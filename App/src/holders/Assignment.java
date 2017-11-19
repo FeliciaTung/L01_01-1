@@ -21,7 +21,7 @@ public class Assignment {
     }
 
     public Assignment(int id, String name, int courseID, List<Integer> questions) {
-        this(-1, name, courseID, questions, -1);
+        this(id, name, courseID, questions, -1);
     }
 
     public Assignment(String name, int courseID, List<Integer> questions) {

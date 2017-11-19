@@ -51,6 +51,7 @@ public class InstructorHomePage extends JPanel implements MouseListener {
 
         viewAssignmentsButton.id = ClickableObject.VIEW_ASSIGNMENTS;
         viewAssignmentsButton.addMouseListener(this);
+        viewAssignmentsButton.setPreferredSize(new Dimension(250, Button.HEIGHT));
         add(UIManager.getSpacing(250, 60));
         add(viewAssignmentsButton);
         add(UIManager.getSpacing(250, 60));
