@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class DatabaseManager {
@@ -121,7 +122,7 @@ public class DatabaseManager {
      * @param useCourseid   true if using courseid, false if using assignemnt id
      * @return  questions
      */
-    public static ArrayList<Question> getAllQuestions(int id, boolean useCourseid) {
+    public static List<Question> getAllQuestions(int id, boolean useCourseid) {
         try {
             if (useCourseid) {
                 sql = "SELECT question, answer, qtype, qid FROM question WHERE course=?";
@@ -134,8 +135,8 @@ public class DatabaseManager {
             rs = pstmt.executeQuery();
             String question = null, answer = null;
             int qtype = 0, qid = 0;
-            ArrayList<Question> question_list = new ArrayList<Question>();
-            ArrayList<String> mc_list = new ArrayList<>();
+            List<Question> question_list = new ArrayList<Question>();
+            List<String> mc_list = new ArrayList<>();
             String[] mc_choices;
 
             while (rs.next()) {
@@ -159,7 +160,6 @@ public class DatabaseManager {
                 question_list.add(new Question(qid, question, answer, null, mc_choices));
             }
             return question_list;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -203,7 +203,7 @@ public class DatabaseManager {
 
     public static Assignment getAssignment(int assignmentID) {
         String aname = "";
-        ArrayList<Integer> qids  = new ArrayList<>();
+        List<Integer> qids  = new ArrayList<>();
         int aid = -1;
         Assignment assignment = null;
         try {
@@ -276,11 +276,11 @@ public class DatabaseManager {
     }
 
     //may need refactor to get assignments by userID
-    public static ArrayList<Assignment> getAllAssignment(int courseID) {
+    public static List<Assignment> getAllAssignment(int courseID) {
         String aname = null;
         int assignid = -1, tempId;
-        ArrayList<Integer >qid = new ArrayList<>();
-        ArrayList<Assignment> assign_list = new ArrayList<>();
+        List<Integer >qid = new ArrayList<>();
+        List<Assignment> assign_list = new ArrayList<>();
         try {
             sql = "SELECT a.aid, aname, qid FROM assignment a LEFT OUTER JOIN related_question rq ON rq.aid=a.aid WHERE cid=?";
             pstmt = conn.prepareStatement(sql);
@@ -310,6 +310,5 @@ public class DatabaseManager {
         }
         return assign_list;
     }
-
 
 }

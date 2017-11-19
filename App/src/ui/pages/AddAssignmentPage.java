@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class AddAssignmentPage extends JPanel implements MouseListener {
@@ -26,7 +27,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private DeleteQuestionButton[] deleteButton;
     */
     private InputField assignmentInput;
-    private Question[] questionList;
+    private List<Question> questionList;
     private Label[] questionLabels;
     private CheckBox[] questionCheckBoxes;
     private int WINDOW_WIDTH = 800;
@@ -35,7 +36,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private Label typeAssignment;
 
 
-    public AddAssignmentPage(Question[] questions) {
+    public AddAssignmentPage(List<Question> questions) {
         super();
 
         saveButton = new SaveQuestionButton();
@@ -45,8 +46,8 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         */
         assignmentInput = new InputField();
         questionList = questions;
-        questionLabels = new Label[questions.length];
-        questionCheckBoxes = new CheckBox[questions.length];
+        questionLabels = new Label[questions.size()];
+        questionCheckBoxes = new CheckBox[questions.size()];
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, 600));
         setBackground(Color.WHITE);
@@ -76,9 +77,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     }
 
     private void addQuestions() {
-        for (int i = 0; i < questionList.length; i++) {
+        for (int i = 0; i < questionList.size(); i++) {
             // increase label height to deal with long assignment name
-            String text = "<html>" + questionList[i].question + "</html>";
+            String text = "<html>" + questionList.get(i).question + "</html>";
             int labelHeight = 25;
             if (text.length() > 199) {
                 labelHeight = 65;
@@ -86,7 +87,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 labelHeight = 45;
             }
 
-            questionCheckBoxes[i] = new CheckBox(questionList[i].id);
+            questionCheckBoxes[i] = new CheckBox(questionList.get(i).id);
             questionCheckBoxes[i].addMouseListener(this);
             add(questionCheckBoxes[i]);
             add(UIManager.getSpacing(10, 0));
@@ -131,7 +132,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 }
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
-                gotoViewQuestionPage(questionList[index]);
+                gotoViewQuestionPage(questionList.get(index));
 
         }
     }
@@ -214,15 +215,15 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private void createAssignment() {
         //TODO: get question list from db and add to the selected ones to assignment
         String aname = assignmentInput.getText();
-        ArrayList<Integer> selectedQuestion = new ArrayList<>();
+        List<Integer> selectedQuestion = new ArrayList<>();
 
         for (int i = 0; i < questionCheckBoxes.length; i++) {
             if (questionCheckBoxes[i].isSelected()) {
-                if (questionList[i].id != -1) {
-                    selectedQuestion.add(questionList[i].id);
+                if (questionList.get(i).id != -1) {
+                    selectedQuestion.add(questionList.get(i).id);
 
                 } else {
-                    System.out.println("Invalid Question id: " + questionList[i].question);
+                    System.out.println("Invalid Question id: " + questionList.get(i).question);
                 }
             }
 
