@@ -7,14 +7,17 @@ This project is to build an encouraging assignment system for statistic students
 
 This [file](https://github.com/CSCC01F17/L01_01/blob/master/project_documentation/ProjectTeamAgreement.pdf) is an introduction to cRAFTers (our team for this project).
 
-We have identified the key personas and developed user stories from the personas, which can be found [here](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/userpersonas+stories_v2.pdf) (Updated 11-06-2017).
+We have identified the key personas and developed user stories from the personas, which can be found [here](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/userpersonas+stories_v3.pdf) (Updated 11-20-2017).
+
+You may also view our report on how we describe our strategies in verifying, validating, and reviewing our code [here](https://github.com/CSCC01F17/L01_01/blob/master/project_documentation/verify-validate-review.pdf).
 
 Our Sprints can be found here:
 
 [Sprint 0](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint0.pdf)  
 [Sprint 1](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint1.pdf)  
 [Sprint 2](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint2.pdf)  
-[Sprint 3](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint3.pdf) 
+[Sprint 3](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint3.pdf)  
+[Sprint 4](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint4.pdf)  
 
 ## Team members 
 
