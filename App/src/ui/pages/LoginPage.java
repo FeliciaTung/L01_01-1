@@ -26,7 +26,7 @@ public class LoginPage extends JPanel implements MouseListener {
     private Button loginButton;
     private InputField[] input;
     private String[] userInfo;
-    private JPasswordField[] password;
+    private JPasswordField password;
     private Label title;
 
     public LoginPage() {
@@ -34,7 +34,7 @@ public class LoginPage extends JPanel implements MouseListener {
         loginButton = new LoginButton();
         userInfo = new String[]{"Email", "Password"};
         input = new InputField[2]; // UTORid and password
-        password = new JPasswordField[1];
+        password = new JPasswordField();
         setPreferredSize(new Dimension(800, 680));
         setBackground(Color.WHITE);
 
@@ -60,8 +60,17 @@ public class LoginPage extends JPanel implements MouseListener {
             text.setFont(getFont().deriveFont(16f));
             text.setPreferredSize(new Dimension(InputField.WIDTH, 25));
             add(text);
-            input[i] = new InputField();
-            add(input[i]);
+            if (i == 0) {
+                input[i] = new InputField();
+                add(input[i]);
+            } else{
+                password.setPreferredSize(new Dimension(InputField.WIDTH, InputField.HEIGHT));
+                password.setBackground(new Color(240, 240, 240));
+                password.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                password.setFont(getFont().deriveFont(24f));
+                add(password);
+            }
+
         }
 
         add(UIManager.getSpacing(800, 40));
@@ -134,7 +143,8 @@ public class LoginPage extends JPanel implements MouseListener {
 
     private int loginButton() {
         String uname = input[0].getText();
-        String pw = input[1].getText();
+        String pw = new String(password.getPassword());
+
         User user = DatabaseManager.getUser(uname, pw);
         int type = user.type;
         return type;
