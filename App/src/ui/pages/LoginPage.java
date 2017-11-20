@@ -1,6 +1,7 @@
 package ui.pages;
 
 import backend.DatabaseManager;
+import holders.User;
 import ui.UIManager;
 
 import ui.components.*;
@@ -24,7 +25,7 @@ public class LoginPage extends JPanel implements MouseListener {
     //private Button instructorButton;
     private Button loginButton;
     private InputField[] input;
-    private String[] labelText;
+    private String[] userInfo;
     private JPasswordField[] password;
     private Label title;
 
@@ -42,7 +43,7 @@ public class LoginPage extends JPanel implements MouseListener {
         //add(instructorButton);
 
         loginButton = new SaveQuestionButton();
-        labelText = new String[]{"UTORid", "password"};
+        userInfo = new String[]{"UTORid", "password"};
         input = new InputField[2]; // UTORid and password
         password = new JPasswordField[1];
         setPreferredSize(new Dimension(800, 680));
@@ -65,11 +66,13 @@ public class LoginPage extends JPanel implements MouseListener {
 
         // add "UTORid" and "password"
 
-        for (int i = 0; i < labelText.length; i++) {
-            Label text = new Label(labelText[i], SwingConstants.CENTER);
+        for (int i = 0; i < userInfo.length; i++) {
+            Label text = new Label(userInfo[i], SwingConstants.CENTER);
             text.setFont(getFont().deriveFont(16f));
             text.setPreferredSize(new Dimension(InputField.WIDTH, 25));
             add(text);
+            input[i] = new InputField();
+            add(input[i]);
         }
 
         add(UIManager.getSpacing(800, 40));
@@ -86,7 +89,7 @@ public class LoginPage extends JPanel implements MouseListener {
                 if (validatePassword()) {
                     loginButton();
                 } else {
-                    showErrorMessage();
+                    pwErrorMessage();
                 }
             case ClickableObject.STUDENT_BUTTON:
                 UIManager.switchView(new StudentHomePage());
@@ -97,8 +100,29 @@ public class LoginPage extends JPanel implements MouseListener {
         }
     }
 
-    private void showErrorMessage() {
+    private void pwErrorMessage() {
         title.setText("Please enter a valid password");
+        title.setForeground(Color.WHITE);
+        title.setBackground(Color.RED);
+        title.setOpaque(true);
+        /*
+        Timer t = new Timer(5000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                title.setText("Login");
+                title.setPreferredSize(new Dimension(800, 50));
+                title.setFont(getFont().deriveFont(24f));
+                title.setForeground(Color.BLACK);
+                title.setBackground(Color.WHITE);
+            }
+        });
+        t.setRepeats(false);
+        t.start();
+        */
+    }
+
+    private void loginErrorMessage() {
+        title.setText("User not found, please try again");
         title.setForeground(Color.WHITE);
         title.setBackground(Color.RED);
         title.setOpaque(true);
@@ -123,7 +147,8 @@ public class LoginPage extends JPanel implements MouseListener {
     }
 
     private void loginButton() {
-
+        String uname = input[0].getText();
+        String pw = input[1].getText();
     }
 
     @Override
