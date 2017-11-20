@@ -26,6 +26,7 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
     private Label[] questionLabels;
     private BackButton backButton;
     private int WINDOW_WIDTH = 800;
+    private int WINDOW_HEIGHT = 680;
     private int LABEL_WIDTH = 600;
     private Label title;
     private Label assignmentLabel;
@@ -36,7 +37,7 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
         questionList = assignment.getQuestions();
         questionLabels = new Label[assignment.questions.size()];
         backButton = new BackButton(ClickableObject.BACK_TO_VIEW_ALL_ASSIGN);
-        setPreferredSize(new Dimension(WINDOW_WIDTH, 600));
+        setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
 
         title = new Label("Assignment", SwingConstants.CENTER);
@@ -177,7 +178,7 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
     }
 
     private void gotoViewAllAssignments() {
-        //TODO: Go back to view all assignment page
+        UIManager.switchView(new InstructorHomePage());
     }
 
     private void gotoViewQuestion(Question question) {

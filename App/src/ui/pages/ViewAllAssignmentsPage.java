@@ -27,7 +27,7 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     private float labelTextSize = 16f;
     private int LABEL_WIDTH = 200;
     private int WINDOW_WIDTH = 800;
-    private int WINDOW_HEIGHT = 600;
+    private int WINDOW_HEIGHT = 680;
     private JLabel title;
     private JLabel AssignNameLabel;
     private Button backButton;
@@ -104,7 +104,6 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
             detailButton.add(new Button("Detail"));
             detailButton.get(i).id = ClickableObject.EDIT_QUESTION;
             detailButton.get(i).setPreferredSize(new Dimension(100, Button.HEIGHT));
-            detailButton.get(i).setFont(getFont().deriveFont(18f));
             detailButton.get(i).addMouseListener(this);
 
             add(assignLabels[i]);

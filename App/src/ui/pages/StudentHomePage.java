@@ -12,7 +12,7 @@ import java.awt.event.MouseListener;
 public class StudentHomePage extends JPanel implements MouseListener {
 
     private static int WINDOW_WIDTH = 800;
-    private static int WINDOW_HEIGHT = 600;
+    private static int WINDOW_HEIGHT = 680;
 
     private JLabel title;
     private Button viewAssignmentsButton;
@@ -22,6 +22,7 @@ public class StudentHomePage extends JPanel implements MouseListener {
         viewAssignmentsButton = new Button("View Assignments");
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        setBackground(Color.WHITE);
 
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));

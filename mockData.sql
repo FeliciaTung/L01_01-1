@@ -31,7 +31,7 @@ INSERT INTO mc(qid, choice) VALUES (10, "choice 10.3");
 
 
 INSERT INTO assignment(aname, cid, due_date) VALUES ("a1", 1, DATE('2016/01/13'));
-INSERT INTO assignment(aname, cid, due_date) VALUES ("a2", 1, DATE('2017/01/23'));
+INSERT INTO assignment(aname, cid, due_date) VALUES ("a2", 1, DATE('2020/12/23'));
 INSERT INTO assignment(aname, cid, due_date) VALUES ("a3", 1, DATE('2017/02/13'));
 INSERT INTO assignment(aname, cid, due_date) VALUES ("a4", 2, DATE('2017/03/13'));
 INSERT INTO assignment(aname, cid, due_date) VALUES ("a5", 3, DATE('2017/04/01'));
@@ -39,18 +39,17 @@ INSERT INTO assignment(aname, cid, due_date) VALUES ("a5", 3, DATE('2017/04/01')
 INSERT INTO related_question(aid, qid) VALUES (1, 1);
 INSERT INTO related_question(aid, qid) VALUES (1, 5);
 INSERT INTO related_question(aid, qid) VALUES (1, 6);
-INSERT INTO related_question(aid, qid) VALUES (2, 4);
+INSERT INTO related_question(aid, qid) VALUES (2, 1);
 INSERT INTO related_question(aid, qid) VALUES (2, 5);
-INSERT INTO related_question(aid, qid) VALUES (2, 6);
+INSERT INTO related_question(aid, qid) VALUES (2, 10);
 INSERT INTO related_question(aid, qid) VALUES (3, 7);
 INSERT INTO related_question(aid, qid) VALUES (4, 8);
 INSERT INTO related_question(aid, qid) VALUES (4, 9);
 INSERT INTO related_question(aid, qid) VALUES (5, 10);
 
-
-INSERT INTO users(uname, email, password, cid, type) VALUES("Felicia Tung", "useremail1@mail.utoronto.ca","test", 1, 3);
-INSERT INTO users(uname, email, password, cid, type) VALUES("Rene Piperi", "useremail2@mail.utoronto.ca", "test", 1, 3);
-INSERT INTO users(uname, email, password, cid, type) VALUES("Adrian Ensan", "useremail3@mail.utoronto.ca", "test", 2, 3);
-INSERT INTO users(uname, email, password, cid, type) VALUES("Talha Khatri", "useremail4@mail.utoronto.ca", "test", 3, 3);
-INSERT INTO users(uname, email, password, cid, type) VALUES("Thierry Sans", "useremail5@mail.utoronto.ca", "test", 2, 1);
-INSERT INTO users(uname, email, password, cid, type) VALUES("Brandon", "useremail6@mail.utoronto.ca", "test", 1, 2);
+INSERT INTO users(uname, email, password, cid, type) VALUES("student", "useremail1@mail.utoronto.ca","test", 1, 3);
+INSERT INTO users(uname, email, password, cid, type) VALUES("student2", "useremail3@mail.utoronto.ca", "test", 2, 3);
+INSERT INTO users(uname, email, password, cid, type) VALUES("student3", "useremail4@mail.utoronto.ca", "test", 3, 3);
+INSERT INTO users(uname, email, password, cid, type) VALUES("prof1", "useremail5@mail.utoronto.ca", "test", 1, 1);
+INSERT INTO users(uname, email, password, cid, type) VALUES("prof2", "useremail5@mail.utoronto.ca", "test", 2, 1);
+INSERT INTO users(uname, email, password, cid, type) VALUES("brandon", "useremail6@mail.utoronto.ca", "test", 1, 2);

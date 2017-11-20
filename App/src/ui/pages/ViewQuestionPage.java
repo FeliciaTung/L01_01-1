@@ -23,6 +23,7 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
     private Label answer;
     private Label otherChioce;
     private int WINDOW_WIDTH = 800;
+    private int WINDOW_HEIGHT = 680;
     private int LABEL_WIDTH = 600;
     private float PRIMARY_FONT = 18f;
     private float SECONDARY_FONT = 16F;
@@ -35,7 +36,7 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
         else
             questionType = ClickableObject.MC_BUTTON;
 
-        setPreferredSize(new Dimension(WINDOW_WIDTH, 600));
+        setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
 
         addContent();

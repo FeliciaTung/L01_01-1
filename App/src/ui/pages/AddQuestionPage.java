@@ -23,19 +23,25 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     private RadioButton[] multipleChoiceRadioButtons = new RadioButton[4];
     private RadioButton[] topMenuOptions;
     private int questionType = -1;
+    private Button backButton;
+    private int WINDOW_WIDTH = 800;
+    private int WINDOW_HEIGHT = 680;
+
     public AddQuestionPage() {
         super();
         saveButton = new SaveQuestionButton();
         saveButton.addMouseListener(this);
         questionInput = new InputField();
         topMenuOptions = new RadioButton[2];
+        backButton = new Button("Back");
 
-        setPreferredSize(new Dimension(800, 680));
+        setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
+
 
         addContent(false);
 
-        add(UIManager.getSpacing(800, 30));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 30));
 
 
     }
@@ -43,22 +49,27 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     private void addContent(boolean typeChose){
         // clear everything
         removeAll();
+        backButton.id = ClickableObject.BACK_BUTTON;
+        backButton.addMouseListener(this);
+        add(backButton);
+        add(UIManager.getSpacing(WINDOW_WIDTH - 220, 1));
+
         JLabel title = new JLabel("Add a Question", SwingConstants.CENTER);
-        title.setPreferredSize(new Dimension(800, 50));
+        title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));
         add(title);
 
-        add(UIManager.getSpacing(800, 40));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 40));
 
         JLabel typeQuestion = new JLabel("Question:", SwingConstants.RIGHT);
         typeQuestion.setFont(getFont().deriveFont(18f));
         add(typeQuestion);
         add(questionInput);
 
-        add(UIManager.getSpacing(800, 30));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 30));
 
         addQuestionTypeSelection();
-        add(UIManager.getSpacing(800, 30));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 30));
 
         // user decided which type of question they want
         // show them the add question page for the selected question type
@@ -68,12 +79,12 @@ public class AddQuestionPage extends JPanel implements MouseListener {
             } else {
                 addShortAnswer();
             }
-            add(UIManager.getSpacing(800, 30));
+            add(UIManager.getSpacing(WINDOW_WIDTH, 30));
 
             add(saveButton);
 
         }
-        add(UIManager.getSpacing(800, 30));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 30));
         UIManager.switchView(this);
 
     }
@@ -103,7 +114,6 @@ public class AddQuestionPage extends JPanel implements MouseListener {
             }
         }
 
-        add(UIManager.getSpacing(800, 30));
 
 
     }
@@ -112,7 +122,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         for (int i = 0; i < multipleChoiceOptions.length; i++) {
             if (i % 2 == 0) {
                 if (i > 0) {
-                    add(UIManager.getSpacing(800, 20));
+                    add(UIManager.getSpacing(WINDOW_WIDTH, 20));
                 }
 
                 add(UIManager.getSpacing(60, 1));
@@ -187,6 +197,10 @@ public class AddQuestionPage extends JPanel implements MouseListener {
                     }
                 }
                 break;
+
+            case ClickableObject.BACK_BUTTON:
+                UIManager.switchView(new InstructorHomePage());
+                break;
         }
     }
 
@@ -207,6 +221,9 @@ public class AddQuestionPage extends JPanel implements MouseListener {
                 saveButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
 
+            case ClickableObject.BACK_BUTTON:
+                backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
         }
     }
 
@@ -215,6 +232,9 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         switch (((ClickableObject) e.getSource()).getID()) {
             case ClickableObject.SAVE_QUESTION:
                 saveButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
+            case ClickableObject.BACK_BUTTON:
+                backButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
         }
     }

@@ -49,7 +49,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
         }
 
         setLayout(null);
-        setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(800, 680));
         setBackground(new Color(240, 240, 240));
 
         progress.setFont(getFont().deriveFont(16f));
@@ -172,8 +172,8 @@ public class AssignmentPage extends JPanel implements MouseListener {
     }
 
     private void saveMark(float mark) {
-        // dummy user data
-        User currentUser = DatabaseManager.getUser(1);
+        // mock user data
+        User currentUser = DatabaseManager.getUser("student", "test");
         DatabaseManager.updateAssignmentMark(assignment.id, currentUser.id, mark);
     }
 

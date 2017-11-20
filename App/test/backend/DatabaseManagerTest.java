@@ -33,7 +33,7 @@ public class DatabaseManagerTest {
         DatabaseManager.addQuestion(testQuestion1);
         // Assignment creation and addition
         questionList.add(1);
-        testAssignment1 = new Assignment("testAssignment", 1, questionList);
+        testAssignment1 = new Assignment("testAssignment", 1, questionList, "2017/12/12");
         DatabaseManager.addAssignment(testAssignment1);
         // User creation and addition
         testUser1 = new User("testName", "testEmail", "testPass", 1, 1);
@@ -45,7 +45,7 @@ public class DatabaseManagerTest {
         questionList = new ArrayList<>();
         questionList.add(1);
         questionList.add(2);
-        testAssignmentExtra = new Assignment("ExtraAssignment", 1, questionList);
+        testAssignmentExtra = new Assignment("ExtraAssignment", 1, questionList,"2017/12/12");
         // Adding these won't affect the first elements of the database (which are the first question and assignment)
         DatabaseManager.addAssignment(testAssignmentExtra);
     }
@@ -122,7 +122,7 @@ public class DatabaseManagerTest {
     @Test
     public void testgetAllAssignment() {
         // First user from setup
-        List<Assignment> testAllAssignment = DatabaseManager.getAllAssignment(1);
+        List<Assignment> testAllAssignment = DatabaseManager.getAllAssignment(1,1);
         Assignment a1 = testAllAssignment.get(0);
         Assignment a2 = testAllAssignment.get(1);
 

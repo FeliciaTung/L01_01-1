@@ -187,7 +187,7 @@ public class DatabaseManager {
 
     public static User getUser(String user, String pass) {
         try {
-            sql = "SELECT uid, uname, email, password, cid, type FROM users WHERE uid=?";
+            sql = "SELECT uid, uname, email, password, cid, type FROM users WHERE uname=? AND password=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, user);
             pstmt.setString(2, pass);

@@ -33,12 +33,13 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private Label[] questionLabels;
     private List<CheckBox> questionCheckBoxes;
     private int WINDOW_WIDTH = 800;
+    private int WINDOW_HEIGHT = 680;
     private int LABEL_WIDTH = 600;
     private Label title;
     private JLabel typeAssignment;
-    private String typeDueDate;
+    private String typeDueDate, assignName, dueDate;
     private InputField dueDateInput;
-    private String assignName, dueDate;
+    private Button backButton;
 
 
     public AddAssignmentPage(List<Question> questions) {
@@ -49,6 +50,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         editButton = new EditQuestionButton[question_num];
         deleteButton = new DeleteQuestionButton[question_num];
         */
+        backButton = new Button("Back");
         assignmentInput = new InputField();
         questionList = questions;
         questionLabels = new Label[questions.size()];
@@ -56,8 +58,13 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         dueDateInput = new InputField();
         typeDueDate = "Due Date (yyyy/mm/dd)";
 
-        setPreferredSize(new Dimension(WINDOW_WIDTH, 600));
+        setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
+
+        backButton.id = ClickableObject.BACK_BUTTON;
+        backButton.addMouseListener(this);
+        add(backButton);
+        add(UIManager.getSpacing(WINDOW_WIDTH - 220, 1));
 
         title = new Label("Create Assignment", SwingConstants.CENTER);
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
@@ -150,7 +157,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 int index = ((Label) e.getSource()).getIndex();
                 gotoViewQuestionPage(questionList.get(index));
                 break;
-
+            case ClickableObject.BACK_BUTTON:
+                UIManager.switchView(new InstructorHomePage());
+                break;
         }
     }
 
@@ -175,6 +184,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 int index = ((Label) e.getSource()).getIndex();
                 questionLabels[index].setForeground(Label.LABEL_COLOR_PRESSED);
 
+            case ClickableObject.BACK_BUTTON:
+                backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
             /*case ClickableObject.EDIT_QUESTION:
                 int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
                 for (EditQuestionButton button : editButton) {
@@ -201,6 +213,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
                 questionLabels[index].setForeground(Label.LABEL_COLOR_IDLE);
+            case ClickableObject.BACK_BUTTON:
+                backButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
 
             /*case ClickableObject.EDIT_QUESTION:
                 int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();

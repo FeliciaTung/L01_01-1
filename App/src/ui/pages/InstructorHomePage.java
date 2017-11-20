@@ -16,7 +16,7 @@ import java.util.List;
 public class InstructorHomePage extends JPanel implements MouseListener {
 
     private static int WINDOW_WIDTH = 800;
-    private static int WINDOW_HEIGHT = 600;
+    private static int WINDOW_HEIGHT = 680;
 
     private JLabel title;
     private Button addQuestionButton;
@@ -34,6 +34,7 @@ public class InstructorHomePage extends JPanel implements MouseListener {
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));
         add(title);
+        setBackground(Color.WHITE);
 
         add(UIManager.getSpacing(WINDOW_WIDTH, 100));
 

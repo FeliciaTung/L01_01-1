@@ -17,7 +17,7 @@ import java.util.List;
 public class AvailableAssignments extends JPanel implements MouseListener {
 
     private static int WINDOW_WIDTH = 800;
-    private static int WINDOW_HEIGHT = 600;
+    private static int WINDOW_HEIGHT = 680;
 
     private List<Assignment> assignments;
     private JLabel title;
@@ -42,6 +42,7 @@ public class AvailableAssignments extends JPanel implements MouseListener {
         backButton = new Button("Back");
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        setBackground(Color.WHITE);
 
         backButton.id = ClickableObject.BACK_BUTTON;
         backButton.addMouseListener(this);
