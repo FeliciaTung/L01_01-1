@@ -9,22 +9,17 @@ public class CheckBox extends JComponent implements ClickableObject {
     public static final int HEIGHT = 30;
 
     private final int id;
-    private final int questionid;
 
     private boolean isSelected;
 
-    public CheckBox(int id) {
+    public CheckBox() {
         super();
         this.id = CHECKBOX;
-        this.questionid = id;
         isSelected = false;
 
         setFocusable(true);
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-    }
-    public int getQuestionID(){
-        return this.questionid;
     }
 
     @Override

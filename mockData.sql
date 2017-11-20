@@ -30,11 +30,11 @@ INSERT INTO mc(qid, choice) VALUES (10, "choice 10.2");
 INSERT INTO mc(qid, choice) VALUES (10, "choice 10.3");
 
 
-INSERT INTO assignment(aname, cid) VALUES ("a1", 1);
-INSERT INTO assignment(aname, cid) VALUES ("a2", 1);
-INSERT INTO assignment(aname, cid) VALUES ("a3", 1);
-INSERT INTO assignment(aname, cid) VALUES ("a4", 2);
-INSERT INTO assignment(aname, cid) VALUES ("a5", 3);
+INSERT INTO assignment(aname, cid, due_date) VALUES ("a1", 1, DATE('2016/01/13'));
+INSERT INTO assignment(aname, cid, due_date) VALUES ("a2", 1, DATE('2017/01/23'));
+INSERT INTO assignment(aname, cid, due_date) VALUES ("a3", 1, DATE('2017/02/13'));
+INSERT INTO assignment(aname, cid, due_date) VALUES ("a4", 2, DATE('2017/03/13'));
+INSERT INTO assignment(aname, cid, due_date) VALUES ("a5", 3, DATE('2017/04/01'));
 
 INSERT INTO related_question(aid, qid) VALUES (1, 1);
 INSERT INTO related_question(aid, qid) VALUES (1, 5);

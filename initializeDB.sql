@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS assignment(
 	aid INT AUTO_INCREMENT,
 	aname VARCHAR(255),
 	cid INT,
+    due_date DATETIME,
 	PRIMARY KEY(aid),
 	FOREIGN KEY(cid) REFERENCES course(cid)
 );

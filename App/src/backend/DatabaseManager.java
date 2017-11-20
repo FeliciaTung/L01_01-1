@@ -5,7 +5,10 @@ import holders.Question;
 import holders.User;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -209,9 +212,10 @@ public class DatabaseManager {
 
         try {
             // add assignment to table
-            sql = "INSERT INTO assignment(aname) VALUES(?)";
+            sql = "INSERT INTO assignment(aname, due_date) VALUES(?, DATE(?))";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, assignment.name);
+            pstmt.setString(2, assignment.dueDate);
             pstmt.executeUpdate();
 
             // get the ID of the new assignment
@@ -240,18 +244,22 @@ public class DatabaseManager {
 
     public static Assignment getAssignment(int assignmentID) {
         String aname = "";
+        String date = "";
         List<Integer> qids  = new ArrayList<>();
+        Date dueDate;
         int aid = -1;
         Assignment assignment = null;
         try {
             // get assignment name and id
-            sql = "SELECT aid, aname FROM assignment WHERE aid=?";
+            sql = "SELECT aid, aname, due_date FROM assignment WHERE aid=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, assignmentID);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 aid = rs.getInt(1);
                 aname = rs.getString(2);
+                dueDate = rs.getDate(3);
+                date = convertDateToString(dueDate);
             }
             // get question list for this assignment
             sql = "SELECT qid FROM related_question WHERE aid=?";
@@ -262,7 +270,7 @@ public class DatabaseManager {
                 qids.add(rs.getInt(1));
             }
 
-            assignment = new Assignment(aid,aname, -1, qids);
+            assignment = new Assignment(aid,aname, -1, qids, date);
 
 
         } catch (SQLException e) {
@@ -282,8 +290,10 @@ public class DatabaseManager {
      */
     public static List<Assignment> getAllAssignment(int userID, int courseID) {
         String aname = null;
+        String date;
         int assignid = -1, tempId;
         float mark = -1;
+        Date dueDate = new Date();
         List<Integer >qid = new ArrayList<>();
         List<Assignment> assign_list = new ArrayList<>();
         try {
@@ -308,22 +318,24 @@ public class DatabaseManager {
                 if (tempId != assignid){
                     // this is new assignment, store previous one to list if there is one
                     if (assignid != -1) {
-                        assign_list.add(new Assignment(assignid, aname, courseID, qid, mark));
+                        date = convertDateToString(dueDate);
+                        assign_list.add(new Assignment(assignid, aname, courseID, qid, date, mark));
                     }
                     // clear question list for new assignment
                     assignid = tempId;
                     qid = new ArrayList<>();
                 }
                 aname = rs.getString(2);
-                qid.add(rs.getInt(3));
-                //TODO: add due date
+                dueDate = rs.getDate(3  );
+                qid.add(rs.getInt(4));
                 if (userID >= 1){
                     mark = rs.getFloat(5);
                     if (rs.wasNull()) {mark = -1;}
                 }
             }
             // loop ends before storing the last assignment
-            assign_list.add(new Assignment(assignid, aname, -1, qid));
+            date = convertDateToString(dueDate);
+            assign_list.add(new Assignment(assignid, aname, -1, qid, date, mark));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -333,23 +345,50 @@ public class DatabaseManager {
 
     public static void updateAssignmentMark(int assignId, int userId, float mark){
         try {
-            sql = "SELECT * FROM marks WHERE student =? AND aid=?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, userId);
-            pstmt.setInt(2, assignId);
-            rs = pstmt.executeQuery();
-            if (rs.next()){
-                sql = "UPDATE marks SET mark = ? WHERE student = ? AND aid =?";
-            } else {
-                sql = "INSERT INTO marks(mark, student, cid, aid) VALUES (?,?,1,?)"; // course id = 1
+            if (!passedDueDate(assignId)){
+                sql = "SELECT * FROM marks WHERE student =? AND aid=?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, userId);
+                pstmt.setInt(2, assignId);
+                rs = pstmt.executeQuery();
+                if (rs.next()){
+                    sql = "UPDATE marks SET mark = ? WHERE student = ? AND aid =?";
+                } else {
+                    sql = "INSERT INTO marks(mark, student, cid, aid) VALUES (?,?,1,?)"; // course id = 1
+                }
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setFloat(1, mark);
+                pstmt.setInt(3, assignId);
+                pstmt.setInt(2, userId);
+                pstmt.executeUpdate();
             }
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setFloat(1, mark);
-            pstmt.setInt(3, assignId);
-            pstmt.setInt(2, userId);
-            pstmt.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
         }
+    }
+    private static boolean passedDueDate(int assignId){
+        Date dueDate = new Date();
+        Date today = new Date();
+        try{
+            sql = "SELECT due_date FROM assignment where aid = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, assignId);
+            rs = pstmt.executeQuery();
+            if (rs.next()){
+                dueDate = rs.getDate(1);
+            }
+            DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+            df.format(today);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return (dueDate.before(today));
+
+    }
+    private static String convertDateToString(Date date){
+        String result = "";
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        result = df.format(date);
+        return result;
     }
 }

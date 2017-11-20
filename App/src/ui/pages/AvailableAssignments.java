@@ -23,16 +23,13 @@ public class AvailableAssignments extends JPanel implements MouseListener {
     private JLabel title;
     private JLabel assignmentNames[];
     private JLabel assignmentMarks[];
+    private JLabel assignmentDueDate[];
     private List<Button> takeAssignmentButtons;
     private Button backButton;
 
 
     public AvailableAssignments(List<Assignment> assignments) {
-        //Dummy Data
         assignments = new ArrayList<>();
-        assignments.add(new Assignment(-1, "Dummy Assignment 1", 0, null, 33.33f));
-        assignments.add(new Assignment(-1, "Dummy Assignment 2", 0, null, 100f));
-        assignments.add(new Assignment(-1, "Dummy Assignment 3", 0, null, -1));
         // Dummy User and course
         assignments = DatabaseManager.getAllAssignment(1, 1);
         this.assignments = assignments;
@@ -40,6 +37,7 @@ public class AvailableAssignments extends JPanel implements MouseListener {
         title = new JLabel("Assignments", SwingConstants.CENTER);
         assignmentNames = new JLabel[assignments.size()];
         assignmentMarks = new JLabel[assignments.size()];
+        assignmentDueDate = new JLabel[assignments.size()];
         takeAssignmentButtons = new ArrayList<>();
         backButton = new Button("Back");
 
@@ -59,9 +57,15 @@ public class AvailableAssignments extends JPanel implements MouseListener {
         for (int i = 0; i < assignments.size(); i++) {
 
             assignmentNames[i] = new JLabel(assignments.get(i).name, SwingConstants.LEFT);
-            assignmentNames[i].setPreferredSize(new Dimension(300, 50));
+            assignmentNames[i].setPreferredSize(new Dimension(150, 50));
             assignmentNames[i].setFont(getFont().deriveFont(18f));
             add(assignmentNames[i]);
+
+            assignmentDueDate[i] = new JLabel(assignments.get(i).dueDate, SwingConstants.LEFT);
+            assignmentDueDate[i].setPreferredSize(new Dimension(200, 50));
+            assignmentDueDate[i].setFont(getFont().deriveFont(18f));
+            add(assignmentDueDate[i]);
+
 
             boolean assignmentCompleted = assignments.get(i).mark >= 0;
             String mark = assignmentCompleted ? ("" + assignments.get(i).mark + "%") : "Not Completed";

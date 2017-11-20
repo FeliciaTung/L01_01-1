@@ -13,6 +13,8 @@ import ui.UIManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -29,11 +31,14 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private InputField assignmentInput;
     private List<Question> questionList;
     private Label[] questionLabels;
-    private CheckBox[] questionCheckBoxes;
+    private List<CheckBox> questionCheckBoxes;
     private int WINDOW_WIDTH = 800;
     private int LABEL_WIDTH = 600;
     private Label title;
-    private Label typeAssignment;
+    private JLabel typeAssignment;
+    private String typeDueDate;
+    private InputField dueDateInput;
+    private String assignName, dueDate;
 
 
     public AddAssignmentPage(List<Question> questions) {
@@ -47,25 +52,37 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         assignmentInput = new InputField();
         questionList = questions;
         questionLabels = new Label[questions.size()];
-        questionCheckBoxes = new CheckBox[questions.size()];
+        questionCheckBoxes = new ArrayList<>();
+        dueDateInput = new InputField();
+        typeDueDate = "Due Date (yyyy/mm/dd)";
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, 600));
         setBackground(Color.WHITE);
 
-        title = new Label("Available Questions", SwingConstants.CENTER);
+        title = new Label("Create Assignment", SwingConstants.CENTER);
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));
         add(title);
 
         add(UIManager.getSpacing(WINDOW_WIDTH, 40));
 
-        typeAssignment = new Label("Create an Assignment:", SwingConstants.RIGHT);
-        typeAssignment.setFont(getFont().deriveFont(18f));
+        typeAssignment = new JLabel("Assignment name:", SwingConstants.LEFT);
+
+        typeAssignment.setFont(getFont().deriveFont(16f));
+        typeAssignment.setPreferredSize(new Dimension(InputField.WIDTH, 25));
         add(typeAssignment);
 
-        add(assignmentInput);
+        add(UIManager.getSpacing(20, 1));
 
-        add(UIManager.getSpacing(WINDOW_WIDTH, 30));
+        JLabel dueDateLabel = new JLabel(typeDueDate, SwingConstants.LEFT);
+        dueDateLabel.setFont(getFont().deriveFont(16f));
+        dueDateLabel.setPreferredSize(new Dimension(InputField.WIDTH, 25));
+        add(dueDateLabel);
+
+        add(assignmentInput);
+        add(UIManager.getSpacing(20, 1));
+        add(dueDateInput);
+        add(UIManager.getSpacing(WINDOW_WIDTH, 20));
 
         addQuestions();
 
@@ -87,9 +104,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 labelHeight = 45;
             }
 
-            questionCheckBoxes[i] = new CheckBox(questionList.get(i).id);
-            questionCheckBoxes[i].addMouseListener(this);
-            add(questionCheckBoxes[i]);
+            questionCheckBoxes.add(new CheckBox());
+            questionCheckBoxes.get(i).addMouseListener(this);
+            add(questionCheckBoxes.get(i));
             add(UIManager.getSpacing(10, 0));
 
 
@@ -117,22 +134,22 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
             case ClickableObject.SAVE_QUESTION:
-                createAssignment();
+                if (validateInput()) {
+                    createAssignment();
+                } else {showErrorMessage();}
                 break;
             case ClickableObject.CHECKBOX:
-                id = ((CheckBox) e.getSource()).getQuestionID();
-                for (CheckBox checkbox : questionCheckBoxes) {
-                    if (id == checkbox.getQuestionID()) {
-                        if (!checkbox.isSelected())
-                            checkbox.select();
-                        else
-                            checkbox.deselect();
-                        break;
-                    }
+                CheckBox clickedCheckBox = ((CheckBox)e.getSource());
+                if (clickedCheckBox.isSelected()) {
+                    clickedCheckBox.deselect();
+                } else {
+                    clickedCheckBox.select();
                 }
+                break;
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
                 gotoViewQuestionPage(questionList.get(index));
+                break;
 
         }
     }
@@ -213,26 +230,49 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     }
 
     private void createAssignment() {
-        //TODO: get question list from db and add to the selected ones to assignment
-        String aname = assignmentInput.getText();
         List<Integer> selectedQuestion = new ArrayList<>();
-
-        for (int i = 0; i < questionCheckBoxes.length; i++) {
-            if (questionCheckBoxes[i].isSelected()) {
-                if (questionList.get(i).id != -1) {
-                    selectedQuestion.add(questionList.get(i).id);
-
+        for (CheckBox cb : questionCheckBoxes){
+            if (cb.isSelected()) {
+                int index = questionCheckBoxes.indexOf(cb);
+                if (questionList.get(index).id != -1) {
+                    selectedQuestion.add(questionList.get(index).id);
                 } else {
-                    System.out.println("Invalid Question id: " + questionList.get(i).question);
+                    System.out.println("Invalid Question id: " + questionList.get(index).question);
                 }
             }
-
-
         }
-        DatabaseManager.addAssignment(new Assignment(aname, 0, selectedQuestion));
+        DatabaseManager.addAssignment(new Assignment(assignName, 0, selectedQuestion, dueDate));
     }
 
     private void gotoViewQuestionPage(Question question) {
         UIManager.switchToQuestionView(question);
+    }
+
+    private boolean validateInput(){
+        assignName = assignmentInput.getText();
+        dueDate = dueDateInput.getText();
+        return !(assignName.equals("")  && dueDate.equals(""));
+
+
+    }
+    private void showErrorMessage() {
+
+        title.setText("Please enter assignment name and due date");
+        title.setForeground(Color.WHITE);
+        title.setBackground(Color.RED);
+        title.setOpaque(true);
+
+        Timer t = new Timer(5000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                title.setText("Sign Up");
+                title.setPreferredSize(new Dimension(800, 50));
+                title.setFont(getFont().deriveFont(24f));
+                title.setForeground(Color.BLACK);
+                title.setBackground(Color.WHITE);
+            }
+        });
+        t.setRepeats(false);
+        t.start();
     }
 }
