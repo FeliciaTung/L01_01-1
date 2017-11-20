@@ -31,19 +31,8 @@ public class LoginPage extends JPanel implements MouseListener {
 
     public LoginPage() {
 
-        //studentButton = new Button("student");
-        //instructorButton = new Button("instructor");
-
-        //studentButton.id = ClickableObject.STUDENT_BUTTON;
-        //studentButton.addMouseListener(this);
-        //add(studentButton);
-
-        //instructorButton.id = ClickableObject.INSTRUCTOR_BUTTON;
-        //instructorButton.addMouseListener(this);
-        //add(instructorButton);
-
-        loginButton = new SaveQuestionButton();
-        userInfo = new String[]{"UTORid", "password"};
+        loginButton = new LoginButton();
+        userInfo = new String[]{"Email", "Password"};
         input = new InputField[2]; // UTORid and password
         password = new JPasswordField[1];
         setPreferredSize(new Dimension(800, 680));
@@ -67,7 +56,7 @@ public class LoginPage extends JPanel implements MouseListener {
         // add "UTORid" and "password"
 
         for (int i = 0; i < userInfo.length; i++) {
-            Label text = new Label(userInfo[i], SwingConstants.CENTER);
+            Label text = new Label(userInfo[i], SwingConstants.LEFT);
             text.setFont(getFont().deriveFont(16f));
             text.setPreferredSize(new Dimension(InputField.WIDTH, 25));
             add(text);
@@ -83,18 +72,13 @@ public class LoginPage extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int id = ((ClickableObject) e.getSource()).getID();
+        int id = loginButton() + 40;
         switch (id) {
-            case ClickableObject.SAVE_QUESTION:
-                if (validatePassword()) {
-                    loginButton();
-                } else {
-                    pwErrorMessage();
-                }
-            case ClickableObject.STUDENT_BUTTON:
+            case ClickableObject.USER_TYPE_3:
                 UIManager.switchView(new StudentHomePage());
                 break;
-            case ClickableObject.INSTRUCTOR_BUTTON:
+            case ClickableObject.USER_TYPE_2:
+            case ClickableObject.USER_TYPE_1:
                 UIManager.switchView(new InstructorHomePage());
                 break;
         }
@@ -142,13 +126,18 @@ public class LoginPage extends JPanel implements MouseListener {
         */
     }
 
+    /*
     private boolean validatePassword() {
         // TODO: validate password from backend
     }
+    */
 
-    private void loginButton() {
+    private int loginButton() {
         String uname = input[0].getText();
         String pw = input[1].getText();
+        User user = DatabaseManager.getUser(uname, pw);
+        int type = user.type;
+        return type;
     }
 
     @Override
@@ -165,7 +154,7 @@ public class LoginPage extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
-            case ClickableObject.SAVE_QUESTION:
+            case ClickableObject.LOGIN_BUTTON:
                 loginButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
         }
@@ -173,7 +162,7 @@ public class LoginPage extends JPanel implements MouseListener {
 
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
-            case ClickableObject.SAVE_QUESTION:
+            case ClickableObject.LOGIN_BUTTON:
                 loginButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
             }

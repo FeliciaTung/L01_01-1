@@ -252,22 +252,21 @@ public class DatabaseManager {
         }
     }
     
-    public static User getUser(int uid) {
+    public static User getUser(String user, String pass) {
         try {
-            sql = "SELECT uname, email, password, cid, type FROM users WHERE uid=?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, uid);
+            String query = "SELECT uname, email, password, cid, type FROM users WHERE uname="+user+" AND password="+pass;
+            pstmt = conn.prepareStatement(query);
             rs = pstmt.executeQuery();
-            String uname = null, email = null, password = null;
+            String email = null;
             int cid = -1, type = -1;
             while (rs.next()) {
-            	uname = rs.getString(1);
+                user = rs.getString(1);
             	email = rs.getString(2);
-            	password = rs.getString(3);
+            	pass = rs.getString(3);
             	cid = rs.getInt(4);
             	type = rs.getInt(5);
             }
-            User res_user = new User(uname, email, password, cid, type);
+            User res_user = new User(user, email, pass, cid, type);
             return res_user;
         } catch (SQLException e) {
             e.printStackTrace();
