@@ -52,4 +52,6 @@ conn = DriverManager.getConnection("jdbc:mysql://localhost/C01ProjectDB", "root"
 ## Run the unit tests
 1. Download and install [junit.jar and hamcrest-core.jar](https://github.com/junit-team/junit4/wiki/Download-and-Install)
 2. Add the jars to java class path 
-3. Run [L01_01/App/test/backend/DatabaseManagerTest.java](https://github.com/CSCC01F17/L01_01/blob/master/App/test/backend/DatabaseManagerTest.java)
+3. Follow the steps above set up local database, but don't have to run the two scripts
+4. Run [initializeTestingDB.sql](https://github.com/CSCC01F17/L01_01/blob/master/initializeTestingDB.sql)
+5. Run [L01_01/App/test/backend/DatabaseManagerTest.java](https://github.com/CSCC01F17/L01_01/blob/master/App/test/backend/DatabaseManagerTest.java)
