@@ -31,11 +31,14 @@ public class DatabaseManager {
 
     public static void addQuestion(Question question) {
         // SQL Query
-        try {
-            sql = "INSERT INTO question(question, answer) VALUES(?, ?)";
+        int questionType = (question.multipleChoices == null)? 2: 1;
+            try {
+            sql = "INSERT INTO question(question, answer, course, qtype) VALUES(?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, question.question);
             pstmt.setString(2, question.answer);
+            pstmt.setInt(3, 1); //dummy courseID
+            pstmt.setInt(4, questionType);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -43,11 +46,10 @@ public class DatabaseManager {
         }
 
         // If true we know the question is a multiple choice question
-        if (question.multipleChoices != null) {
+        if (questionType == 1) {
             try {
                 String sql_get = "SELECT qid FROM question WHERE question=?";
 				PreparedStatement ret_id = conn.prepareStatement(sql_get);
-				ret_id = conn.prepareStatement(sql_get);
 				ret_id.setString(1, question.question);
 				// Result set for desired qid
 		        ResultSet rs = ret_id.executeQuery();
@@ -171,10 +173,10 @@ public class DatabaseManager {
 
         try {
             // add assignment to table
-            //TODO: add courseID
-            sql = "INSERT INTO assignment(aname) VALUES(?)";
+            sql = "INSERT INTO assignment(aname, cid) VALUES(?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, assignment.name);
+            pstmt.setInt(2, assignment.courseID);
             pstmt.executeUpdate();
 
             // get the ID of the new assignment
@@ -204,17 +206,18 @@ public class DatabaseManager {
     public static Assignment getAssignment(int assignmentID) {
         String aname = "";
         List<Integer> qids  = new ArrayList<>();
-        int aid = -1;
+        int aid = -1, courseID = -1;
         Assignment assignment = null;
         try {
-            // get assignment name and id
-            sql = "SELECT aid, aname FROM assignment WHERE aid=?";
+            // get assignment name and id ad courseID
+            sql = "SELECT aid, aname, cid FROM assignment WHERE aid=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, assignmentID);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 aid = rs.getInt(1);
                 aname = rs.getString(2);
+                courseID = rs.getInt(3);
             }
             // get question list for this assignment
             sql = "SELECT qid FROM related_question WHERE aid=?";
@@ -225,7 +228,7 @@ public class DatabaseManager {
                 qids.add(rs.getInt(1));
             }
 
-            assignment = new Assignment(aid,aname, -1, qids);
+            assignment = new Assignment(aid,aname, courseID, qids);
 
 
         } catch (SQLException e) {
@@ -305,7 +308,7 @@ public class DatabaseManager {
                 qid.add(rs.getInt(3));
             }
             // loop ends before storing the last assignment
-            assign_list.add(new Assignment(assignid, aname, -1, qid));
+            assign_list.add(new Assignment(assignid, aname, courseID, qid));
 
         } catch (SQLException e) {
             e.printStackTrace();
