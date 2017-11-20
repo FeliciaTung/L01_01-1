@@ -18,9 +18,9 @@ Our Sprints can be found here:
 [Sprint 2](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint2.pdf)  
 [Sprint 3](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint3.pdf)  
 [Sprint 4](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint4.pdf)  
-[Code Review Debriefing](https://www.youtube.com/watch?v=XfbQsTs4Va4) 
 
-[Code Review and Testing Report](https://github.com/CSCC01F17/L01_01/blob/afb8e7b0e6b91d58dad41596d45a5d20dcc5f69c/project_documentation/verify-validate-review.pdf)
+[Code Review Debriefing Video](https://www.youtube.com/watch?v=XfbQsTs4Va4) 
+
 ## Team members 
 
 * **Adrian Ensan** 
