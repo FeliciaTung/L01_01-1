@@ -4,11 +4,7 @@ import holders.Assignment;
 import holders.Question;
 import holders.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,6 +141,7 @@ public class DatabaseManager {
             	qtype = rs.getInt(3);
             	qid = rs.getInt(4);
             	mc_choices = null; // reset for each question
+            	mc_list = new ArrayList<>(); // reset for each question
                 // Again check for multiple choice.
                 if (qtype == 1) {
                 	String sql_mc = "SELECT choice FROM mc WHERE qid=?";
@@ -165,13 +162,53 @@ public class DatabaseManager {
         }
         return null;
     }
+    
+    public static void addUser(User user) {
+    	try {
+            sql = "INSERT INTO users(uname, email, password, cid, type) VALUES(?, ?, ?, ?, ?)";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, user.name);
+            pstmt.setString(2, user.email);
+            // This may need to change. Should we really store raw password text?
+            pstmt.setString(3, user.input_pass);
+            pstmt.setInt(4, user.courseID);
+            pstmt.setInt(5, user.type);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static User getUser(int uid) {
+        try {
+            sql = "SELECT uid, uname, email, password, cid, type FROM users WHERE uid=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, uid);
+            rs = pstmt.executeQuery();
+            String uname = null, email = null, password = null;
+            int cid = -1, type = -1, userid = -1 ;
+            while (rs.next()) {
+                userid = rs.getInt(1);
+                uname = rs.getString(2);
+                email = rs.getString(3);
+                password = rs.getString(4);
+                cid = rs.getInt(5);
+                type = rs.getInt(6);
+            }
+            User res_user = new User(userid, uname, email, password, cid, type);
+            return res_user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static void addAssignment(Assignment assignment) {
         int aid = -1;
 
         try {
             // add assignment to table
-            //TODO: add courseID
             sql = "INSERT INTO assignment(aname) VALUES(?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, assignment.name);
@@ -234,57 +271,35 @@ public class DatabaseManager {
 
         return assignment;
     }
-    
-    public static void addUser(User user) {
-    	try {
-            sql = "INSERT INTO users(uname, email, password, cid, type) VALUES(?, ?, ?, ?, ?)";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, user.name);
-            pstmt.setString(2, user.email);
-            // This may need to change. Should we really store raw password text?
-            pstmt.setString(3, user.input_pass);
-            pstmt.setInt(4, user.courseID);
-            pstmt.setInt(5, user.type);
-            pstmt.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public static User getUser(int uid) {
-        try {
-            sql = "SELECT uname, email, password, cid, type FROM users WHERE uid=?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, uid);
-            rs = pstmt.executeQuery();
-            String uname = null, email = null, password = null;
-            int cid = -1, type = -1;
-            while (rs.next()) {
-            	uname = rs.getString(1);
-            	email = rs.getString(2);
-            	password = rs.getString(3);
-            	cid = rs.getInt(4);
-            	type = rs.getInt(5);
-            }
-            User res_user = new User(uname, email, password, cid, type);
-            return res_user;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    //may need refactor to get assignments by userID
-    public static List<Assignment> getAllAssignment(int courseID) {
+    /**
+     * get all assignments that are associated with a course/user. If userID is invalid, then get assignments based on courseID
+     * and no mark is given to the assignments return.
+     * If userID is valid, then return Assignments with user's marks on each assignment
+     * @param userID
+     * @param courseID
+     * @return
+     */
+    public static List<Assignment> getAllAssignment(int userID, int courseID) {
         String aname = null;
         int assignid = -1, tempId;
+        float mark = -1;
         List<Integer >qid = new ArrayList<>();
         List<Assignment> assign_list = new ArrayList<>();
         try {
-            sql = "SELECT a.aid, aname, qid FROM assignment a LEFT OUTER JOIN related_question rq ON rq.aid=a.aid WHERE cid=?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, courseID);
+            if (userID < 1) {
+                sql = "SELECT a.aid, aname, due_date, qid FROM assignment a LEFT OUTER JOIN related_question rq ON " +
+                        "rq.aid=a.aid WHERE cid=?";
+
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, courseID);
+            } else {
+                sql = "SELECT a.aid, aname, due_date, qid, m.mark FROM assignment a JOIN related_question rq ON " +
+                        "rq.aid=a.aid LEFT JOIN marks m ON a.cid = m.cid AND a.aid=m.aid and student = ? WHERE a.cid = ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, userID);
+                pstmt.setInt(2, courseID);
+            }
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -293,7 +308,7 @@ public class DatabaseManager {
                 if (tempId != assignid){
                     // this is new assignment, store previous one to list if there is one
                     if (assignid != -1) {
-                        assign_list.add(new Assignment(assignid, aname, courseID, qid));
+                        assign_list.add(new Assignment(assignid, aname, courseID, qid, mark));
                     }
                     // clear question list for new assignment
                     assignid = tempId;
@@ -301,6 +316,11 @@ public class DatabaseManager {
                 }
                 aname = rs.getString(2);
                 qid.add(rs.getInt(3));
+                //TODO: add due date
+                if (userID >= 1){
+                    mark = rs.getFloat(5);
+                    if (rs.wasNull()) {mark = -1;}
+                }
             }
             // loop ends before storing the last assignment
             assign_list.add(new Assignment(assignid, aname, -1, qid));
@@ -311,4 +331,25 @@ public class DatabaseManager {
         return assign_list;
     }
 
+    public static void updateAssignmentMark(int assignId, int userId, float mark){
+        try {
+            sql = "SELECT * FROM marks WHERE student =? AND aid=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, assignId);
+            rs = pstmt.executeQuery();
+            if (rs.next()){
+                sql = "UPDATE marks SET mark = ? WHERE student = ? AND aid =?";
+            } else {
+                sql = "INSERT INTO marks(mark, student, cid, aid) VALUES (?,?,1,?)"; // course id = 1
+            }
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setFloat(1, mark);
+            pstmt.setInt(3, assignId);
+            pstmt.setInt(2, userId);
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }

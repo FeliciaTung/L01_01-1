@@ -70,7 +70,7 @@ public class InstructorHomePage extends JPanel implements MouseListener {
                 UIManager.switchView(new AddAssignmentPage(list));
                 break;
             case ClickableObject.VIEW_ASSIGNMENTS:
-                List<Assignment> assignments = DatabaseManager.getAllAssignment(1);
+                List<Assignment> assignments = DatabaseManager.getAllAssignment(-1, 1);
                 UIManager.switchView(new ViewAllAssignmentsPage(assignments));
                 break;
         }

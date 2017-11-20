@@ -1,7 +1,9 @@
 package ui.pages;
 
+import backend.DatabaseManager;
 import holders.Assignment;
 import holders.Question;
+import holders.User;
 import ui.UIManager;
 import ui.components.MultipleChoiceAnswer;
 import ui.components.Button;
@@ -21,7 +23,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
     private List<Question> questions;
     private int currentQuestion;
     private int correctAnswers;
-
+    private Assignment assignment;
     private JLabel progress;
     private JLabel question;
     private Button nextQuestion;
@@ -29,10 +31,11 @@ public class AssignmentPage extends JPanel implements MouseListener {
 
     public AssignmentPage(Assignment assignment) {
         super();
-        // questions = assignment.getQuestions()
-        questions = new ArrayList<>(Arrays.asList(new Question("What's 2 + 2?", "4", "", new String[]{"1", "5", "42"}),
-                new Question("What's 4 * 2?", "8", "", new String[]{"16", "6", "24"}),
-                new Question("What's 30 / 5?", "6", "", new String[]{"4", "5", "25"})));
+        this.assignment = assignment;
+        questions = assignment.getQuestions();
+//        questions = new ArrayList<>(Arrays.asList(new Question("What's 2 + 2?", "4", "", new String[]{"1", "5", "42"}),
+//                new Question("What's 4 * 2?", "8", "", new String[]{"16", "6", "24"}),
+//                new Question("What's 30 / 5?", "6", "", new String[]{"4", "5", "25"})));
         currentQuestion = -1;
         correctAnswers = 0;
         progress = new JLabel("", SwingConstants.RIGHT);
@@ -153,18 +156,25 @@ public class AssignmentPage extends JPanel implements MouseListener {
             nextQuestion.id = ClickableObject.BACK_BUTTON;
             nextQuestion.setText("DONE");
         }
-
+        float mark;
         if (currentQuestion > 0) {
+            mark = Math.round((float) correctAnswers / currentQuestion * 100);
             if (progressString.equals("")) {
                 progressString += "Final Score: " + correctAnswers + "/" + currentQuestion +
                         " (" + Math.round((float) correctAnswers / currentQuestion * 100) + "%)";
+                saveMark(mark);
             } else {
                 progressString += " - Current Score: " + correctAnswers + "/" + currentQuestion +
                         " (" + Math.round((float) correctAnswers / currentQuestion * 100) + "%)";
             }
         }
-
         progress.setText(progressString + "     ");
+    }
+
+    private void saveMark(float mark) {
+        // dummy user data
+        User currentUser = DatabaseManager.getUser(1);
+        DatabaseManager.updateAssignmentMark(assignment.id, currentUser.id, mark);
     }
 
     private void resize() {

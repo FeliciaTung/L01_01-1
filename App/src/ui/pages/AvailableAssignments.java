@@ -1,5 +1,6 @@
 package ui.pages;
 
+import backend.DatabaseManager;
 import holders.Assignment;
 import ui.UIManager;
 import ui.components.Button;
@@ -32,6 +33,8 @@ public class AvailableAssignments extends JPanel implements MouseListener {
         assignments.add(new Assignment(-1, "Dummy Assignment 1", 0, null, 33.33f));
         assignments.add(new Assignment(-1, "Dummy Assignment 2", 0, null, 100f));
         assignments.add(new Assignment(-1, "Dummy Assignment 3", 0, null, -1));
+        // Dummy User and course
+        assignments = DatabaseManager.getAllAssignment(1, 1);
         this.assignments = assignments;
 
         title = new JLabel("Assignments", SwingConstants.CENTER);

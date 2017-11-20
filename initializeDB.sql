@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS marks(
 	student INT,
 	aid INT, 
 	cid INT,
-	mark INT,
+	mark FLOAT,
 	PRIMARY KEY(student, aid),
 	FOREIGN KEY(aid) REFERENCES assignment(aid),
 	FOREIGN KEY(cid) REFERENCES course(cid),
