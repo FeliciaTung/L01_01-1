@@ -32,7 +32,7 @@ public class LoginPage extends JPanel implements MouseListener {
     public LoginPage() {
 
         loginButton = new LoginButton();
-        userInfo = new String[]{"Email", "Password"};
+        userInfo = new String[]{"UTORid", "Password"};
         input = new InputField[2]; // UTORid and password
         password = new JPasswordField();
         setPreferredSize(new Dimension(800, 680));
