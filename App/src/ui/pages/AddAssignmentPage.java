@@ -241,7 +241,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 }
             }
         }
-        DatabaseManager.addAssignment(new Assignment(assignName, 0, selectedQuestion, dueDate));
+        DatabaseManager.addAssignment(new Assignment(assignName, 1, selectedQuestion, dueDate));
     }
 
     private void gotoViewQuestionPage(Question question) {

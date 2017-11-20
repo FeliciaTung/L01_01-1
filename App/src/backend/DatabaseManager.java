@@ -30,11 +30,14 @@ public class DatabaseManager {
 
     public static void addQuestion(Question question) {
         // SQL Query
-        try {
-            sql = "INSERT INTO question(question, answer) VALUES(?, ?)";
+        int questionType = (question.multipleChoices == null)? 2: 1;
+            try {
+            sql = "INSERT INTO question(question, answer, course, qtype) VALUES(?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, question.question);
             pstmt.setString(2, question.answer);
+            pstmt.setInt(3, 1); //dummy courseID
+            pstmt.setInt(4, questionType);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -42,11 +45,10 @@ public class DatabaseManager {
         }
 
         // If true we know the question is a multiple choice question
-        if (question.multipleChoices != null) {
+        if (questionType == 1) {
             try {
                 String sql_get = "SELECT qid FROM question WHERE question=?";
 				PreparedStatement ret_id = conn.prepareStatement(sql_get);
-				ret_id = conn.prepareStatement(sql_get);
 				ret_id.setString(1, question.question);
 				// Result set for desired qid
 		        ResultSet rs = ret_id.executeQuery();
@@ -165,7 +167,7 @@ public class DatabaseManager {
         }
         return null;
     }
-    
+
     public static void addUser(User user) {
     	try {
             sql = "INSERT INTO users(uname, email, password, cid, type) VALUES(?, ?, ?, ?, ?)";
@@ -182,12 +184,13 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
-    
-    public static User getUser(int uid) {
+
+    public static User getUser(String user, String pass) {
         try {
             sql = "SELECT uid, uname, email, password, cid, type FROM users WHERE uid=?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, uid);
+            pstmt.setString(1, user);
+            pstmt.setString(2, pass);
             rs = pstmt.executeQuery();
             String uname = null, email = null, password = null;
             int cid = -1, type = -1, userid = -1 ;
@@ -212,10 +215,11 @@ public class DatabaseManager {
 
         try {
             // add assignment to table
-            sql = "INSERT INTO assignment(aname, due_date) VALUES(?, DATE(?))";
+            sql = "INSERT INTO assignment(aname,cid, due_date) VALUES(?, ?, DATE(?))";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, assignment.name);
-            pstmt.setString(2, assignment.dueDate);
+            pstmt.setInt(2, assignment.courseID);
+            pstmt.setString(3, assignment.dueDate);
             pstmt.executeUpdate();
 
             // get the ID of the new assignment
@@ -247,18 +251,19 @@ public class DatabaseManager {
         String date = "";
         List<Integer> qids  = new ArrayList<>();
         Date dueDate;
-        int aid = -1;
+        int aid = -1, courseID = -1;
         Assignment assignment = null;
         try {
-            // get assignment name and id
-            sql = "SELECT aid, aname, due_date FROM assignment WHERE aid=?";
+            // get assignment info
+            sql = "SELECT aid, aname, cid, due_date  FROM assignment WHERE aid=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, assignmentID);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 aid = rs.getInt(1);
                 aname = rs.getString(2);
-                dueDate = rs.getDate(3);
+                courseID = rs.getInt(3);
+                dueDate = rs.getDate(4);
                 date = convertDateToString(dueDate);
             }
             // get question list for this assignment
@@ -270,7 +275,7 @@ public class DatabaseManager {
                 qids.add(rs.getInt(1));
             }
 
-            assignment = new Assignment(aid,aname, -1, qids, date);
+            assignment = new Assignment(aid,aname, courseID, qids, date);
 
 
         } catch (SQLException e) {
@@ -335,7 +340,7 @@ public class DatabaseManager {
             }
             // loop ends before storing the last assignment
             date = convertDateToString(dueDate);
-            assign_list.add(new Assignment(assignid, aname, -1, qid, date, mark));
+            assign_list.add(new Assignment(assignid, aname, courseID, qid, date, mark));
 
         } catch (SQLException e) {
             e.printStackTrace();
