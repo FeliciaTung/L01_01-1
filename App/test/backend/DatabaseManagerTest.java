@@ -52,7 +52,7 @@ public class DatabaseManagerTest {
 
     @After
     public void tearDown() {
-        String[] tables = new String[]{"question", "assignment", "related_question"};
+        String[] tables = new String[]{"question", "assignment", "related_question", "users"};
         try {
             Statement st = conn.createStatement();
             for (int i = 0; i < tables.length; i++) {
@@ -92,7 +92,7 @@ public class DatabaseManagerTest {
     @Test
     public void testgetUser() {
         // First user from setup
-        User testUser2 = DatabaseManager.getUser(1);
+        User testUser2 = DatabaseManager.getUser(testUser1.name, testUser1.input_pass);
         // Fields should all be the same
         assertEquals(testUser1.name, testUser2.name);
         assertEquals(testUser1.email, testUser2.email);
