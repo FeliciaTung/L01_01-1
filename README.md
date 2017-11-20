@@ -18,7 +18,9 @@ Our Sprints can be found here:
 [Sprint 2](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint2.pdf)  
 [Sprint 3](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint3.pdf)  
 [Sprint 4](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint4.pdf)  
-[Code Review Debriefing](https://www.youtube.com/watch?v=XfbQsTs4Va4)
+[Code Review Debriefing](https://www.youtube.com/watch?v=XfbQsTs4Va4) 
+
+[Code Review and Testing Report](https://github.com/CSCC01F17/L01_01/blob/afb8e7b0e6b91d58dad41596d45a5d20dcc5f69c/project_documentation/verify-validate-review.pdf)
 ## Team members 
 
 * **Adrian Ensan** 
@@ -44,15 +46,10 @@ conn = DriverManager.getConnection("jdbc:mysql://localhost/C01ProjectDB", "root"
 
 ## Run the project
 1. Run the [Main.java](https://github.com/CSCC01F17/L01_01/blob/master/App/src/Main.java) after you have the local database set up 
-* By default, it loads the add question page 
-* To see the add assignment page, go to [UIManager.java](https://github.com/CSCC01F17/L01_01/blob/master/App/src/ui/UIManager.java), 
-  1. comment the line below 
-  ```
-  switchView(new AddQuestionPage());
-  ```
-  2. uncomment the line below 
-  ```
-  switchView(new AddAssignmentPage(qlist));
-  ```
-  3. rerun Main.java 
+2. To login as student, enter UTORid: student, Password: test
+3. To login as instructor, enter UTORid: prof1, Password: test
  
+## Run the unit tests
+1. Download and install [junit.jar and hamcrest-core.jar](https://github.com/junit-team/junit4/wiki/Download-and-Install)
+2. Add the jars to java class path 
+3. Run [L01_01/App/test/backend/DatabaseManagerTest.java](https://github.com/CSCC01F17/L01_01/blob/master/App/test/backend/DatabaseManagerTest.java)
