@@ -18,7 +18,7 @@ Our Sprints can be found here:
 [Sprint 2](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint2.pdf)  
 [Sprint 3](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint3.pdf)  
 [Sprint 4](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint4.pdf)  
-
+[Code Review Debriefing](https://www.youtube.com/watch?v=XfbQsTs4Va4)
 ## Team members 
 
 * **Adrian Ensan** 
@@ -55,3 +55,4 @@ conn = DriverManager.getConnection("jdbc:mysql://localhost/C01ProjectDB", "root"
   switchView(new AddAssignmentPage(qlist));
   ```
   3. rerun Main.java 
+ 
