@@ -14,9 +14,12 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import java.util.Random;
+
 public class AddQuestionPage extends JPanel implements MouseListener {
 
     private Button saveButton;
+    private Button randButton;
     private InputField questionInput;
     private InputField answerInput = new InputField();
     private InputField[] multipleChoiceOptions = new InputField[4];
@@ -26,10 +29,12 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     private Button backButton;
     private int WINDOW_WIDTH = 800;
     private int WINDOW_HEIGHT = 680;
+    Random rand = new Random();
 
     public AddQuestionPage() {
         super();
         saveButton = new SaveQuestionButton();
+        randButton = new Button("Randomize");
         saveButton.addMouseListener(this);
         questionInput = new InputField();
         topMenuOptions = new RadioButton[2];
@@ -50,7 +55,9 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         // clear everything
         removeAll();
         backButton.id = ClickableObject.BACK_BUTTON;
+        randButton.id = ClickableObject.RAND_BUTTON;
         backButton.addMouseListener(this);
+        randButton.addMouseListener(this);
         add(backButton);
         add(UIManager.getSpacing(WINDOW_WIDTH - 220, 1));
 
@@ -81,6 +88,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
             }
             add(UIManager.getSpacing(WINDOW_WIDTH, 30));
 
+            add(randButton);
             add(saveButton);
 
         }
@@ -163,10 +171,46 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         add(answerInput);
     }
 
+    public void randomizeQuestion() {
+        int num1 = rand.nextInt(50) + 1;
+        int num2 = rand.nextInt(50) + 1;
+        int sum = num1 + num2;
+        String[] answerChoices = new String[4];
+
+        String question = String.format("What is %d + %d?", num1, num2);
+        questionInput.setText(question);
+        String correctAnswer = Integer.toString(sum);
+
+        String op1, op2, op3;
+        op1 = Integer.toString(sum+1);
+        op2 = Integer.toString(sum-3);
+        op3 = Integer.toString(sum+2);
+
+        answerChoices[0] = correctAnswer;
+        answerChoices[1] = op1;
+        answerChoices[2] = op2;
+        answerChoices[3] = op3;
+
+        if (questionType == ClickableObject.MC_BUTTON) {
+            for (int i = 0; i < multipleChoiceRadioButtons.length; i++) {
+                if (multipleChoiceRadioButtons[i].isSelected()) {
+                    multipleChoiceOptions[i].setText(answerChoices[i]);
+                } else {
+                    multipleChoiceOptions[i].setText(answerChoices[i]);
+                }
+            }
+        } else {
+            answerInput.setText(correctAnswer);
+        }
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
+            case ClickableObject.RAND_BUTTON:
+                randomizeQuestion();
+                break;
             case ClickableObject.SAVE_QUESTION:
                 saveQuestion();
                 break;
@@ -217,6 +261,9 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
+            case ClickableObject.RAND_BUTTON:
+                randButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
             case ClickableObject.SAVE_QUESTION:
                 saveButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
@@ -230,6 +277,9 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
+            case ClickableObject.RAND_BUTTON:
+                randButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
             case ClickableObject.SAVE_QUESTION:
                 saveButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;

@@ -105,7 +105,7 @@ public class LoginPage extends JPanel implements MouseListener {
                             break;
                         }
                 } else {
-                    pwErrorMessage();
+                    showErrorMessage();
                 }
                 break;
             case ClickableObject.LABEL:
@@ -114,11 +114,13 @@ public class LoginPage extends JPanel implements MouseListener {
         }
     }
 
-    private void pwErrorMessage() {
-        title.setText("Please enter a valid password");
+    private void showErrorMessage() {
+
+        title.setText("Please enter a valid username and password");
         title.setForeground(Color.WHITE);
         title.setBackground(Color.RED);
         title.setOpaque(true);
+
         Timer t = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
