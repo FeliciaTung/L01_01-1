@@ -3,6 +3,7 @@ package ui.pages;
 import ui.UIManager;
 import ui.components.Button;
 import ui.components.ClickableObject;
+import ui.components.LogoutButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,11 +16,17 @@ public class StudentHomePage extends JPanel implements MouseListener {
     private static int WINDOW_HEIGHT = 680;
 
     private JLabel title;
+    private Button logoutButton;
     private Button viewAssignmentsButton;
 
     public StudentHomePage() {
         title = new JLabel("Welcome \"Student\"", SwingConstants.CENTER);
+        logoutButton = new LogoutButton();
         viewAssignmentsButton = new Button("View Assignments");
+
+        logoutButton.addMouseListener(this);
+        add(logoutButton);
+        add(UIManager.getSpacing(WINDOW_WIDTH - 220, 1));
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
@@ -39,6 +46,9 @@ public class StudentHomePage extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
+            case ClickableObject.LOGOUT_BUTTON:
+                UIManager.switchView(new LoginPage());
+                break;
             case ClickableObject.VIEW_ASSIGNMENTS:
                 UIManager.switchView(new AvailableAssignments(null));
                 break;
@@ -55,6 +65,9 @@ public class StudentHomePage extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
+            case ClickableObject.LOGOUT_BUTTON:
+                logoutButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
             case ClickableObject.VIEW_ASSIGNMENTS:
                 viewAssignmentsButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
@@ -64,6 +77,9 @@ public class StudentHomePage extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
+            case ClickableObject.LOGOUT_BUTTON:
+                logoutButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
             case ClickableObject.VIEW_ASSIGNMENTS:
                 viewAssignmentsButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;

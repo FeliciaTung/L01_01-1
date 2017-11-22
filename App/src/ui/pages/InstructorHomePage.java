@@ -6,6 +6,7 @@ import holders.Question;
 import ui.UIManager;
 import ui.components.Button;
 import ui.components.ClickableObject;
+import ui.components.LogoutButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,15 +20,21 @@ public class InstructorHomePage extends JPanel implements MouseListener {
     private static int WINDOW_HEIGHT = 680;
 
     private JLabel title;
+    private Button logoutButton;
     private Button addQuestionButton;
     private Button addAssignmentButton;
     private Button viewAssignmentsButton;
 
     public InstructorHomePage() {
         title = new JLabel("Welcome \"Instructor\"", SwingConstants.CENTER);
+        logoutButton = new LogoutButton();
         addQuestionButton = new Button("Add Question");
         addAssignmentButton = new Button("Add Assignment");
         viewAssignmentsButton = new Button("View All Assignments");
+
+        logoutButton.addMouseListener(this);
+        add(logoutButton);
+        add(UIManager.getSpacing(WINDOW_WIDTH - 220, 1));
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 
@@ -62,6 +69,9 @@ public class InstructorHomePage extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
+            case ClickableObject.LOGOUT_BUTTON:
+                UIManager.switchView(new LoginPage());
+                break;
             case ClickableObject.ADD_QUESTION:
                 UIManager.switchView(new AddQuestionPage());
                 break;
@@ -87,6 +97,9 @@ public class InstructorHomePage extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
+            case ClickableObject.LOGOUT_BUTTON:
+                logoutButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
             case ClickableObject.ADD_QUESTION:
                 addQuestionButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
@@ -102,6 +115,9 @@ public class InstructorHomePage extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
+            case ClickableObject.LOGOUT_BUTTON:
+                logoutButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
             case ClickableObject.ADD_QUESTION:
                 addQuestionButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
