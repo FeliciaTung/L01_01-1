@@ -25,7 +25,7 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     private JLabel[] dueDateLabels;
     private List<Button> detailButton;
     private List<Assignment> assignList;
-    private float labelTextSize = 16f;
+    private float labelTextSize = 18f;
     private int LABEL_WIDTH = 200;
     private int WINDOW_WIDTH = 800;
     private int WINDOW_HEIGHT = 680;
@@ -93,14 +93,10 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
             assignLabels[i] = new JLabel(text, SwingConstants.LEFT);
             assignLabels[i].setPreferredSize(new Dimension(LABEL_WIDTH, labelHeight));
             assignLabels[i].setFont(getFont().deriveFont(labelTextSize));
-            assignLabels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            assignLabels[i].setFont(getFont().deriveFont(18f));
-
 
             dueDateLabels[i] = new JLabel(assignList.get(i).dueDate, SwingConstants.LEFT);
             dueDateLabels[i].setFont(getFont().deriveFont(labelTextSize));
             dueDateLabels[i].setPreferredSize(new Dimension(LABEL_WIDTH, labelHeight));
-            dueDateLabels[i].setFont(getFont().deriveFont(18f));
 
             detailButton.add(new Button("Detail"));
             detailButton.get(i).id = ClickableObject.VIEW_QUESTION;

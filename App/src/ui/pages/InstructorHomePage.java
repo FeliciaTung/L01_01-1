@@ -67,7 +67,6 @@ public class InstructorHomePage extends JPanel implements MouseListener {
                 break;
             case ClickableObject.ADD_ASSIGNMENT:
                 List<Question> list = DatabaseManager.getAllQuestions(-1);
-                Question[] qlist = list.toArray(new Question[list.size()]);
                 UIManager.switchView(new AddAssignmentPage(list));
                 break;
             case ClickableObject.VIEW_ASSIGNMENTS:

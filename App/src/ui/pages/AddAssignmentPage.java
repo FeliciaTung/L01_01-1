@@ -36,12 +36,13 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private int WINDOW_WIDTH = 800;
     private int WINDOW_HEIGHT = 680;
     private int LABEL_WIDTH = 600;
+    private int questionPanelHeight = WINDOW_HEIGHT - 400;
     private Label title;
     private JLabel typeAssignment;
     private String typeDueDate, assignName, dueDate;
     private InputField dueDateInput;
     private Button backButton;
-
+    private JPanel questionPanel;
 
     public AddAssignmentPage(List<Question> questions) {
         super();
@@ -57,6 +58,8 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         questionLabels = new Label[questions.size()];
         questionCheckBoxes = new ArrayList<>();
         dueDateInput = new InputField();
+        questionPanel = new JPanel();
+        questionPanel.setBackground(Color.WHITE);
         typeDueDate = "Due Date (yyyy/mm/dd)";
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -102,6 +105,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     }
 
     private void addQuestions() {
+        int totalHeight = 10;
         for (int i = 0; i < questionList.size(); i++) {
             // increase label height to account for long assignment name
             String text = "<html>" + questionList.get(i).question + "</html>";
@@ -114,27 +118,42 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
 
             questionCheckBoxes.add(new CheckBox());
             questionCheckBoxes.get(i).addMouseListener(this);
-            add(questionCheckBoxes.get(i));
-            add(UIManager.getSpacing(10, 0));
-
 
             questionLabels[i] = new Label(text, SwingConstants.LEFT);
             questionLabels[i].setIndex(i);
             questionLabels[i].setPreferredSize(new Dimension(LABEL_WIDTH, labelHeight));
             questionLabels[i].setFont(getFont().deriveFont(16f));
             questionLabels[i].addMouseListener(this);
-            add(questionLabels[i]);
-            /*
-            editButton[i] = new EditQuestionButton(i);
-            deleteButton[i] = new DeleteQuestionButton(i);
-            editButton[i].addMouseListener(this);
-            deleteButton[i].addMouseListener(this);
+            questionLabels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-            add(editButton[i]);
-            add(deleteButton[i]);
-            */
-            add(UIManager.getSpacing(WINDOW_WIDTH, 1));
+            questionPanel.add(questionCheckBoxes.get(i));
+            questionPanel.add(UIManager.getSpacing(10, 0));
+            questionPanel.add(questionLabels[i]);
+            questionPanel.add(UIManager.getSpacing(WINDOW_WIDTH, 1));
+
+            // update the height required to display all questions
+            totalHeight += (labelHeight + 15);
         }
+
+        questionPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, totalHeight));
+        if (totalHeight < questionPanelHeight) {
+            add(questionPanel);
+        } else {
+            // not enough space to display all questions, add a scroll bar
+            addScrollBar();
+        }
+    }
+
+    /**
+     * Add a scroll panel for questions
+     */
+    private void addScrollBar(){
+        JScrollPane scrollPanel = new JScrollPane(questionPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, questionPanelHeight));
+        scrollPanel.setBorder(BorderFactory.createEmptyBorder());
+        scrollPanel.getVerticalScrollBar().setOpaque(true);
+        add(scrollPanel);
     }
 
     @Override
@@ -282,7 +301,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         Timer t = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                title.setText("Sign Up");
+                title.setText("Create Assignment");
                 title.setPreferredSize(new Dimension(800, 50));
                 title.setFont(getFont().deriveFont(24f));
                 title.setForeground(Color.BLACK);
