@@ -1,7 +1,7 @@
 package ui.pages;
 
+import backend.CurrentSession;
 import backend.DatabaseManager;
-import holders.Assignment;
 import holders.Question;
 import ui.UIManager;
 import ui.components.Button;
@@ -66,13 +66,14 @@ public class InstructorHomePage extends JPanel implements MouseListener {
                 UIManager.switchView(new AddQuestionPage());
                 break;
             case ClickableObject.ADD_ASSIGNMENT:
-                List<Question> list = DatabaseManager.getAllQuestions(1, true);
+                List<Question> list = DatabaseManager.getAllQuestions(-1);
                 Question[] qlist = list.toArray(new Question[list.size()]);
                 UIManager.switchView(new AddAssignmentPage(list));
                 break;
             case ClickableObject.VIEW_ASSIGNMENTS:
-                List<Assignment> assignments = DatabaseManager.getAllAssignment(-1, 1);
-                UIManager.switchView(new ViewAllAssignmentsPage(assignments));
+
+                UIManager.switchView(new ViewAllAssignmentsPage(DatabaseManager
+                        .getAllAssignment(CurrentSession.user.id, CurrentSession.user.courseID)));
                 break;
         }
     }

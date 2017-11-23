@@ -29,9 +29,6 @@ public class AvailableAssignments extends JPanel implements MouseListener {
 
 
     public AvailableAssignments(List<Assignment> assignments) {
-        assignments = new ArrayList<>();
-        // Dummy User and course
-        assignments = DatabaseManager.getAllAssignment(1, 1);
         this.assignments = assignments;
 
         title = new JLabel("Assignments", SwingConstants.CENTER);

@@ -1,5 +1,6 @@
 package ui.pages;
 
+import backend.CurrentSession;
 import holders.Assignment;
 import ui.UIManager;
 import ui.components.ClickableObject;
@@ -102,7 +103,7 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
             dueDateLabels[i].setFont(getFont().deriveFont(18f));
 
             detailButton.add(new Button("Detail"));
-            detailButton.get(i).id = ClickableObject.EDIT_QUESTION;
+            detailButton.get(i).id = ClickableObject.VIEW_QUESTION;
             detailButton.get(i).setPreferredSize(new Dimension(100, Button.HEIGHT));
             detailButton.get(i).addMouseListener(this);
 
@@ -123,10 +124,13 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int clickedItem = ((ClickableObject) e.getSource()).getID();
         switch(clickedItem){
-            case ClickableObject.EDIT_QUESTION:
-                gotoAssignment(assignList.get(detailButton.indexOf((e.getSource()))));
+            case ClickableObject.VIEW_QUESTION:
+                Assignment assignment = assignList.get(detailButton.indexOf((e.getSource())));
+                CurrentSession.assignment = assignment;
+                UIManager.switchView(new ViewAssignmentPage(assignment));
                 break;
             case ClickableObject.BACK_BUTTON:
+                CurrentSession.assignment = null;
                 UIManager.switchView(new InstructorHomePage());
                 break;
         }
@@ -146,7 +150,7 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         int clickedItem = ((ClickableObject) e.getSource()).getID();
         switch(clickedItem){
-            case ClickableObject.EDIT_QUESTION:
+            case ClickableObject.VIEW_QUESTION:
                 detailButton.get(detailButton.indexOf((e.getSource()))).setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
             case ClickableObject.BACK_BUTTON:
@@ -160,7 +164,7 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
         int clickedItem = ((ClickableObject) e.getSource()).getID();
         switch(clickedItem){
-            case ClickableObject.EDIT_QUESTION:
+            case ClickableObject.VIEW_QUESTION:
                 detailButton.get(detailButton.indexOf((e.getSource()))).setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
             case ClickableObject.BACK_BUTTON:
@@ -179,8 +183,4 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
 
     }
 
-    private void gotoAssignment(Assignment assign) {
-        //TODO: switch view to individual assignment page
-        UIManager.switchToAssignmentView(assign);
-    }
 }

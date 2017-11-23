@@ -1,5 +1,6 @@
 package ui.pages;
 
+import backend.CurrentSession;
 import backend.DatabaseManager;
 import holders.Assignment;
 import holders.Question;
@@ -44,8 +45,8 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
 
     public AddAssignmentPage(List<Question> questions) {
         super();
-
-        saveButton = new SaveQuestionButton();
+        CurrentSession.addingAssignment = true;
+                saveButton = new SaveQuestionButton();
         /*
         editButton = new EditQuestionButton[question_num];
         deleteButton = new DeleteQuestionButton[question_num];
@@ -102,7 +103,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
 
     private void addQuestions() {
         for (int i = 0; i < questionList.size(); i++) {
-            // increase label height to deal with long assignment name
+            // increase label height to account for long assignment name
             String text = "<html>" + questionList.get(i).question + "</html>";
             int labelHeight = 25;
             if (text.length() > 199) {
@@ -158,6 +159,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 gotoViewQuestionPage(questionList.get(index));
                 break;
             case ClickableObject.BACK_BUTTON:
+                CurrentSession.addingAssignment = false;
                 UIManager.switchView(new InstructorHomePage());
                 break;
         }
@@ -183,7 +185,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
                 questionLabels[index].setForeground(Label.LABEL_COLOR_PRESSED);
-
+                break;
             case ClickableObject.BACK_BUTTON:
                 backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
@@ -256,7 +258,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 }
             }
         }
-        DatabaseManager.addAssignment(new Assignment(assignName, 1, selectedQuestion, dueDate));
+        DatabaseManager.addAssignment(new Assignment(assignName, CurrentSession.user.courseID, selectedQuestion, dueDate));
     }
 
     private void gotoViewQuestionPage(Question question) {

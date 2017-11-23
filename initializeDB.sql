@@ -37,16 +37,14 @@ CREATE TABLE IF NOT EXISTS question(
 	qid INT AUTO_INCREMENT,
 	question LONGTEXT,
 	answer VARCHAR(255),
-	course INT,
 	qtype INT,
 	PRIMARY KEY(qid),
-	FOREIGN KEY(course) REFERENCES course(cid),
-	FOREIGN KEY(qtype) REFERENCES question_type(qtid)
+	FOREIGN KEY(qtype) REFERENCES question_type(qtid) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS mc(
 	qid INT,
 	choice LONGTEXT,
-	FOREIGN KEY(qid) REFERENCES question(qid)
+	FOREIGN KEY(qid) REFERENCES question(qid) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS assignment(
 	aid INT AUTO_INCREMENT,
@@ -54,15 +52,15 @@ CREATE TABLE IF NOT EXISTS assignment(
 	cid INT,
     due_date DATETIME,
 	PRIMARY KEY(aid),
-	FOREIGN KEY(cid) REFERENCES course(cid)
+	FOREIGN KEY(cid) REFERENCES course(cid) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS related_question(
 	aid INT ,
 	qid INT,
 	PRIMARY KEY(aid, qid),
-	FOREIGN KEY(qid) REFERENCES question(qid),
-	FOREIGN KEY(aid) REFERENCES assignment(aid)
+	FOREIGN KEY(qid) REFERENCES question(qid) ON DELETE CASCADE,
+	FOREIGN KEY(aid) REFERENCES assignment(aid) ON DELETE CASCADE
 );
 
 
@@ -72,9 +70,9 @@ CREATE TABLE IF NOT EXISTS marks(
 	cid INT,
 	mark FLOAT,
 	PRIMARY KEY(student, aid),
-	FOREIGN KEY(aid) REFERENCES assignment(aid),
-	FOREIGN KEY(cid) REFERENCES course(cid),
-	FOREIGN KEY(student) REFERENCES users(uid)
+	FOREIGN KEY(aid) REFERENCES assignment(aid) ON DELETE CASCADE,
+	FOREIGN KEY(cid) REFERENCES course(cid) ON DELETE CASCADE,
+	FOREIGN KEY(student) REFERENCES users(uid) ON DELETE CASCADE
 );
 
 INSERT INTO question_type(question_type) VALUE("multiple choice");

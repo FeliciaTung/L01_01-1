@@ -104,8 +104,7 @@ public class DatabaseManagerTest {
     @Test
     public void testgetAllQuestions() {
         // First user from setup
-    /* getAllQuestions() gets assignments for one course so it won't get both a1 and a2 in the same call */
-        List<Question> testAllQuestions = DatabaseManager.getAllQuestions(1, true);
+        List<Question> testAllQuestions = DatabaseManager.getAllQuestions(-1);
         Question q1 = testAllQuestions.get(0);
         Question q2 = testAllQuestions.get(1);
         // First question with q1

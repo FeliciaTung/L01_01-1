@@ -32,12 +32,11 @@ public class DatabaseManager {
         // SQL Query
         int questionType = (question.multipleChoices == null)? 2: 1;
             try {
-            sql = "INSERT INTO question(question, answer, course, qtype) VALUES(?, ?, ?, ?)";
+            sql = "INSERT INTO question(question, answer, qtype) VALUES(?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, question.question);
             pstmt.setString(2, question.answer);
-            pstmt.setInt(3, 1); //dummy courseID
-            pstmt.setInt(4, questionType);
+            pstmt.setInt(3, questionType);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -117,28 +116,29 @@ public class DatabaseManager {
     }
 
     /**
-     * Get all questions that are related to a course or a course
+     * Get all questions that are related to an assignment. If assignment id is invalid, then return
+     * all available questions.
      *
-     * @param id    id of course or course
-     * @param useCourseid   true if using courseid, false if using assignemnt id
-     * @return  questions
-     */
-    public static List<Question> getAllQuestions(int id, boolean useCourseid) {
+     * @param assignId  assignment id
+     * @return          list of Question on an assignment
+     * */
+    public static List<Question> getAllQuestions(int assignId) {
+        String question, answer;
+        int qtype, qid;
+        List<Question> question_list = new ArrayList<>();
+        List<String> mc_list;
+        String[] mc_choices;
         try {
-            if (useCourseid) {
-                sql = "SELECT question, answer, qtype, qid FROM question WHERE course=?";
+            if (assignId < 1) {
+                sql = "SELECT question, answer, qtype, qid FROM question";
+                pstmt = conn.prepareStatement(sql);
             } else {
                 sql = "SELECT question, answer, qtype, q.qid FROM question q JOIN " +
                         "related_question rq ON rq.qid=q.qid where rq.aid=?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, assignId);
             }
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
             rs = pstmt.executeQuery();
-            String question = null, answer = null;
-            int qtype = 0, qid = 0;
-            List<Question> question_list = new ArrayList<Question>();
-            List<String> mc_list = new ArrayList<>();
-            String[] mc_choices;
 
             while (rs.next()) {
             	question = rs.getString(1);
@@ -415,9 +415,34 @@ public class DatabaseManager {
 
     }
     private static String convertDateToString(Date date){
-        String result = "";
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-        result = df.format(date);
-        return result;
+        return df.format(date);
+    }
+
+    public static int getCourseID(String course){
+        int courseID = -1;
+        try {
+            sql = "SELECT cid FROM course WHERE course = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, course);
+            rs = pstmt.executeQuery();
+            if (!rs.next()) {
+                // add new course
+                sql = "INSERT INTO course(course) VALUES (?)";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, course);
+                pstmt.executeUpdate();
+                // get new course id
+                sql = "SELECT cid FROM course WHERE course = ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, course);
+                rs = pstmt.executeQuery();
+            }
+            courseID = rs.getInt(1);
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return courseID;
     }
 }

@@ -1,5 +1,6 @@
 package ui.pages;
 
+import backend.CurrentSession;
 import backend.DatabaseManager;
 import holders.Assignment;
 import holders.Question;
@@ -24,7 +25,7 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
     private InputField assignmentInput;
     private List<Question> questionList;
     private Label[] questionLabels;
-    private BackButton backButton;
+    private Button backButton;
     private int WINDOW_WIDTH = 800;
     private int WINDOW_HEIGHT = 680;
     private int LABEL_WIDTH = 600;
@@ -36,9 +37,14 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
         assignmentInput = new InputField();
         questionList = assignment.getQuestions();
         questionLabels = new Label[assignment.questions.size()];
-        backButton = new BackButton(ClickableObject.BACK_TO_VIEW_ALL_ASSIGN);
+        backButton = new Button("Back");
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
+
+        backButton.id = ClickableObject.BACK_BUTTON;
+        backButton.addMouseListener(this);
+        add(backButton);
+        add(UIManager.getSpacing(WINDOW_WIDTH - 220, 1));
 
         title = new Label("Assignment", SwingConstants.CENTER);
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
@@ -94,12 +100,14 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
-            case ClickableObject.BACK_TO_VIEW_ALL_ASSIGN:
-                gotoViewAllAssignments();
+            case ClickableObject.BACK_BUTTON:
+                UIManager.switchView(new ViewAllAssignmentsPage(
+                        DatabaseManager.getAllAssignment(CurrentSession.user.id, CurrentSession.user.courseID)));
                 break;
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
-                gotoViewQuestion(questionList.get(index));
+                UIManager.switchToQuestionView(questionList.get(index));
+
         }
     }
 
@@ -118,12 +126,14 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
-            case ClickableObject.BACK_TO_VIEW_ALL_ASSIGN:
+            case ClickableObject.BACK_BUTTON:
                 backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
                 questionLabels[index].setForeground(Label.LABEL_COLOR_PRESSED);
+                break;
+
             /*case ClickableObject.EDIT_QUESTION:
                 int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
                 for (EditQuestionButton button : editButton) {
@@ -144,7 +154,7 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
-            case ClickableObject.BACK_TO_VIEW_ALL_ASSIGN:
+            case ClickableObject.BACK_BUTTON:
                 backButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
             case ClickableObject.LABEL:
@@ -175,13 +185,5 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
     private void deleteQuestion() {
         //TODO: trigger delete question function
 
-    }
-
-    private void gotoViewAllAssignments() {
-        UIManager.switchView(new InstructorHomePage());
-    }
-
-    private void gotoViewQuestion(Question question) {
-        UIManager.switchToQuestionView(question);
     }
 }
