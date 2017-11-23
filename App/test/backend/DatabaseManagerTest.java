@@ -28,16 +28,20 @@ public class DatabaseManagerTest {
     public void setUp() {
         questionList = new ArrayList<>();
         DatabaseManager.connectDB();
+
         // Question creation and addition
         testQuestion1 = new Question("testQ", "testA", "testTag", null);
         DatabaseManager.addQuestion(testQuestion1);
+
         // Assignment creation and addition
         questionList.add(1);
         testAssignment1 = new Assignment("testAssignment", 1, questionList, "2017/12/12");
         DatabaseManager.addAssignment(testAssignment1);
+
         // User creation and addition
         testUser1 = new User("testName", "testEmail", "testPass", 1, 1);
         DatabaseManager.addUser(testUser1);
+
         // Extra additions for getAll functions
         mc = new String[]{"mc choice1", "mc choice 2", "mc choice 3"};
         testQuestionExtra = new Question("ExtraQ", "ExtraA", "ExtraTag", mc);
@@ -52,11 +56,17 @@ public class DatabaseManagerTest {
 
     @After
     public void tearDown() {
-        String[] tables = new String[]{"question", "assignment", "related_question", "users"};
+        String[] tables = new String[]{"question", "assignment", "related_question", "users", "course"};
+        String query;
         try {
             Statement st = conn.createStatement();
             for (int i = 0; i < tables.length; i++) {
-                String query = String.format("DELETE FROM %s", tables[i]);
+                // clear tables
+                query = String.format("DELETE FROM %s", tables[i]);
+                if (tables[i] == "course"){
+                    // for course table remove new courses only
+                    query = "DELETE FROM course WHERE cid NOT IN (1,2,3)";
+                }
                 st.executeUpdate(query);
                 query = String.format("ALTER TABLE %s AUTO_INCREMENT = 1", tables[i]);
                 st.executeUpdate(query);
@@ -103,7 +113,7 @@ public class DatabaseManagerTest {
 
     @Test
     public void testgetAllQuestions() {
-        // First user from setup
+        // All questions from setup
         List<Question> testAllQuestions = DatabaseManager.getAllQuestions(-1);
         Question q1 = testAllQuestions.get(0);
         Question q2 = testAllQuestions.get(1);
@@ -120,7 +130,7 @@ public class DatabaseManagerTest {
 
     @Test
     public void testgetAllAssignment() {
-        // First user from setup
+        // All assignments from setup
         List<Assignment> testAllAssignment = DatabaseManager.getAllAssignment(1,1);
         Assignment a1 = testAllAssignment.get(0);
         Assignment a2 = testAllAssignment.get(1);
@@ -137,5 +147,21 @@ public class DatabaseManagerTest {
         assertEquals(testAssignmentExtra.questions.get(0), a2.questions.get(0));
     }
 
+    @Test
+    public void testgetCourseIDExistingCourse() {
+        // Mock data from db script
+        int expectedCourseId = 1;
+        int actualCourseId = DatabaseManager.getCourseID("cscc01");
+        assertEquals(expectedCourseId,actualCourseId);
+    }
+
+    @Test
+    public void testgetCourseIDNewCourse() {
+        // Mock data from db script
+        int expectedCourseId = 4;
+        int actualCourseId = DatabaseManager.getCourseID("CSCD01");
+        assertEquals(expectedCourseId,actualCourseId);
+    }
 
 }
+

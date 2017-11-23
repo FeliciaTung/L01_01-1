@@ -349,7 +349,7 @@ public class DatabaseManager {
     }
 
     /**
-     * Update a student's assignment mark  if due date has not passed and current mark is higher than previous mark
+     * Update a student's assignment mark if due date has not passed and current mark is higher than previous mark
      * @param assignId  assignment id
      * @param userId    student user id
      * @param mark      current mark
@@ -414,11 +414,23 @@ public class DatabaseManager {
         return (dueDate.before(today));
 
     }
+
+    /**
+     * Given a Date object convert it into a string in yyyy/MM/dd format
+     * @param date  Date object
+     * @return      string representation of the date
+     */
     private static String convertDateToString(Date date){
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         return df.format(date);
     }
 
+    /**
+     * Get the course id of the given course. If course is not in database then add it first then get the new
+     * course id.
+     * @param course    course name
+     * @return          course id
+     */
     public static int getCourseID(String course){
         int courseID = -1;
         try {
@@ -426,7 +438,11 @@ public class DatabaseManager {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, course);
             rs = pstmt.executeQuery();
-            if (!rs.next()) {
+
+            if (rs.next()) {
+                // course exists so get course id
+                courseID = rs.getInt(1);
+            } else {
                 // add new course
                 sql = "INSERT INTO course(course) VALUES (?)";
                 pstmt = conn.prepareStatement(sql);
@@ -437,9 +453,10 @@ public class DatabaseManager {
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1, course);
                 rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    courseID = rs.getInt(1);
+                }
             }
-            courseID = rs.getInt(1);
-
         } catch (SQLException e){
             e.printStackTrace();
         }
