@@ -5,6 +5,7 @@ import holders.Assignment;
 import ui.UIManager;
 import ui.components.ClickableObject;
 import ui.components.Button;
+import ui.components.ScrollPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,13 +30,16 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     private int LABEL_WIDTH = 200;
     private int WINDOW_WIDTH = 800;
     private int WINDOW_HEIGHT = 680;
+    private int numOfAssignments;
+    private int assignPanelHeight = WINDOW_HEIGHT - 300;
     private JLabel title;
     private JLabel AssignNameLabel;
     private Button backButton;
+    private JPanel assignPanel;
 
     public ViewAllAssignmentsPage(List<Assignment> assignments) {
         super();
-        int numOfAssignments = assignments.size();
+        numOfAssignments = assignments.size();
         /*
         editButton = new EditQuestionButton[question_num];
         deleteButton = new DeleteQuestionButton[question_num];
@@ -45,7 +49,8 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
         assignLabels = new JLabel[numOfAssignments];
         dueDateLabels = new JLabel[numOfAssignments];
         detailButton = new ArrayList<>();
-
+        assignPanel = new JPanel();
+        assignPanel.setBackground(Color.WHITE);
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
 
@@ -75,18 +80,22 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
         AssignDateLabel.setFont(getFont().deriveFont(18f));
 
         add(AssignDateLabel);
-        
+
         add(UIManager.getSpacing(100, 1));
         add(UIManager.getSpacing(WINDOW_WIDTH, 20));
 
+        addAssignmentPanel();
+    }
 
+    private void addAssignmentPanel(){
+        int totalHeight = 0;
         for (int i = 0; i < numOfAssignments; i++) {
             // increase label height to deal with long assignment name
             String text = "<html>" + assignList.get(i).name + "</html>";
             int labelHeight = 25;
-            if (text.length() > 199) {
+            if (text.length() > 99) {
                 labelHeight = 65;
-            } else if (text.length() > 99) {
+            } else if (text.length() > 39) {
                 labelHeight = 45;
             }
 
@@ -103,17 +112,20 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
             detailButton.get(i).setPreferredSize(new Dimension(100, Button.HEIGHT));
             detailButton.get(i).addMouseListener(this);
 
-            add(assignLabels[i]);
-            add(dueDateLabels[i]);
-            add(detailButton.get(i));
-
-
-            add(UIManager.getSpacing(WINDOW_WIDTH, 1));
+            assignPanel.add(assignLabels[i]);
+            assignPanel.add(dueDateLabels[i]);
+            assignPanel.add(detailButton.get(i));
+            assignPanel.add(UIManager.getSpacing(WINDOW_WIDTH, 1));
+            totalHeight += (Button.HEIGHT + 15);
         }
 
-        add(UIManager.getSpacing(WINDOW_WIDTH, 40));
-
-
+        assignPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, totalHeight));
+        if (totalHeight < assignPanelHeight) {
+            add(assignPanel);
+        } else {
+            // not enough space to display all questions, add a scroll bar
+            add(new ScrollPanel(assignPanel, assignPanelHeight));
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import holders.Assignment;
 import ui.UIManager;
 import ui.components.Button;
 import ui.components.ClickableObject;
+import ui.components.ScrollPanel;
 
 
 import javax.swing.*;
@@ -26,7 +27,8 @@ public class AvailableAssignments extends JPanel implements MouseListener {
     private JLabel assignmentDueDate[];
     private List<Button> takeAssignmentButtons;
     private Button backButton;
-
+    private JPanel assignmentPanel;
+    private int assignPanelHeight = WINDOW_HEIGHT - 200;
 
     public AvailableAssignments(List<Assignment> assignments) {
         this.assignments = assignments;
@@ -37,6 +39,8 @@ public class AvailableAssignments extends JPanel implements MouseListener {
         assignmentDueDate = new JLabel[assignments.size()];
         takeAssignmentButtons = new ArrayList<>();
         backButton = new Button("Back");
+        assignmentPanel = new JPanel();
+        assignmentPanel.setBackground(Color.WHITE);
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
@@ -52,17 +56,22 @@ public class AvailableAssignments extends JPanel implements MouseListener {
 
         add(UIManager.getSpacing(WINDOW_WIDTH, 75));
 
+        addAssignments();
+    }
+
+    private void addAssignments() {
+        int totalHeight = 10;
         for (int i = 0; i < assignments.size(); i++) {
 
             assignmentNames[i] = new JLabel(assignments.get(i).name, SwingConstants.LEFT);
             assignmentNames[i].setPreferredSize(new Dimension(150, 50));
             assignmentNames[i].setFont(getFont().deriveFont(18f));
-            add(assignmentNames[i]);
+            assignmentPanel.add(assignmentNames[i]);
 
             assignmentDueDate[i] = new JLabel(assignments.get(i).dueDate, SwingConstants.LEFT);
             assignmentDueDate[i].setPreferredSize(new Dimension(200, 50));
             assignmentDueDate[i].setFont(getFont().deriveFont(18f));
-            add(assignmentDueDate[i]);
+            assignmentPanel.add(assignmentDueDate[i]);
 
 
             boolean assignmentCompleted = assignments.get(i).mark >= 0;
@@ -70,14 +79,22 @@ public class AvailableAssignments extends JPanel implements MouseListener {
             assignmentMarks[i] = new JLabel(mark, SwingConstants.LEFT);
             assignmentMarks[i].setPreferredSize(new Dimension(200, 50));
             assignmentMarks[i].setFont(getFont().deriveFont(18f));
-            add(assignmentMarks[i]);
+            assignmentPanel.add(assignmentMarks[i]);
 
             takeAssignmentButtons.add(new Button(assignmentCompleted ? "Retake Assignment" : "Take Assignment"));
             takeAssignmentButtons.get(i).id = ClickableObject.DO_ASSIGNMENT;
             takeAssignmentButtons.get(i).addMouseListener(this);
-            add(takeAssignmentButtons.get(i));
+            assignmentPanel.add(takeAssignmentButtons.get(i));
 
-            add(UIManager.getSpacing(WINDOW_WIDTH, 10));
+            assignmentPanel.add(UIManager.getSpacing(WINDOW_WIDTH, 10));
+            totalHeight += (Button.HEIGHT + 20);
+        }
+        assignmentPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, totalHeight));
+        if (totalHeight < assignPanelHeight) {
+            add(assignmentPanel);
+        } else {
+            // not enough space to display all questions, add a scroll bar
+            add(new ScrollPanel(assignmentPanel, assignPanelHeight));
         }
     }
 

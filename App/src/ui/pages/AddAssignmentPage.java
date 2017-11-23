@@ -4,13 +4,10 @@ import backend.CurrentSession;
 import backend.DatabaseManager;
 import holders.Assignment;
 import holders.Question;
-import ui.components.Button;
-import ui.components.CheckBox;
-import ui.components.ClickableObject;
-import ui.components.InputField;
-import ui.components.SaveQuestionButton;
-import ui.components.Label;
+import ui.components.*;
 import ui.UIManager;
+import ui.components.Button;
+import ui.components.Label;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,10 +22,7 @@ import java.util.List;
 public class AddAssignmentPage extends JPanel implements MouseListener {
 
     private Button saveButton;
-    /*
-    private EditQuestionButton[] editButton;
-    private DeleteQuestionButton[] deleteButton;
-    */
+
     private InputField assignmentInput;
     private List<Question> questionList;
     private Label[] questionLabels;
@@ -47,11 +41,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     public AddAssignmentPage(List<Question> questions) {
         super();
         CurrentSession.addingAssignment = true;
-                saveButton = new SaveQuestionButton();
-        /*
-        editButton = new EditQuestionButton[question_num];
-        deleteButton = new DeleteQuestionButton[question_num];
-        */
+        saveButton = new SaveQuestionButton();
         backButton = new Button("Back");
         assignmentInput = new InputField();
         questionList = questions;
@@ -140,20 +130,8 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             add(questionPanel);
         } else {
             // not enough space to display all questions, add a scroll bar
-            addScrollBar();
+            add(new ScrollPanel(questionPanel, questionPanelHeight));
         }
-    }
-
-    /**
-     * Add a scroll panel for questions
-     */
-    private void addScrollBar(){
-        JScrollPane scrollPanel = new JScrollPane(questionPanel,
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, questionPanelHeight));
-        scrollPanel.setBorder(BorderFactory.createEmptyBorder());
-        scrollPanel.getVerticalScrollBar().setOpaque(true);
-        add(scrollPanel);
     }
 
     @Override
@@ -255,16 +233,6 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         }
     }
 
-    private void editQuestion() {
-        //TODO: switch to edit question page
-    }
-
-
-    private void deleteQuestion() {
-        //TODO: trigger delete question function
-
-    }
-
     private void createAssignment() {
         List<Integer> selectedQuestion = new ArrayList<>();
         for (CheckBox cb : questionCheckBoxes){
@@ -291,6 +259,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
 
 
     }
+
     private void showErrorMessage() {
 
         title.setText("Please enter assignment name and due date");
