@@ -352,29 +352,53 @@ public class DatabaseManager {
         return assign_list;
     }
 
+    /**
+     * Update a student's assignment mark  if due date has not passed and current mark is higher than previous mark
+     * @param assignId  assignment id
+     * @param userId    student user id
+     * @param mark      current mark
+     */
     public static void updateAssignmentMark(int assignId, int userId, float mark){
+        float previousMark;
         try {
             if (!passedDueDate(assignId)){
-                sql = "SELECT * FROM marks WHERE student =? AND aid=?";
+                // check if there is a previous mark
+                sql = "SELECT mark FROM marks WHERE student =? AND aid=?";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setInt(1, userId);
                 pstmt.setInt(2, assignId);
                 rs = pstmt.executeQuery();
+                // choose query accordingly
                 if (rs.next()){
-                    sql = "UPDATE marks SET mark = ? WHERE student = ? AND aid =?";
+                    // only update mark if previous mark is lower than current mark
+                    previousMark = rs.getFloat(1);
+                    if (previousMark < mark) {
+                        sql = "UPDATE marks SET mark = ? WHERE student = ? AND aid =?";
+                    } else {
+                        sql = null;
+                    }
                 } else {
+                    // there is not previous mark
                     sql = "INSERT INTO marks(mark, student, cid, aid) VALUES (?,?,1,?)"; // course id = 1
                 }
-                pstmt = conn.prepareStatement(sql);
-                pstmt.setFloat(1, mark);
-                pstmt.setInt(3, assignId);
-                pstmt.setInt(2, userId);
-                pstmt.executeUpdate();
+                if (sql != null) {
+                    pstmt = conn.prepareStatement(sql);
+                    pstmt.setFloat(1, mark);
+                    pstmt.setInt(2, userId);
+                    pstmt.setInt(3, assignId);
+                    pstmt.executeUpdate();
+                }
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
     }
+
+    /**
+     * Check if given assignment due date has passed yet or not
+     * @param assignId  assignment id
+     * @return          true if due date has passed, otherwise false
+     */
     private static boolean passedDueDate(int assignId){
         Date dueDate = new Date();
         Date today = new Date();

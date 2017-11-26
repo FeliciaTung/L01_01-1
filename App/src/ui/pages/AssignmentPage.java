@@ -5,6 +5,7 @@ import holders.Assignment;
 import holders.Question;
 import holders.User;
 import ui.UIManager;
+import ui.components.InputField;
 import ui.components.MultipleChoiceAnswer;
 import ui.components.Button;
 import ui.components.ClickableObject;
@@ -23,29 +24,28 @@ public class AssignmentPage extends JPanel implements MouseListener {
     private List<Question> questions;
     private int currentQuestion;
     private int correctAnswers;
+    private String progressString;
     private Assignment assignment;
     private JLabel progress;
     private JLabel question;
     private Button nextQuestion;
     private MultipleChoiceAnswer[] answerLabels;
+    private InputField shortAnswerInput;
 
     public AssignmentPage(Assignment assignment) {
         super();
         this.assignment = assignment;
         questions = assignment.getQuestions();
-//        questions = new ArrayList<>(Arrays.asList(new Question("What's 2 + 2?", "4", "", new String[]{"1", "5", "42"}),
-//                new Question("What's 4 * 2?", "8", "", new String[]{"16", "6", "24"}),
-//                new Question("What's 30 / 5?", "6", "", new String[]{"4", "5", "25"})));
         currentQuestion = -1;
         correctAnswers = 0;
         progress = new JLabel("", SwingConstants.RIGHT);
         question = new JLabel("", SwingConstants.CENTER);
         nextQuestion = new Button("Next Question");
         answerLabels = new MultipleChoiceAnswer[4];
+        shortAnswerInput = new InputField();
         for (int i = 0; i < answerLabels.length; i++) {
             answerLabels[i] = new MultipleChoiceAnswer();
             answerLabels[i].addMouseListener(this);
-            add(answerLabels[i]);
         }
 
         setLayout(null);
@@ -53,14 +53,12 @@ public class AssignmentPage extends JPanel implements MouseListener {
         setBackground(new Color(240, 240, 240));
 
         progress.setFont(getFont().deriveFont(16f));
-        add(progress);
-
         question.setFont(getFont().deriveFont(24f));
-        add(question);
+
+        shortAnswerInput.setBackground(Color.white);
 
         nextQuestion.id = ClickableObject.NEXT_QUESTION;
         nextQuestion.addMouseListener(this);
-        add(nextQuestion);
 
         resize();
         setNextQuestion();
@@ -130,45 +128,73 @@ public class AssignmentPage extends JPanel implements MouseListener {
     }
 
     private void setNextQuestion() {
+        if (shortAnswerInput.getText() != null && !shortAnswerInput.getText().equals("")) {
+            if (questions.get(currentQuestion).answer.equals(shortAnswerInput.getText())) {
+                correctAnswers++;
+            }
+
+            shortAnswerInput.setText("");
+        }
+
         currentQuestion++;
-        String progressString = "";
+        progressString = "";
+        removeAll();
         if (currentQuestion < questions.size()) {
             question.setText(questions.get(currentQuestion).question);
-
-            List<String> answers = new ArrayList<>(Arrays.asList(questions.get(currentQuestion).multipleChoices));
-            answers.add(questions.get(currentQuestion).answer);
-            Collections.shuffle(answers);
-            for (int i = 0; i < answers.size(); i++) {
-                answerLabels[i].setText(answers.get(i));
-                answerLabels[i].setBackground(Color.white);
+            if (questions.get(currentQuestion).multipleChoices != null) {
+                showMultipleChoiceQuestion();
+            } else {
+                showShortAnswerQuestion();
             }
 
             progressString += "Question " + (currentQuestion + 1 + " of " + questions.size());
-            nextQuestion.setVisible(false);
-        } else {
-            removeAll();
-            revalidate();
-            repaint();
-            add(question);
-            add(progress);
-            add(nextQuestion);
-            question.setText("Assignment Complete!");
-            nextQuestion.id = ClickableObject.BACK_BUTTON;
-            nextQuestion.setText("DONE");
-        }
-        float mark;
-        if (currentQuestion > 0) {
-            mark = Math.round((float) correctAnswers / currentQuestion * 100);
-            if (progressString.equals("")) {
-                progressString += "Final Score: " + correctAnswers + "/" + currentQuestion +
-                        " (" + Math.round((float) correctAnswers / currentQuestion * 100) + "%)";
-                saveMark(mark);
-            } else {
+            if (currentQuestion > 0) {
                 progressString += " - Current Score: " + correctAnswers + "/" + currentQuestion +
                         " (" + Math.round((float) correctAnswers / currentQuestion * 100) + "%)";
             }
+
+            add(progress);
+            add(question);
+            add(nextQuestion);
+        } else {
+            showFinishedPage();
         }
+
         progress.setText(progressString + "     ");
+        revalidate();
+        repaint();
+    }
+
+    private void showMultipleChoiceQuestion() {
+        List<String> answers = new ArrayList<>(Arrays.asList(questions.get(currentQuestion).multipleChoices));
+        answers.add(questions.get(currentQuestion).answer);
+        Collections.shuffle(answers);
+        for (int i = 0; i < answers.size(); i++) {
+            answerLabels[i].setText(answers.get(i));
+            answerLabels[i].setBackground(Color.white);
+            add(answerLabels[i]);
+        }
+
+        nextQuestion.setVisible(false);
+    }
+
+    private void showShortAnswerQuestion() {
+        shortAnswerInput.setText("");
+        add(shortAnswerInput);
+        nextQuestion.setVisible(true);
+    }
+
+    private void showFinishedPage() {
+        float mark = Math.round((float) correctAnswers / currentQuestion * 100);
+        saveMark(mark);
+        progressString += "Final Score: " + correctAnswers + "/" + currentQuestion + " (" + mark + "%)";
+        add(question);
+        add(progress);
+        add(nextQuestion);
+        question.setText("Assignment Complete!");
+        nextQuestion.id = ClickableObject.BACK_BUTTON;
+        nextQuestion.setText("DONE");
+        nextQuestion.setVisible(true);
     }
 
     private void saveMark(float mark) {
@@ -188,5 +214,9 @@ public class AssignmentPage extends JPanel implements MouseListener {
                     getPreferredSize().height / 4 + 180 * (i < 2 ? 0 : 1),
                     300,120);
         }
+
+        shortAnswerInput.setBounds(getPreferredSize().width / 2 - 150,
+                getPreferredSize().height / 2 - 60,
+                300,120);
     }
 }
