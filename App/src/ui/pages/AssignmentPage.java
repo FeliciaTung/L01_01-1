@@ -38,8 +38,9 @@ public class AssignmentPage extends JPanel implements MouseListener {
 
         for (int i = 0; i < questions.size(); i++) {
             // if the question was selected to be random (based off of input from AddQuestionPage
-            if (questions.get(i).question.equals("Simple Math") || questions.get(i).question.equals("Intermediate Stats Question")
-                    || questions.get(i).question.equals("Expert Stats Question")) {
+            if (questions.get(i).question.equals("Simple Math")
+                    || questions.get(i).question.equals("Intermediate Statistics Question")
+                    || questions.get(i).question.equals("Expert Statistics Question")) {
                 randomizeQuestion();
             }
         }
@@ -76,11 +77,10 @@ public class AssignmentPage extends JPanel implements MouseListener {
         for (int i = 0; i < questions.size();  i++) {
             if (questions.get(i).question.equals("Simple Math")) {
                 simpleMath(questions.get(i));
-                /*
-            } else if (questions.get(i).question == "Intermediate Stats Question") {
-                statsOne(i);
+            } else if (questions.get(i).question.equals("Intermediate Statistics Question")) {
+                statsOne(questions.get(i));
             } else {
-                statsTwo(i);*/
+                statsTwo(questions.get(i));
             }
         }
     }
@@ -104,13 +104,86 @@ public class AssignmentPage extends JPanel implements MouseListener {
         answerChoices[0] = op1;
         answerChoices[1] = op2;
         answerChoices[2] = op3;
-        q.multipleChoices = answerChoices;
-//        if (questions.get(i).multipleChoices[0] == "0" && questions.get(i).multipleChoices[1] == "0"
-//                && questions.get(i).multipleChoices[2] == "0") {
-//            for (int j = 0; j < questions.get(j).multipleChoices.length; j++) {
-//                questions.get(j).multipleChoices[j] = answerChoices[j];
-//            }
-//        }
+
+        if (q.multipleChoices != null) {
+            q.multipleChoices = answerChoices;
+        }
+    }
+
+    private void statsOne(Question q) {
+        double num1 = rand.nextInt(15) + 1;
+        double num2 = rand.nextInt(15) + 1;
+        double num3 = rand.nextInt(15) + 1;
+        double sum = num1 + num2 + num3;
+        double ans = round(num3/sum, 2);
+        String[] answerChoices = new String[3];
+
+        String question = String.format("A jar contains %d red marbles, %d green marbles and %d white marbles. " +
+                "If a marble is drawn from the jar at random, " +
+                "what is the probability that this marble is white? Please round to 2 decimal places",
+                (int)num1, (int)num2, (int)num3);
+        q.question = question;
+        String correctAnswer = Double.toString(ans);
+        q.answer = correctAnswer;
+
+        String op1, op2, op3;
+        op1 = Double.toString(round(num1/sum,2));
+        op2 = Double.toString(round(num2/sum,2));
+        op3 = Double.toString(round(ans-0.05,2));
+
+        answerChoices[0] = op1;
+        answerChoices[1] = op2;
+        answerChoices[2] = op3;
+
+        if (q.multipleChoices != null) {
+            q.multipleChoices = answerChoices;
+        }
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
+
+    private void statsTwo(Question q) {
+        int num1 = rand.nextInt(50) + 1;
+        int num2 = rand.nextInt(50) + 1;
+        int num3 = rand.nextInt(50) + 1;
+        int num4 = rand.nextInt(50) + 1;
+        int num5 = rand.nextInt(50) + 1;
+        int num6 = rand.nextInt(50) + 1;
+        int num7 = rand.nextInt(50) + 1;
+        int num8 = rand.nextInt(50) + 1;
+        int num9 = rand.nextInt(50) + 1;
+        int num10 = rand.nextInt(50) + 1;
+        int sum = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 + num10;
+        int mean = sum/10;
+        String[] answerChoices = new String[3];
+
+        String question = String.format("Find x and y such that the data set S has " +
+                "a mean of %d. S = {%d, %d, %d, %d, %d, x, %d, %d, %d, y}. " +
+                        "Answer should be in the form 'x = ?, y = ?'.", mean, num1, num2, num3, num4, num5, num7,
+                num8, num9);
+        q.question = question;
+        String correctAnswer = "x = " + Integer.toString(num6) + ", y = " + Integer.toString(num10);
+        q.answer = correctAnswer;
+
+        String op1, op2, op3;
+        op1 = "x = " + Integer.toString(num6-3) + ", y = " + Integer.toString(num10+7);
+        op2 = "x = " + Integer.toString(num6+6) + ", y = " + Integer.toString(num10+1);
+        op3 = "x = " + Integer.toString(num6-4) + ", y = " + Integer.toString(num10+3);
+
+        answerChoices[0] = op1;
+        answerChoices[1] = op2;
+        answerChoices[2] = op3;
+
+        if (q.multipleChoices != null) {
+            q.multipleChoices = answerChoices;
+        }
     }
 
     @Override
