@@ -140,8 +140,8 @@ public class AssignmentPage extends JPanel implements MouseListener {
         progressString = "";
         removeAll();
         if (currentQuestion < questions.size()) {
+            question.setText(questions.get(currentQuestion).question);
             if (questions.get(currentQuestion).multipleChoices != null) {
-                question.setText(questions.get(currentQuestion).question);
                 showMultipleChoiceQuestion();
             } else {
                 showShortAnswerQuestion();
