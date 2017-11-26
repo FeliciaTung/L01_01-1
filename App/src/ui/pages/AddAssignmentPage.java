@@ -1,15 +1,13 @@
 package ui.pages;
 
+import backend.CurrentSession;
 import backend.DatabaseManager;
 import holders.Assignment;
 import holders.Question;
-import ui.components.Button;
-import ui.components.CheckBox;
-import ui.components.ClickableObject;
-import ui.components.InputField;
-import ui.components.SaveQuestionButton;
-import ui.components.Label;
+import ui.components.*;
 import ui.UIManager;
+import ui.components.Button;
+import ui.components.Label;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,10 +22,7 @@ import java.util.List;
 public class AddAssignmentPage extends JPanel implements MouseListener {
 
     private Button saveButton;
-    /*
-    private EditQuestionButton[] editButton;
-    private DeleteQuestionButton[] deleteButton;
-    */
+
     private InputField assignmentInput;
     private List<Question> questionList;
     private Label[] questionLabels;
@@ -35,27 +30,26 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private int WINDOW_WIDTH = 800;
     private int WINDOW_HEIGHT = 680;
     private int LABEL_WIDTH = 600;
+    private int questionPanelHeight = WINDOW_HEIGHT - 400;
     private Label title;
     private JLabel typeAssignment;
     private String typeDueDate, assignName, dueDate;
     private InputField dueDateInput;
     private Button backButton;
-
+    private JPanel questionPanel;
 
     public AddAssignmentPage(List<Question> questions) {
         super();
-
+        CurrentSession.addingAssignment = true;
         saveButton = new SaveQuestionButton();
-        /*
-        editButton = new EditQuestionButton[question_num];
-        deleteButton = new DeleteQuestionButton[question_num];
-        */
         backButton = new Button("Back");
         assignmentInput = new InputField();
         questionList = questions;
         questionLabels = new Label[questions.size()];
         questionCheckBoxes = new ArrayList<>();
         dueDateInput = new InputField();
+        questionPanel = new JPanel();
+        questionPanel.setBackground(Color.WHITE);
         typeDueDate = "Due Date (yyyy/mm/dd)";
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -101,8 +95,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     }
 
     private void addQuestions() {
+        int totalHeight = 10;
         for (int i = 0; i < questionList.size(); i++) {
-            // increase label height to deal with long assignment name
+            // increase label height to account for long assignment name
             String text = "<html>" + questionList.get(i).question + "</html>";
             int labelHeight = 25;
             if (text.length() > 199) {
@@ -113,26 +108,29 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
 
             questionCheckBoxes.add(new CheckBox());
             questionCheckBoxes.get(i).addMouseListener(this);
-            add(questionCheckBoxes.get(i));
-            add(UIManager.getSpacing(10, 0));
-
 
             questionLabels[i] = new Label(text, SwingConstants.LEFT);
             questionLabels[i].setIndex(i);
             questionLabels[i].setPreferredSize(new Dimension(LABEL_WIDTH, labelHeight));
             questionLabels[i].setFont(getFont().deriveFont(16f));
             questionLabels[i].addMouseListener(this);
-            add(questionLabels[i]);
-            /*
-            editButton[i] = new EditQuestionButton(i);
-            deleteButton[i] = new DeleteQuestionButton(i);
-            editButton[i].addMouseListener(this);
-            deleteButton[i].addMouseListener(this);
+            questionLabels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-            add(editButton[i]);
-            add(deleteButton[i]);
-            */
-            add(UIManager.getSpacing(WINDOW_WIDTH, 1));
+            questionPanel.add(questionCheckBoxes.get(i));
+            questionPanel.add(UIManager.getSpacing(10, 0));
+            questionPanel.add(questionLabels[i]);
+            questionPanel.add(UIManager.getSpacing(WINDOW_WIDTH, 1));
+
+            // update the height required to display all questions
+            totalHeight += (labelHeight + 15);
+        }
+
+        questionPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, totalHeight));
+        if (totalHeight < questionPanelHeight) {
+            add(questionPanel);
+        } else {
+            // not enough space to display all questions, add a scroll bar
+            add(new ScrollPanel(questionPanel, questionPanelHeight));
         }
     }
 
@@ -158,6 +156,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 gotoViewQuestionPage(questionList.get(index));
                 break;
             case ClickableObject.BACK_BUTTON:
+                CurrentSession.addingAssignment = false;
                 UIManager.switchView(new InstructorHomePage());
                 break;
         }
@@ -235,16 +234,6 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         }
     }
 
-    private void editQuestion() {
-        //TODO: switch to edit question page
-    }
-
-
-    private void deleteQuestion() {
-        //TODO: trigger delete question function
-
-    }
-
     private void createAssignment() {
         List<Integer> selectedQuestion = new ArrayList<>();
         for (CheckBox cb : questionCheckBoxes){
@@ -257,7 +246,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 }
             }
         }
-        DatabaseManager.addAssignment(new Assignment(assignName, 1, selectedQuestion, dueDate));
+        DatabaseManager.addAssignment(new Assignment(assignName, CurrentSession.user.courseID, selectedQuestion, dueDate));
     }
 
     private void gotoViewQuestionPage(Question question) {
@@ -271,6 +260,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
 
 
     }
+
     private void showErrorMessage() {
 
         title.setText("Please enter assignment name and due date");
@@ -281,7 +271,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         Timer t = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                title.setText("Sign Up");
+                title.setText("Create Assignment");
                 title.setPreferredSize(new Dimension(800, 50));
                 title.setFont(getFont().deriveFont(24f));
                 title.setForeground(Color.BLACK);

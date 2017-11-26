@@ -32,12 +32,11 @@ public class DatabaseManager {
         // SQL Query
         int questionType = (question.multipleChoices == null)? 2: 1;
             try {
-            sql = "INSERT INTO question(question, answer, course, qtype) VALUES(?, ?, ?, ?)";
+            sql = "INSERT INTO question(question, answer, qtype) VALUES(?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, question.question);
             pstmt.setString(2, question.answer);
-            pstmt.setInt(3, 1); //dummy courseID
-            pstmt.setInt(4, questionType);
+            pstmt.setInt(3, questionType);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -117,28 +116,29 @@ public class DatabaseManager {
     }
 
     /**
-     * Get all questions that are related to a course or a course
+     * Get all questions that are related to an assignment. If assignment id is invalid, then return
+     * all available questions.
      *
-     * @param id    id of course or course
-     * @param useCourseid   true if using courseid, false if using assignemnt id
-     * @return  questions
-     */
-    public static List<Question> getAllQuestions(int id, boolean useCourseid) {
+     * @param assignId  assignment id
+     * @return          list of Question on an assignment
+     * */
+    public static List<Question> getAllQuestions(int assignId) {
+        String question, answer;
+        int qtype, qid;
+        List<Question> question_list = new ArrayList<>();
+        List<String> mc_list;
+        String[] mc_choices;
         try {
-            if (useCourseid) {
-                sql = "SELECT question, answer, qtype, qid FROM question WHERE course=?";
+            if (assignId < 1) {
+                sql = "SELECT question, answer, qtype, qid FROM question";
+                pstmt = conn.prepareStatement(sql);
             } else {
                 sql = "SELECT question, answer, qtype, q.qid FROM question q JOIN " +
                         "related_question rq ON rq.qid=q.qid where rq.aid=?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, assignId);
             }
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
             rs = pstmt.executeQuery();
-            String question = null, answer = null;
-            int qtype = 0, qid = 0;
-            List<Question> question_list = new ArrayList<Question>();
-            List<String> mc_list = new ArrayList<>();
-            String[] mc_choices;
 
             while (rs.next()) {
             	question = rs.getString(1);
@@ -353,13 +353,15 @@ public class DatabaseManager {
     }
 
     /**
-     * Update a student's assignment mark  if due date has not passed and current mark is higher than previous mark
+     * Update current user's assignment mark if due date has not passed and current mark is higher than previous mark
      * @param assignId  assignment id
-     * @param userId    student user id
      * @param mark      current mark
      */
-    public static void updateAssignmentMark(int assignId, int userId, float mark){
+    public static void updateAssignmentMark(int assignId, float mark){
         float previousMark;
+        int userId = CurrentSession.user.id;
+        int courseId = CurrentSession.user.courseID;
+
         try {
             if (!passedDueDate(assignId)){
                 // check if there is a previous mark
@@ -373,19 +375,20 @@ public class DatabaseManager {
                     // only update mark if previous mark is lower than current mark
                     previousMark = rs.getFloat(1);
                     if (previousMark < mark) {
-                        sql = "UPDATE marks SET mark = ? WHERE student = ? AND aid =?";
+                        sql = "UPDATE marks SET mark = ? WHERE student = ? AND cid = ? AND aid =?";
                     } else {
                         sql = null;
                     }
                 } else {
                     // there is not previous mark
-                    sql = "INSERT INTO marks(mark, student, cid, aid) VALUES (?,?,1,?)"; // course id = 1
+                    sql = "INSERT INTO marks(mark, student, cid, aid) VALUES (?,?,?,?)"; // course id = 1
                 }
                 if (sql != null) {
                     pstmt = conn.prepareStatement(sql);
                     pstmt.setFloat(1, mark);
                     pstmt.setInt(2, userId);
-                    pstmt.setInt(3, assignId);
+                    pstmt.setInt(3, courseId);
+                    pstmt.setInt(4, assignId);
                     pstmt.executeUpdate();
                 }
             }
@@ -418,10 +421,52 @@ public class DatabaseManager {
         return (dueDate.before(today));
 
     }
+
+    /**
+     * Given a Date object convert it into a string in yyyy/MM/dd format
+     * @param date  Date object
+     * @return      string representation of the date
+     */
     private static String convertDateToString(Date date){
-        String result = "";
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-        result = df.format(date);
-        return result;
+        return df.format(date);
+    }
+
+    /**
+     * Get the course id of the given course. If course is not in database then add it first then get the new
+     * course id.
+     * @param course    course name
+     * @return          course id
+     */
+    public static int getCourseID(String course){
+        int courseID = -1;
+        try {
+            sql = "SELECT cid FROM course WHERE course = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, course);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                // course exists so get course id
+                courseID = rs.getInt(1);
+            } else {
+                // add new course
+                sql = "INSERT INTO course(course) VALUES (?)";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, course);
+                pstmt.executeUpdate();
+                // get new course id
+                sql = "SELECT cid FROM course WHERE course = ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, course);
+                rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    courseID = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return courseID;
     }
 }

@@ -1,5 +1,7 @@
 package ui.pages;
 
+import backend.CurrentSession;
+import backend.DatabaseManager;
 import ui.UIManager;
 import ui.components.Button;
 import ui.components.ClickableObject;
@@ -50,7 +52,8 @@ public class StudentHomePage extends JPanel implements MouseListener {
                 UIManager.switchView(new LoginPage());
                 break;
             case ClickableObject.VIEW_ASSIGNMENTS:
-                UIManager.switchView(new AvailableAssignments(null));
+                UIManager.switchView(new AvailableAssignments(DatabaseManager
+                        .getAllAssignment(CurrentSession.user.id, CurrentSession.user.courseID)));
                 break;
         }
     }

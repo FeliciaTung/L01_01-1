@@ -31,7 +31,7 @@ public class Assignment {
     }
 
     public List<Question> getQuestions(){
-        List<Question> questionList = DatabaseManager.getAllQuestions(id, false);
+        List<Question> questionList = DatabaseManager.getAllQuestions(id);
         return questionList;
     }
 }

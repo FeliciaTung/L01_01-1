@@ -1,9 +1,11 @@
 package ui.pages;
 
+import backend.CurrentSession;
 import holders.Assignment;
 import ui.UIManager;
 import ui.components.ClickableObject;
 import ui.components.Button;
+import ui.components.ScrollPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,17 +26,20 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     private JLabel[] dueDateLabels;
     private List<Button> detailButton;
     private List<Assignment> assignList;
-    private float labelTextSize = 16f;
+    private float labelTextSize = 18f;
     private int LABEL_WIDTH = 200;
     private int WINDOW_WIDTH = 800;
     private int WINDOW_HEIGHT = 680;
+    private int numOfAssignments;
+    private int assignPanelHeight = WINDOW_HEIGHT - 300;
     private JLabel title;
     private JLabel AssignNameLabel;
     private Button backButton;
+    private JPanel assignPanel;
 
     public ViewAllAssignmentsPage(List<Assignment> assignments) {
         super();
-        int numOfAssignments = assignments.size();
+        numOfAssignments = assignments.size();
         /*
         editButton = new EditQuestionButton[question_num];
         deleteButton = new DeleteQuestionButton[question_num];
@@ -44,7 +49,8 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
         assignLabels = new JLabel[numOfAssignments];
         dueDateLabels = new JLabel[numOfAssignments];
         detailButton = new ArrayList<>();
-
+        assignPanel = new JPanel();
+        assignPanel.setBackground(Color.WHITE);
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
 
@@ -74,59 +80,65 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
         AssignDateLabel.setFont(getFont().deriveFont(18f));
 
         add(AssignDateLabel);
-        
+
         add(UIManager.getSpacing(100, 1));
         add(UIManager.getSpacing(WINDOW_WIDTH, 20));
 
+        addAssignmentPanel();
+    }
 
+    private void addAssignmentPanel(){
+        int totalHeight = 0;
         for (int i = 0; i < numOfAssignments; i++) {
             // increase label height to deal with long assignment name
             String text = "<html>" + assignList.get(i).name + "</html>";
             int labelHeight = 25;
-            if (text.length() > 199) {
+            if (text.length() > 99) {
                 labelHeight = 65;
-            } else if (text.length() > 99) {
+            } else if (text.length() > 39) {
                 labelHeight = 45;
             }
 
             assignLabels[i] = new JLabel(text, SwingConstants.LEFT);
             assignLabels[i].setPreferredSize(new Dimension(LABEL_WIDTH, labelHeight));
             assignLabels[i].setFont(getFont().deriveFont(labelTextSize));
-            assignLabels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            assignLabels[i].setFont(getFont().deriveFont(18f));
-
 
             dueDateLabels[i] = new JLabel(assignList.get(i).dueDate, SwingConstants.LEFT);
             dueDateLabels[i].setFont(getFont().deriveFont(labelTextSize));
             dueDateLabels[i].setPreferredSize(new Dimension(LABEL_WIDTH, labelHeight));
-            dueDateLabels[i].setFont(getFont().deriveFont(18f));
 
             detailButton.add(new Button("Detail"));
-            detailButton.get(i).id = ClickableObject.EDIT_QUESTION;
+            detailButton.get(i).id = ClickableObject.VIEW_QUESTION;
             detailButton.get(i).setPreferredSize(new Dimension(100, Button.HEIGHT));
             detailButton.get(i).addMouseListener(this);
 
-            add(assignLabels[i]);
-            add(dueDateLabels[i]);
-            add(detailButton.get(i));
-
-
-            add(UIManager.getSpacing(WINDOW_WIDTH, 1));
+            assignPanel.add(assignLabels[i]);
+            assignPanel.add(dueDateLabels[i]);
+            assignPanel.add(detailButton.get(i));
+            assignPanel.add(UIManager.getSpacing(WINDOW_WIDTH, 1));
+            totalHeight += (Button.HEIGHT + 15);
         }
 
-        add(UIManager.getSpacing(WINDOW_WIDTH, 40));
-
-
+        assignPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, totalHeight));
+        if (totalHeight < assignPanelHeight) {
+            add(assignPanel);
+        } else {
+            // not enough space to display all questions, add a scroll bar
+            add(new ScrollPanel(assignPanel, assignPanelHeight));
+        }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         int clickedItem = ((ClickableObject) e.getSource()).getID();
         switch(clickedItem){
-            case ClickableObject.EDIT_QUESTION:
-                gotoAssignment(assignList.get(detailButton.indexOf((e.getSource()))));
+            case ClickableObject.VIEW_QUESTION:
+                Assignment assignment = assignList.get(detailButton.indexOf((e.getSource())));
+                CurrentSession.assignment = assignment;
+                UIManager.switchView(new ViewAssignmentPage(assignment));
                 break;
             case ClickableObject.BACK_BUTTON:
+                CurrentSession.assignment = null;
                 UIManager.switchView(new InstructorHomePage());
                 break;
         }
@@ -146,7 +158,7 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         int clickedItem = ((ClickableObject) e.getSource()).getID();
         switch(clickedItem){
-            case ClickableObject.EDIT_QUESTION:
+            case ClickableObject.VIEW_QUESTION:
                 detailButton.get(detailButton.indexOf((e.getSource()))).setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
             case ClickableObject.BACK_BUTTON:
@@ -160,7 +172,7 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
         int clickedItem = ((ClickableObject) e.getSource()).getID();
         switch(clickedItem){
-            case ClickableObject.EDIT_QUESTION:
+            case ClickableObject.VIEW_QUESTION:
                 detailButton.get(detailButton.indexOf((e.getSource()))).setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
             case ClickableObject.BACK_BUTTON:
@@ -179,8 +191,4 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
 
     }
 
-    private void gotoAssignment(Assignment assign) {
-        //TODO: switch view to individual assignment page
-        UIManager.switchToAssignmentView(assign);
-    }
 }

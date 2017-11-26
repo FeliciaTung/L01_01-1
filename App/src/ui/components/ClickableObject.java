@@ -7,7 +7,7 @@ public interface ClickableObject {
     int STUDENT_BUTTON = -10;
     int INSTRUCTOR_BUTTON = -11;
     int SAVE_QUESTION = 1;
-    int EDIT_QUESTION = 2;
+    int VIEW_QUESTION = 2;
     int DELETE_QUESTION = 3;
     int ADD_QUESTION = 4;
     int NEXT_QUESTION = 5;

@@ -1,5 +1,6 @@
 package ui.pages;
 
+import backend.CurrentSession;
 import backend.DatabaseManager;
 import holders.User;
 import ui.UIManager;
@@ -10,14 +11,10 @@ import ui.components.Label;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Arrays;
 
 import ui.components.ClickableObject;
-import ui.components.Label;
 
 public class LoginPage extends JPanel implements MouseListener {
 
@@ -150,6 +147,7 @@ public class LoginPage extends JPanel implements MouseListener {
         String uname = input[0].getText();
         String pw = new String(password.getPassword());
         User user = DatabaseManager.getUser(uname, pw);
+        CurrentSession.user = user;
         int type = user.type;
         return type;
     }

@@ -230,6 +230,7 @@ public class RegisterPage extends JPanel implements MouseListener {
 
     private void saveUser(){
         String UTORid = input[1].getText();
+        String course = input[2].getText();
         String email = input[3].getText();
         String pw = new String(password[0].getPassword());
         int type ;
@@ -246,6 +247,6 @@ public class RegisterPage extends JPanel implements MouseListener {
             default:
                 type = -1;
         }
-        DatabaseManager.addUser(new User(UTORid, email, pw, 1, type));
+        DatabaseManager.addUser(new User(UTORid, email, pw, DatabaseManager.getCourseID(course), type));
     }
 }

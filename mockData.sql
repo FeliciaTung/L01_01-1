@@ -4,17 +4,17 @@ INSERT INTO course(course) VALUES ("cscc01");
 INSERT INTO course(course) VALUES ("cscd27");
 INSERT INTO course(course) VALUES ("stab52");
 
-INSERT INTO question(question, answer, course, qtype) VALUES ("What is the probability that the survey will show a greater percentage of Republican voters in the second state than in the first state?",
- "0.04", 1, 1);
-INSERT INTO question(question, answer, course, qtype) VALUES ("question2", "answer2", 1, 2);
-INSERT INTO question(question, answer, course, qtype) VALUES ("question3", "answer3", 1, 2);
-INSERT INTO question(question, answer, course, qtype) VALUES ("question4", "answer4", 1, 2);
-INSERT INTO question(question, answer, course, qtype) VALUES ("question5", "answer5", 1, 1);
-INSERT INTO question(question, answer, course, qtype) VALUES ("question6", "answer6", 2, 1);
-INSERT INTO question(question, answer, course, qtype) VALUES ("question7", "answer7", 2, 2);
-INSERT INTO question(question, answer, course, qtype) VALUES ("question8", "answer8", 3, 2);
-INSERT INTO question(question, answer, course, qtype) VALUES ("question9", "answer9", 3, 2);
-INSERT INTO question(question, answer, course, qtype) VALUES ("question10", "answer10", 3, 1);
+INSERT INTO question(question, answer, qtype) VALUES ("What is the probability that the survey will show a greater percentage of Republican voters in the second state than in the first stateWhat is the probability that the survey will show a greater percentage ?",
+ "0.04", 1);
+INSERT INTO question(question, answer, qtype) VALUES ("question2", "answer2", 2);
+INSERT INTO question(question, answer, qtype) VALUES ("question3", "answer3", 2);
+INSERT INTO question(question, answer, qtype) VALUES ("question4", "answer4", 2);
+INSERT INTO question(question, answer, qtype) VALUES ("question5", "answer5", 1);
+INSERT INTO question(question, answer, qtype) VALUES ("question6", "answer6", 1);
+INSERT INTO question(question, answer, qtype) VALUES ("question7", "answer7", 2);
+INSERT INTO question(question, answer, qtype) VALUES ("question8", "answer8", 2);
+INSERT INTO question(question, answer, qtype) VALUES ("question9", "answer9", 2);
+INSERT INTO question(question, answer, qtype) VALUES ("question10", "answer10", 1);
 
 INSERT INTO mc(qid, choice) VALUES (1, "choice 1.1");
 INSERT INTO mc(qid, choice) VALUES (1, "choice 1.2");
