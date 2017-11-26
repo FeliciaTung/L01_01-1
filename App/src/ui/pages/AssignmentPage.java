@@ -38,8 +38,8 @@ public class AssignmentPage extends JPanel implements MouseListener {
 
         for (int i = 0; i < questions.size(); i++) {
             // if the question was selected to be random (based off of input from AddQuestionPage
-            if (questions.get(i).question == "Simple Math" || questions.get(i).question == "Intermediate Stats Question"
-                    || questions.get(i).question == "Expert Stats Question") {
+            if (questions.get(i).question.equals("Simple Math") || questions.get(i).question.equals("Intermediate Stats Question")
+                    || questions.get(i).question.equals("Expert Stats Question")) {
                 randomizeQuestion();
             }
         }
@@ -74,8 +74,8 @@ public class AssignmentPage extends JPanel implements MouseListener {
 
     private void randomizeQuestion() {
         for (int i = 0; i < questions.size();  i++) {
-            if (questions.get(i).question == "Simple Math") {
-                simpleMath(i);
+            if (questions.get(i).question.equals("Simple Math")) {
+                simpleMath(questions.get(i));
                 /*
             } else if (questions.get(i).question == "Intermediate Stats Question") {
                 statsOne(i);
@@ -85,16 +85,16 @@ public class AssignmentPage extends JPanel implements MouseListener {
         }
     }
 
-    private void simpleMath(int i) {
+    private void simpleMath(Question q) {
         int num1 = rand.nextInt(50) + 1;
         int num2 = rand.nextInt(50) + 1;
         int sum = num1 + num2;
         String[] answerChoices = new String[3];
 
         String question = String.format("What is %d + %d?", num1, num2);
-        questions.get(i).question = question;
+        q.question = question;
         String correctAnswer = Integer.toString(sum);
-        questions.get(i).answer = correctAnswer;
+        q.answer = correctAnswer;
 
         String op1, op2, op3;
         op1 = Integer.toString(sum+1);
@@ -104,13 +104,13 @@ public class AssignmentPage extends JPanel implements MouseListener {
         answerChoices[0] = op1;
         answerChoices[1] = op2;
         answerChoices[2] = op3;
-
-        if (questions.get(i).multipleChoices[0] == "0" && questions.get(i).multipleChoices[1] == "0"
-                && questions.get(i).multipleChoices[2] == "0") {
-            for (int j = 0; j < questions.get(j).multipleChoices.length; j++) {
-                questions.get(j).multipleChoices[j] = answerChoices[j];
-            }
-        }
+        q.multipleChoices = answerChoices;
+//        if (questions.get(i).multipleChoices[0] == "0" && questions.get(i).multipleChoices[1] == "0"
+//                && questions.get(i).multipleChoices[2] == "0") {
+//            for (int j = 0; j < questions.get(j).multipleChoices.length; j++) {
+//                questions.get(j).multipleChoices[j] = answerChoices[j];
+//            }
+//        }
     }
 
     @Override
