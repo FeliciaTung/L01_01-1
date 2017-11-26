@@ -349,13 +349,15 @@ public class DatabaseManager {
     }
 
     /**
-     * Update a student's assignment mark if due date has not passed and current mark is higher than previous mark
+     * Update current user's assignment mark if due date has not passed and current mark is higher than previous mark
      * @param assignId  assignment id
-     * @param userId    student user id
      * @param mark      current mark
      */
-    public static void updateAssignmentMark(int assignId, int userId, float mark){
+    public static void updateAssignmentMark(int assignId, float mark){
         float previousMark;
+        int userId = CurrentSession.user.id;
+        int courseId = CurrentSession.user.courseID;
+
         try {
             if (!passedDueDate(assignId)){
                 // check if there is a previous mark
@@ -369,19 +371,20 @@ public class DatabaseManager {
                     // only update mark if previous mark is lower than current mark
                     previousMark = rs.getFloat(1);
                     if (previousMark < mark) {
-                        sql = "UPDATE marks SET mark = ? WHERE student = ? AND aid =?";
+                        sql = "UPDATE marks SET mark = ? WHERE student = ? AND cid = ? AND aid =?";
                     } else {
                         sql = null;
                     }
                 } else {
                     // there is not previous mark
-                    sql = "INSERT INTO marks(mark, student, cid, aid) VALUES (?,?,1,?)"; // course id = 1
+                    sql = "INSERT INTO marks(mark, student, cid, aid) VALUES (?,?,?,?)"; // course id = 1
                 }
                 if (sql != null) {
                     pstmt = conn.prepareStatement(sql);
                     pstmt.setFloat(1, mark);
                     pstmt.setInt(2, userId);
-                    pstmt.setInt(3, assignId);
+                    pstmt.setInt(3, courseId);
+                    pstmt.setInt(4, assignId);
                     pstmt.executeUpdate();
                 }
             }

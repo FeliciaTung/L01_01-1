@@ -1,9 +1,9 @@
 package ui.pages;
 
+import backend.CurrentSession;
 import backend.DatabaseManager;
 import holders.Assignment;
 import holders.Question;
-import holders.User;
 import ui.UIManager;
 import ui.components.InputField;
 import ui.components.MultipleChoiceAnswer;
@@ -77,7 +77,9 @@ public class AssignmentPage extends JPanel implements MouseListener {
                 setNextQuestion();
                 break;
             case ClickableObject.BACK_BUTTON:
-                UIManager.switchView(new AvailableAssignments(null));
+                UIManager.switchView(new AvailableAssignments(DatabaseManager
+                        .getAllAssignment(CurrentSession.user.id, CurrentSession.user.courseID)));
+
                 break;
         }
     }
@@ -198,9 +200,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
     }
 
     private void saveMark(float mark) {
-        // mock user data
-        User currentUser = DatabaseManager.getUser("student", "test");
-        DatabaseManager.updateAssignmentMark(assignment.id, currentUser.id, mark);
+        DatabaseManager.updateAssignmentMark(assignment.id, mark);
     }
 
     private void resize() {
