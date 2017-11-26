@@ -254,7 +254,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
         progressString = "";
         removeAll();
         if (currentQuestion < questions.size()) {
-            question.setText(questions.get(currentQuestion).question);
+            question.setText("<html>" + questions.get(currentQuestion).question + "</html>");
             if (questions.get(currentQuestion).multipleChoices != null) {
                 showMultipleChoiceQuestion();
             } else {
@@ -317,13 +317,13 @@ public class AssignmentPage extends JPanel implements MouseListener {
 
     private void resize() {
         progress.setBounds(0, 0, getPreferredSize().width, 50);
-        question.setBounds(0, 50, getPreferredSize().width, 50);
+        question.setBounds(0, 50, getPreferredSize().width, 125);
         nextQuestion.setBounds((getPreferredSize().width - Button.WIDTH) / 2,
                 getPreferredSize().height - Button.HEIGHT - 50,
                 Button.WIDTH, Button.HEIGHT);
         for (int i = 0; i < answerLabels.length; i++) {
             answerLabels[i].setBounds(getPreferredSize().width / 2 - 150 - 175 * (i % 2 == 0 ? 1 : -1),
-                    getPreferredSize().height / 4 + 180 * (i < 2 ? 0 : 1),
+                    getPreferredSize().height / 3 + 180 * (i < 2 ? 0 : 1),
                     300,120);
         }
 
