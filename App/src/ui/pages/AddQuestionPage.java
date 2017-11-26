@@ -11,6 +11,8 @@ import ui.UIManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -259,5 +261,14 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
         DatabaseManager.addQuestion(new Question(question, correctAnswer, "", answerChoices));
         saveMessage.setText("Question Saved");
+        Timer timer = new Timer(4000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                saveMessage.setText("");
+            }
+        });
+        timer.setRepeats(false);
+        timer.setCoalesce(true);
+        timer.start();
     }
 }
