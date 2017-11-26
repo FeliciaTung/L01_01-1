@@ -1,5 +1,7 @@
 package ui.pages;
 
+import backend.CurrentSession;
+import backend.DatabaseManager;
 import holders.Question;
 import ui.components.*;
 import ui.UIManager;
@@ -12,8 +14,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class ViewQuestionPage extends JPanel implements MouseListener {
-    //TODO: add back button to go back to the previous page
-    public static BackButton backButton = new BackButton(ClickableObject.BACK_TO_VIEW_ASSIGN);
     private Label[] multipleChoices = new Label[3];
     private int questionType;
     private Question question;
@@ -22,6 +22,7 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
     private Label answerLabel;
     private Label answer;
     private Label otherChioce;
+    private Button backButton;
     private int WINDOW_WIDTH = 800;
     private int WINDOW_HEIGHT = 680;
     private int LABEL_WIDTH = 600;
@@ -48,7 +49,11 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
 
     private void addContent() {
         // reset panel
-        removeAll();
+        backButton = new Button("Back");
+        backButton.id = ClickableObject.BACK_BUTTON;
+        backButton.addMouseListener(this);
+        add(backButton);
+        add(UIManager.getSpacing(WINDOW_WIDTH - 220, 1));
 
         Label title = new Label("View Question", SwingConstants.CENTER);
         title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
@@ -62,6 +67,7 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
         int descriptionHeight = setLabelHeight(question.question);
         int answerHeight = setLabelHeight(question.answer);
         int[] choiceHeight = new int[3];
+
         // display question
         questionLabel = new Label("Question: ", SwingConstants.CENTER);
         questionLabel.setFont(getFont().deriveFont(PRIMARY_FONT));
@@ -122,6 +128,14 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
             case ClickableObject.BACK_TO_VIEW_ALL_ASSIGN:
                 gotoPreviousPage();
                 break;
+
+            case ClickableObject.BACK_BUTTON:
+                if (CurrentSession.assignment == null) {
+                    UIManager.switchView(new AddAssignmentPage(DatabaseManager.getAllQuestions(-1)));
+                } else {
+                    UIManager.switchView(new ViewAssignmentPage(CurrentSession.assignment));
+                }
+                break;
         }
     }
 
@@ -142,6 +156,9 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
                 backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
 
+            case ClickableObject.BACK_BUTTON:
+                backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
         }
     }
 
@@ -149,6 +166,9 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
             case ClickableObject.SAVE_QUESTION:
+                backButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
+            case ClickableObject.BACK_BUTTON:
                 backButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
         }
