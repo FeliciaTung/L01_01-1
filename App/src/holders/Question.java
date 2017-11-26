@@ -2,11 +2,11 @@ package holders;
 
 public class Question {
 
-    public final String question;
-    public final String answer;
-    public final String tag;
-    public final int id;
-    public final String[] multipleChoices;
+    public String question;
+    public String answer;
+    public String tag;
+    public int id;
+    public String[] multipleChoices;
 
 
     /*

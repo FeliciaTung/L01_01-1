@@ -14,9 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 
 public class AssignmentPage extends JPanel implements MouseListener {
@@ -31,11 +29,21 @@ public class AssignmentPage extends JPanel implements MouseListener {
     private Button nextQuestion;
     private MultipleChoiceAnswer[] answerLabels;
     private InputField shortAnswerInput;
+    Random rand = new Random();
 
     public AssignmentPage(Assignment assignment) {
         super();
         this.assignment = assignment;
         questions = assignment.getQuestions();
+
+        for (int i = 0; i < questions.size(); i++) {
+            // if the question was selected to be random (based off of input from AddQuestionPage
+            if (questions.get(i).question == "Simple Math" || questions.get(i).question == "Intermediate Stats Question"
+                    || questions.get(i).question == "Expert Stats Question") {
+                randomizeQuestion();
+            }
+        }
+
         currentQuestion = -1;
         correctAnswers = 0;
         progress = new JLabel("", SwingConstants.RIGHT);
@@ -62,6 +70,47 @@ public class AssignmentPage extends JPanel implements MouseListener {
 
         resize();
         setNextQuestion();
+    }
+
+    private void randomizeQuestion() {
+        for (int i = 0; i < questions.size();  i++) {
+            if (questions.get(i).question == "Simple Math") {
+                simpleMath(i);
+                /*
+            } else if (questions.get(i).question == "Intermediate Stats Question") {
+                statsOne(i);
+            } else {
+                statsTwo(i);*/
+            }
+        }
+    }
+
+    private void simpleMath(int i) {
+        int num1 = rand.nextInt(50) + 1;
+        int num2 = rand.nextInt(50) + 1;
+        int sum = num1 + num2;
+        String[] answerChoices = new String[3];
+
+        String question = String.format("What is %d + %d?", num1, num2);
+        questions.get(i).question = question;
+        String correctAnswer = Integer.toString(sum);
+        questions.get(i).answer = correctAnswer;
+
+        String op1, op2, op3;
+        op1 = Integer.toString(sum+1);
+        op2 = Integer.toString(sum-3);
+        op3 = Integer.toString(sum+2);
+
+        answerChoices[0] = op1;
+        answerChoices[1] = op2;
+        answerChoices[2] = op3;
+
+        if (questions.get(i).multipleChoices[0] == "0" && questions.get(i).multipleChoices[1] == "0"
+                && questions.get(i).multipleChoices[2] == "0") {
+            for (int j = 0; j < questions.get(j).multipleChoices.length; j++) {
+                questions.get(j).multipleChoices[j] = answerChoices[j];
+            }
+        }
     }
 
     @Override
