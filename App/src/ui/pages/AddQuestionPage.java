@@ -11,6 +11,8 @@ import ui.UIManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -22,6 +24,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     private InputField[] multipleChoiceOptions = new InputField[4];
     private RadioButton[] multipleChoiceRadioButtons = new RadioButton[4];
     private RadioButton[] topMenuOptions;
+    private JLabel saveMessage;
     private int questionType = -1;
     private Button backButton;
     private int WINDOW_WIDTH = 800;
@@ -33,20 +36,16 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         saveButton.addMouseListener(this);
         questionInput = new InputField();
         topMenuOptions = new RadioButton[2];
+        saveMessage = new JLabel("", SwingConstants.CENTER);
         backButton = new Button("Back");
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
 
-
         addContent(false);
-
-        add(UIManager.getSpacing(WINDOW_WIDTH, 30));
-
-
     }
 
-    private void addContent(boolean typeChose){
+    private void addContent(boolean typeChose) {
         // clear everything
         removeAll();
         backButton.id = ClickableObject.BACK_BUTTON;
@@ -84,7 +83,10 @@ public class AddQuestionPage extends JPanel implements MouseListener {
             add(saveButton);
 
         }
-        add(UIManager.getSpacing(WINDOW_WIDTH, 30));
+
+        saveMessage.setPreferredSize(new Dimension(WINDOW_WIDTH, 30));
+        add(saveMessage);
+
         UIManager.switchView(this);
 
     }
@@ -113,9 +115,6 @@ public class AddQuestionPage extends JPanel implements MouseListener {
                 add(menuText);
             }
         }
-
-
-
     }
 
     public void addMultipleChoice() {
@@ -241,6 +240,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
     private void saveQuestion() {
         String question = questionInput.getText();
+        questionInput.setText("");
         String correctAnswer = null;
         String[] answerChoices = new String[3];
         if (questionType == ClickableObject.MC_BUTTON) {
@@ -250,11 +250,20 @@ public class AddQuestionPage extends JPanel implements MouseListener {
                 } else {
                     answerChoices[correctAnswer == null ? i : i - 1] = multipleChoiceOptions[i].getText();
                 }
+
+                multipleChoiceOptions[i].setText("");
             }
         } else {
             correctAnswer = answerInput.getText();
+            answerInput.setText("");
             answerChoices = null;
         }
+
         DatabaseManager.addQuestion(new Question(question, correctAnswer, "", answerChoices));
+        saveMessage.setText("Question Saved");
+        Timer timer = new Timer(4000, (actionEvent) -> saveMessage.setText(""));
+        timer.setRepeats(false);
+        timer.setCoalesce(true);
+        timer.start();
     }
 }
