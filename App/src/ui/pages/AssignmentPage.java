@@ -37,11 +37,13 @@ public class AssignmentPage extends JPanel implements MouseListener {
         questions = assignment.getQuestions();
 
         for (int i = 0; i < questions.size(); i++) {
-            // if the question was selected to be random (based off of input from AddQuestionPage
-            if (questions.get(i).question.equals("Simple Math")
-                    || questions.get(i).question.equals("Intermediate Statistics Question")
-                    || questions.get(i).question.equals("Expert Statistics Question")) {
-                randomizeQuestion();
+            // randomize question if the question was selected to be random (based off of input from AddQuestionPage)
+            if (questions.get(i).question.equals("Simple Math")) {
+                simpleMath(questions.get(i));
+            } else if (questions.get(i).question.equals("Intermediate Statistics Question")) {
+                statsOne(questions.get(i));
+            } else if (questions.get(i).question.equals("Expert Statistics Question")){
+                statsTwo(questions.get(i));
             }
         }
 
@@ -71,18 +73,6 @@ public class AssignmentPage extends JPanel implements MouseListener {
 
         resize();
         setNextQuestion();
-    }
-
-    private void randomizeQuestion() {
-        for (int i = 0; i < questions.size();  i++) {
-            if (questions.get(i).question.equals("Simple Math")) {
-                simpleMath(questions.get(i));
-            } else if (questions.get(i).question.equals("Intermediate Statistics Question")) {
-                statsOne(questions.get(i));
-            } else {
-                statsTwo(questions.get(i));
-            }
-        }
     }
 
     private void simpleMath(Question q) {
