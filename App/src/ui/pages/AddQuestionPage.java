@@ -261,12 +261,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
         DatabaseManager.addQuestion(new Question(question, correctAnswer, "", answerChoices));
         saveMessage.setText("Question Saved");
-        Timer timer = new Timer(4000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                saveMessage.setText("");
-            }
-        });
+        Timer timer = new Timer(4000, (actionEvent) -> saveMessage.setText(""));
         timer.setRepeats(false);
         timer.setCoalesce(true);
         timer.start();
