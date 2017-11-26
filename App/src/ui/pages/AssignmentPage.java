@@ -156,7 +156,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
 
         String question = String.format("Find x and y such that the data set S has " +
                 "a mean of %d. S = {%d, %d, %d, %d, %d, x, %d, %d, %d, y}. " +
-                        "Answer should be in the form 'x = ?, y = ?'.", mean, num1, num2, num3, num4, num5, num7,
+                        "Answer should be in the form: x = ?, y = ?", mean, num1, num2, num3, num4, num5, num7,
                 num8, num9);
         q.question = question;
         String correctAnswer = "x = " + Integer.toString(num6) + ", y = " + Integer.toString(num10);
