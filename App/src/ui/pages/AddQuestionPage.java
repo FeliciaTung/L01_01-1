@@ -192,6 +192,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         chooseType.setFont(getFont().deriveFont(16f));
 
         add(typeAnswer);
+        add(UIManager.getSpacing(WINDOW_WIDTH, 1));
 
         for (int i = 0; i < randMenuOptions.length; i++) {
             randMenuOptions[i] = new RadioButton(ClickableObject.RAND_OPTIONS[i]);
@@ -201,21 +202,15 @@ public class AddQuestionPage extends JPanel implements MouseListener {
             if (optionId == questionType) {
                 randMenuOptions[i].select();
             }
+
+            add(UIManager.getSpacing(WINDOW_WIDTH / 20, 1));
             add(randMenuOptions[i]);
 
-            if (optionId == ClickableObject.SIMPLE_MATH) {
-                JLabel menuText = new JLabel(randLabels[0], SwingConstants.LEFT);
-                menuText.setFont(getFont().deriveFont(16f));
-                add(menuText);
-            } else if (optionId == ClickableObject.STATS1) {
-                JLabel menuText = new JLabel(randLabels[1], SwingConstants.LEFT);
-                menuText.setFont(getFont().deriveFont(16f));
-                add(menuText);
-            } else {
-                JLabel menuText = new JLabel(randLabels[2], SwingConstants.LEFT);
-                menuText.setFont(getFont().deriveFont(16f));
-                add(menuText);
-            }
+            JLabel menuText = new JLabel("", SwingConstants.LEFT);
+            menuText.setText(randLabels[i]);
+            menuText.setFont(getFont().deriveFont(16f));
+            menuText.setPreferredSize(new Dimension(WINDOW_WIDTH / 3, 50));
+            add(menuText);
 
             add(UIManager.getSpacing(WINDOW_WIDTH, 1));
         }
