@@ -18,7 +18,9 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/***
+ * Page to add assignments. This page is not available to students.
+ */
 public class AddAssignmentPage extends JPanel implements MouseListener {
 
     private Button saveButton;
@@ -38,6 +40,11 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private Button backButton;
     private JPanel questionPanel;
 
+    /***
+     * Prepares the page to select questions for an assignment.
+     * 
+     * @param questions the list of questions available
+     */
     public AddAssignmentPage(List<Question> questions) {
         super();
         CurrentSession.addingAssignment = true;
@@ -94,6 +101,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
 
     }
 
+    /***
+     * Section to show questions to add to the assignment.
+     */
     private void addQuestions() {
         int totalHeight = 10;
         for (int i = 0; i < questionList.size(); i++) {
@@ -234,6 +244,10 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         }
     }
 
+    /***
+     * Creates the assignment based on selected questions and assignment name,
+     * and adds it to the database.
+     */
     private void createAssignment() {
         List<Integer> selectedQuestion = new ArrayList<>();
         for (CheckBox cb : questionCheckBoxes){
@@ -249,10 +263,20 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         DatabaseManager.addAssignment(new Assignment(assignName, CurrentSession.user.courseID, selectedQuestion, dueDate));
     }
 
+    /***
+     * Shows the question selected.
+     * 
+     * @param question the question to view
+     */
     private void gotoViewQuestionPage(Question question) {
         UIManager.switchToQuestionView(question);
     }
 
+    /***
+     * Ensures the name of the assignment and due date are filled out.
+     * 
+     * @return true if filled out, false otherwise
+     */
     private boolean validateInput(){
         assignName = assignmentInput.getText();
         dueDate = dueDateInput.getText();
@@ -261,6 +285,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
 
     }
 
+    /***
+     * Notifies the user to enter the proper information.
+     */
     private void showErrorMessage() {
 
         title.setText("Please enter assignment name and due date");

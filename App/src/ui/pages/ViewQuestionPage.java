@@ -13,6 +13,9 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/***
+ * Page to view the question to answer.
+ */
 public class ViewQuestionPage extends JPanel implements MouseListener {
     private Label[] multipleChoices = new Label[3];
     private int questionType;
@@ -29,6 +32,12 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
     private float PRIMARY_FONT = 18f;
     private float SECONDARY_FONT = 16F;
 
+    /***
+     * Prepares the page to show the desired question by creating the 
+     * UI elements.
+     * 
+     * @param q the question to display
+     */
     public ViewQuestionPage(Question q) {
         super();
         question = q;
@@ -47,6 +56,9 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
 
     }
 
+    /***
+     * Displays the question to be answered.
+     */
     private void addContent() {
         // reset panel
         backButton = new Button("Back");

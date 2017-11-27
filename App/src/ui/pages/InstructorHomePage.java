@@ -14,6 +14,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
+/***
+ * Page for instructors. Used to view assignments, and add questions and assignments.
+ */
 public class InstructorHomePage extends JPanel implements MouseListener {
 
     private static int WINDOW_WIDTH = 800;
@@ -25,6 +28,9 @@ public class InstructorHomePage extends JPanel implements MouseListener {
     private Button addAssignmentButton;
     private Button viewAssignmentsButton;
 
+    /***
+     * Prepares the page by creating the buttons required.
+     */
     public InstructorHomePage() {
         title = new JLabel("Welcome \"Instructor\"", SwingConstants.CENTER);
         logoutButton = new LogoutButton();
