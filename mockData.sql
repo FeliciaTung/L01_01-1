@@ -4,7 +4,7 @@ INSERT INTO course(course) VALUES ("cscc01");
 INSERT INTO course(course) VALUES ("cscd27");
 INSERT INTO course(course) VALUES ("stab52");
 
-INSERT INTO question(question, answer, qtype) VALUES ("What is the probability that the survey will show a greater percentage of Republican voters in the second state than in the first stateWhat is the probability that the survey will show a greater percentage ?",
+INSERT INTO question(question, answer, qtype) VALUES ("What is the probability that the survey will show a greater percentage of Republican voters in the second state than in the first state?",
  "0.04", 1);
 INSERT INTO question(question, answer, qtype) VALUES ("question2", "answer2", 2);
 INSERT INTO question(question, answer, qtype) VALUES ("question3", "answer3", 2);
