@@ -10,7 +10,7 @@ public class UIManager {
     private static JFrame frame;
 
     public static void createUI() {
-        frame = new JFrame("SmarTWork");
+        frame = new JFrame("SmarTWorK");
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
