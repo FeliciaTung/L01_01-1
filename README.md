@@ -29,6 +29,11 @@ Our Sprints can be found here:
 * **Talha Khatri** 
 
 
+## Dependencies 
+Add the following jars to your classpath
+- [mysql-connector-java-5.0.8-bin.jar](https://github.com/CSCC01F17/L01_01/blob/master/App/dependencies/mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar)
+- [junit.jar and hamcrest-core.jar](https://github.com/junit-team/junit4/wiki/Download-and-Install)
+
 ## Set up local database
 1. Download and install [MySQL Server and Workbench](https://dev.mysql.com/downloads/installer/)
 2. Start Server and Workbench
@@ -37,21 +42,21 @@ Our Sprints can be found here:
   * [initializeDB.sql](https://github.com/CSCC01F17/L01_01/blob/master/initializeDB.sql): this will drop the existing database and create a new database
   
   * [mockData.sql](https://github.com/CSCC01F17/L01_01/blob/master/mockData.sql): this will create mock data in the database (not including the user related data)
-4. Open DatabaseManager.java from \App\src\backend\
-5. Update the following line with your local database server user(first "root") and password (second "root")
+4. Add the dependenies listed above if you have not done it yet.
+5. Open DatabaseManager.java from \App\src\backend\
+6. Update the following line with your local database server user(first "root") and password (second "root")
 ```
 conn = DriverManager.getConnection("jdbc:mysql://localhost/C01ProjectDB", "root", "root")
 ```
-6. Update your IDE to add the SQL jar dependency, you can find the jar in \App\dependencies\mysql-connector-java-5.0.8\mysql-connector-java-5.0.8-bin.jar
 
-## Run the project
-1. Run the [Main.java](https://github.com/CSCC01F17/L01_01/blob/master/App/src/Main.java) after you have the local database set up 
-2. To login as student, enter UTORid: student, Password: test
-3. To login as instructor, enter UTORid: prof1, Password: test
+## Running the Application
+1. Set up dependencies and local database if you haven't done it yet
+2. Run the [Main.java](https://github.com/CSCC01F17/L01_01/blob/master/App/src/Main.java) after you have the local database set up 
+3. To login as student, enter UTORid: student, Password: test
+4. To login as instructor, enter UTORid: prof1, Password: test
  
-## Run the unit tests
-1. Download and install [junit.jar and hamcrest-core.jar](https://github.com/junit-team/junit4/wiki/Download-and-Install)
-2. Add the jars to java class path 
-3. Follow the steps above set up local database, but don't have to run the two scripts
+## Running the unit tests
+1. Set up dependencies and local database if you haven't done it yet
+3. Follow the steps above to set up local database, but don't run the two scripts
 4. Run [initializeTestingDB.sql](https://github.com/CSCC01F17/L01_01/blob/master/initializeTestingDB.sql)
 5. Run [L01_01/App/test/backend/DatabaseManagerTest.java](https://github.com/CSCC01F17/L01_01/blob/master/App/test/backend/DatabaseManagerTest.java)
