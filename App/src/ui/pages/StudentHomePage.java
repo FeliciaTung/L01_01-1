@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-/***
+/**
  * Home page for the student upon login.
  */
 public class StudentHomePage extends JPanel implements MouseListener {
@@ -24,7 +24,7 @@ public class StudentHomePage extends JPanel implements MouseListener {
     private Button logoutButton;
     private Button viewAssignmentsButton;
 
-    /***
+    /**
      * Prepares the page for the student to access assignments.
      */
     public StudentHomePage() {
@@ -65,10 +65,12 @@ public class StudentHomePage extends JPanel implements MouseListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) { }
+    public void mousePressed(MouseEvent e) {
+    }
 
     @Override
-    public void mouseReleased(MouseEvent e) { }
+    public void mouseReleased(MouseEvent e) {
+    }
 
     @Override
     public void mouseEntered(MouseEvent e) {

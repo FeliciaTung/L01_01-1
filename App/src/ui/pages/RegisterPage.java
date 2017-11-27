@@ -10,13 +10,11 @@ import ui.components.Label;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 
-/***
+/**
  * Registration page. Allows for registering a user and adding them
  * to the database.
  */
@@ -27,12 +25,12 @@ public class RegisterPage extends JPanel implements MouseListener {
     private InputField[] input;
     private JPasswordField[] password;
     private String[] labelText;
-    private RadioButton[] userTypeButtons = new RadioButton[3];
+    private RadioButton[] userTypeButtons;
     private String[] userType;
     private String selectedType;
     private Label title;
 
-    /***
+    /**
      * Registration page for users. Contains fields to input the required
      * information.
      */
@@ -45,6 +43,7 @@ public class RegisterPage extends JPanel implements MouseListener {
         labelText = new String[]{"name", "UTORid", "enrolled course", "UTmail", "password", "confirm password"};
         userType = new String[]{"Instructor", "TA", "Student"};
         selectedType = new String();
+        userTypeButtons = new RadioButton[3];
         setPreferredSize(new Dimension(800, 680));
         setBackground(Color.WHITE);
 
@@ -55,7 +54,7 @@ public class RegisterPage extends JPanel implements MouseListener {
 
     }
 
-    /***
+    /**
      * Sets up content for the user to provide their information.
      */
     private void addContent() {
@@ -164,7 +163,7 @@ public class RegisterPage extends JPanel implements MouseListener {
         }
     }
 
-    /***
+    /**
      * Error message for differing passwords.
      */
     private void showErrorMessage() {
@@ -174,23 +173,20 @@ public class RegisterPage extends JPanel implements MouseListener {
         title.setBackground(Color.RED);
         title.setOpaque(true);
 
-        Timer t = new Timer(5000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                title.setText("Sign Up");
-                title.setPreferredSize(new Dimension(800, 50));
-                title.setFont(getFont().deriveFont(24f));
-                title.setForeground(Color.BLACK);
-                title.setBackground(Color.WHITE);
-            }
+        Timer t = new Timer(5000, e -> {
+            title.setText("Sign Up");
+            title.setPreferredSize(new Dimension(800, 50));
+            title.setFont(getFont().deriveFont(24f));
+            title.setForeground(Color.BLACK);
+            title.setBackground(Color.WHITE);
         });
         t.setRepeats(false);
         t.start();
     }
 
-    /***
+    /**
      * Checks to see whether the passwords inserted match.
-     * 
+     *
      * @return true for matching passwords, false otherwise
      */
     private boolean validateInput() {
@@ -247,15 +243,15 @@ public class RegisterPage extends JPanel implements MouseListener {
         }
     }
 
-    /***
+    /**
      * Finishes registration and adds the user to the database.
      */
-    private void saveUser(){
+    private void saveUser() {
         String UTORid = input[1].getText();
         String course = input[2].getText();
         String email = input[3].getText();
         String pw = new String(password[0].getPassword());
-        int type ;
+        int type;
         switch (selectedType) {
             case "Instructor":
                 type = 1;
@@ -268,7 +264,9 @@ public class RegisterPage extends JPanel implements MouseListener {
                 break;
             default:
                 type = -1;
+                break;
         }
+
         DatabaseManager.addUser(new User(UTORid, email, pw, DatabaseManager.getCourseID(course), type));
     }
 }

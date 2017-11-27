@@ -3,9 +3,9 @@ package ui.pages;
 import backend.CurrentSession;
 import backend.DatabaseManager;
 import holders.Question;
-import ui.components.*;
 import ui.UIManager;
 import ui.components.Button;
+import ui.components.ClickableObject;
 import ui.components.Label;
 
 import javax.swing.*;
@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-/***
+/**
  * Page to view the question to answer.
  */
 public class ViewQuestionPage extends JPanel implements MouseListener {
@@ -32,10 +32,10 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
     private float PRIMARY_FONT = 18f;
     private float SECONDARY_FONT = 16F;
 
-    /***
-     * Prepares the page to show the desired question by creating the 
+    /**
+     * Prepares the page to show the desired question by creating the
      * UI elements.
-     * 
+     *
      * @param q the question to display
      */
     public ViewQuestionPage(Question q) {
@@ -56,7 +56,7 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
 
     }
 
-    /***
+    /**
      * Displays the question to be answered.
      */
     private void addContent() {
@@ -74,10 +74,9 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
 
         add(UIManager.getSpacing(WINDOW_WIDTH, 40));
 
-
         // adjust label space  based on question length
-        int descriptionHeight = setLabelHeight(question.question);
-        int answerHeight = setLabelHeight(question.answer);
+        int descriptionHeight = UIManager.getLabelHeight(question.question);
+        int answerHeight = UIManager.getLabelHeight(question.answer);
         int[] choiceHeight = new int[3];
 
         // display question
@@ -114,7 +113,7 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
             add(UIManager.getSpacing(WINDOW_WIDTH, 10));
             for (int i = 0; i < multipleChoices.length; i++) {
                 String choice = "<html> " + (i + 1) + ". " + question.multipleChoices[i] + "</html>";
-                choiceHeight[i] = setLabelHeight(question.multipleChoices[i]);
+                choiceHeight[i] = UIManager.getLabelHeight(question.multipleChoices[i]);
                 multipleChoices[i] = new Label(choice, SwingConstants.LEFT);
                 multipleChoices[i].setPreferredSize(new Dimension(LABEL_WIDTH, choiceHeight[i]));
                 multipleChoices[i].setFont(getFont().deriveFont(SECONDARY_FONT));
@@ -137,10 +136,6 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
-            case ClickableObject.BACK_TO_VIEW_ALL_ASSIGN:
-                gotoPreviousPage();
-                break;
-
             case ClickableObject.BACK_BUTTON:
                 if (CurrentSession.assignment == null) {
                     UIManager.switchView(new AddAssignmentPage(DatabaseManager.getAllQuestions(-1)));
@@ -184,26 +179,5 @@ public class ViewQuestionPage extends JPanel implements MouseListener {
                 backButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
         }
-    }
-
-    public void gotoPreviousPage() {
-        //TODO: implement this
-    }
-
-    /**
-     * Helper function to calculate the label height based on text length
-     *
-     * @param text
-     * @return label height
-     */
-    private int setLabelHeight(String text) {
-        int labelHeight = 25;
-        if (text.length() > 199) {
-            labelHeight = 65;
-        } else if (text.length() > 99) {
-            labelHeight = 45;
-        }
-        return labelHeight;
-
     }
 }

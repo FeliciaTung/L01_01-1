@@ -17,7 +17,7 @@ import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 
-/***
+/**
  * Page to take an assignment. Also displays correct and wrong answers
  * by using colors.
  */
@@ -35,10 +35,10 @@ public class AssignmentPage extends JPanel implements MouseListener {
     private InputField shortAnswerInput;
     Random rand = new Random();
 
-    /***
+    /**
      * Creates the page and displays the first question. Goes through to show
      * other questions too on clicks.
-     * 
+     *
      * @param assignment the assignment object to get information from
      */
     public AssignmentPage(Assignment assignment) {
@@ -52,7 +52,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
                 simpleMath(questions.get(i));
             } else if (questions.get(i).question.equals("Intermediate Statistics Question")) {
                 statsOne(questions.get(i));
-            } else if (questions.get(i).question.equals("Expert Statistics Question")){
+            } else if (questions.get(i).question.equals("Expert Statistics Question")) {
                 statsTwo(questions.get(i));
             }
         }
@@ -97,9 +97,9 @@ public class AssignmentPage extends JPanel implements MouseListener {
         q.answer = correctAnswer;
 
         String op1, op2, op3;
-        op1 = Integer.toString(sum+1);
-        op2 = Integer.toString(sum-3);
-        op3 = Integer.toString(sum+2);
+        op1 = Integer.toString(sum + 1);
+        op2 = Integer.toString(sum - 3);
+        op3 = Integer.toString(sum + 2);
 
         answerChoices[0] = op1;
         answerChoices[1] = op2;
@@ -115,21 +115,21 @@ public class AssignmentPage extends JPanel implements MouseListener {
         double num2 = rand.nextInt(15) + 1;
         double num3 = rand.nextInt(15) + 1;
         double sum = num1 + num2 + num3;
-        double ans = round(num3/sum, 2);
+        double ans = round(num3 / sum, 2);
         String[] answerChoices = new String[3];
 
         String question = String.format("A jar contains %d red marbles, %d green marbles and %d white marbles. " +
-                "If a marble is drawn from the jar at random, " +
-                "what is the probability that this marble is white? Please round to 2 decimal places",
-                (int)num1, (int)num2, (int)num3);
+                        "If a marble is drawn from the jar at random, " +
+                        "what is the probability that this marble is white? Please round to 2 decimal places",
+                (int) num1, (int) num2, (int) num3);
         q.question = question;
         String correctAnswer = Double.toString(ans);
         q.answer = correctAnswer;
 
         String op1, op2, op3;
-        op1 = Double.toString(round(num1/sum,2));
-        op2 = Double.toString(round(num2/sum,2));
-        op3 = Double.toString(round(ans-0.05,2));
+        op1 = Double.toString(round(num1 / sum, 2));
+        op2 = Double.toString(round(num2 / sum, 2));
+        op3 = Double.toString(round(ans - 0.05, 2));
 
         answerChoices[0] = op1;
         answerChoices[1] = op2;
@@ -153,18 +153,18 @@ public class AssignmentPage extends JPanel implements MouseListener {
         ArrayList<Integer> nums = new ArrayList<>();
         int j = 0;
         while (j < 10) {
-            nums.add(rand.nextInt(50)+1);
+            nums.add(rand.nextInt(50) + 1);
             j++;
         }
         int sum = 0;
         for (Integer i : nums) {
             sum += i;
         }
-        int mean = sum/10;
+        int mean = sum / 10;
         String[] answerChoices = new String[3];
 
         String question = String.format("Find x and y such that the data set S has " +
-                "a mean of %d. S = {%d, %d, %d, %d, %d, x, %d, %d, %d, y}. " +
+                        "a mean of %d. S = {%d, %d, %d, %d, %d, x, %d, %d, %d, y}. " +
                         "Answer should be in the form: x = ?, y = ?", mean, nums.get(0), nums.get(1), nums.get(2),
                 nums.get(3), nums.get(4), nums.get(6), nums.get(7), nums.get(8));
         q.question = question;
@@ -172,9 +172,9 @@ public class AssignmentPage extends JPanel implements MouseListener {
         q.answer = correctAnswer;
 
         String op1, op2, op3;
-        op1 = "x = " + Integer.toString(nums.get(5)-3) + ", y = " + Integer.toString(nums.get(9)+7);
-        op2 = "x = " + Integer.toString(nums.get(5)+6) + ", y = " + Integer.toString(nums.get(9)+1);
-        op3 = "x = " + Integer.toString(nums.get(5)-4) + ", y = " + Integer.toString(nums.get(9)+3);
+        op1 = "x = " + Integer.toString(nums.get(5) - 3) + ", y = " + Integer.toString(nums.get(9) + 7);
+        op2 = "x = " + Integer.toString(nums.get(5) + 6) + ", y = " + Integer.toString(nums.get(9) + 1);
+        op3 = "x = " + Integer.toString(nums.get(5) - 4) + ", y = " + Integer.toString(nums.get(9) + 3);
 
         answerChoices[0] = op1;
         answerChoices[1] = op2;
@@ -234,10 +234,10 @@ public class AssignmentPage extends JPanel implements MouseListener {
         }
     }
 
-    /***
+    /**
      * Highlights the background depending on the answer selected, to show
      * whether it was correct or not.
-     * 
+     *
      * @param selectedAnswer the answer selected by the user
      */
     private void answerSelected(MultipleChoiceAnswer selectedAnswer) {
@@ -246,7 +246,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
             correctAnswers++;
         } else {
             selectedAnswer.setBackground(Color.red);
-            for (MultipleChoiceAnswer answer: answerLabels) {
+            for (MultipleChoiceAnswer answer : answerLabels) {
                 if (questions.get(currentQuestion).answer.equals(answer.getText())) {
                     answer.setBackground(Color.green);
                 }
@@ -256,7 +256,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
         nextQuestion.setVisible(true);
     }
 
-    /***
+    /**
      * Sets the next question and displays it after the one previously was completed.
      */
     private void setNextQuestion() {
@@ -297,7 +297,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
         repaint();
     }
 
-    /***
+    /**
      * Shows the possible answers for multiple choice questions.
      */
     private void showMultipleChoiceQuestion() {
@@ -313,7 +313,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
         nextQuestion.setVisible(false);
     }
 
-    /***
+    /**
      * Shows the short answer question, making it visible.
      */
     private void showShortAnswerQuestion() {
@@ -322,7 +322,7 @@ public class AssignmentPage extends JPanel implements MouseListener {
         nextQuestion.setVisible(true);
     }
 
-    /***
+    /**
      * Displays the finished page after all the information has been determined.
      */
     private void showFinishedPage() {
@@ -338,32 +338,32 @@ public class AssignmentPage extends JPanel implements MouseListener {
         nextQuestion.setVisible(true);
     }
 
-    /***
+    /**
      * Saves the mark to the database.
-     * 
+     *
      * @param mark the mark to be saved
      */
     private void saveMark(float mark) {
         DatabaseManager.updateAssignmentMark(assignment.id, mark);
     }
 
-    /***
+    /**
      * Resizes the UI bounds to fit the displayed elements.
      */
     private void resize() {
         progress.setBounds(0, 0, getPreferredSize().width, 50);
-        question.setBounds(0, 50, getPreferredSize().width, 125);
+        question.setBounds(20, 50, getPreferredSize().width, 125);
         nextQuestion.setBounds((getPreferredSize().width - Button.WIDTH) / 2,
                 getPreferredSize().height - Button.HEIGHT - 50,
                 Button.WIDTH, Button.HEIGHT);
         for (int i = 0; i < answerLabels.length; i++) {
             answerLabels[i].setBounds(getPreferredSize().width / 2 - 150 - 175 * (i % 2 == 0 ? 1 : -1),
                     getPreferredSize().height / 3 + 180 * (i < 2 ? 0 : 1),
-                    300,120);
+                    300, 120);
         }
 
         shortAnswerInput.setBounds(getPreferredSize().width / 2 - 150,
                 getPreferredSize().height / 2 - 60,
-                300,120);
+                300, 120);
     }
 }

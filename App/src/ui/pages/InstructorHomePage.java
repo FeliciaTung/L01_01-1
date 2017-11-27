@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-/***
+/**
  * Page for instructors. Used to view assignments, and add questions and assignments.
  */
 public class InstructorHomePage extends JPanel implements MouseListener {
@@ -28,7 +28,7 @@ public class InstructorHomePage extends JPanel implements MouseListener {
     private Button addAssignmentButton;
     private Button viewAssignmentsButton;
 
-    /***
+    /**
      * Prepares the page by creating the buttons required.
      */
     public InstructorHomePage() {
@@ -94,10 +94,12 @@ public class InstructorHomePage extends JPanel implements MouseListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) { }
+    public void mousePressed(MouseEvent e) {
+    }
 
     @Override
-    public void mouseReleased(MouseEvent e) { }
+    public void mouseReleased(MouseEvent e) {
+    }
 
     @Override
     public void mouseEntered(MouseEvent e) {

@@ -18,7 +18,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/***
+/**
  * Page to add assignments. This page is not available to students.
  */
 public class AddAssignmentPage extends JPanel implements MouseListener {
@@ -40,9 +40,9 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private Button backButton;
     private JPanel questionPanel;
 
-    /***
+    /**
      * Prepares the page to select questions for an assignment.
-     * 
+     *
      * @param questions the list of questions available
      */
     public AddAssignmentPage(List<Question> questions) {
@@ -101,7 +101,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
 
     }
 
-    /***
+    /**
      * Section to show questions to add to the assignment.
      */
     private void addQuestions() {
@@ -109,12 +109,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         for (int i = 0; i < questionList.size(); i++) {
             // increase label height to account for long assignment name
             String text = "<html>" + questionList.get(i).question + "</html>";
-            int labelHeight = 25;
-            if (text.length() > 199) {
-                labelHeight = 65;
-            } else if (text.length() > 99) {
-                labelHeight = 45;
-            }
+            int labelHeight = UIManager.getLabelHeight(text);
 
             questionCheckBoxes.add(new CheckBox());
             questionCheckBoxes.get(i).addMouseListener(this);
@@ -151,10 +146,12 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             case ClickableObject.SAVE_QUESTION:
                 if (validateInput()) {
                     createAssignment();
-                } else {showErrorMessage();}
+                } else {
+                    showErrorMessage();
+                }
                 break;
             case ClickableObject.CHECKBOX:
-                CheckBox clickedCheckBox = ((CheckBox)e.getSource());
+                CheckBox clickedCheckBox = ((CheckBox) e.getSource());
                 if (clickedCheckBox.isSelected()) {
                     clickedCheckBox.deselect();
                 } else {
@@ -163,7 +160,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 break;
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
-                gotoViewQuestionPage(questionList.get(index));
+                UIManager.switchView(new ViewQuestionPage(questionList.get(index)));
                 break;
             case ClickableObject.BACK_BUTTON:
                 CurrentSession.addingAssignment = false;
@@ -196,20 +193,6 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             case ClickableObject.BACK_BUTTON:
                 backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
-            /*case ClickableObject.EDIT_QUESTION:
-                int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
-                for (EditQuestionButton button : editButton) {
-                    if (editId == button.getEditButtonId())
-                        button.setBackground(Button.BUTTON_COLOR_PRESSED);
-                }
-                break;
-            case ClickableObject.DELETE_QUESTION:
-                int deleteId = ((DeleteQuestionButton) e.getSource()).getDeleteButtonId();
-                for (DeleteQuestionButton button : deleteButton) {
-                    if (deleteId == button.getDeleteButtonId())
-                        button.setBackground(Button.BUTTON_COLOR_PRESSED);
-                }
-                break;*/
         }
     }
 
@@ -227,30 +210,16 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
                 backButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
 
-            /*case ClickableObject.EDIT_QUESTION:
-                int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
-                for (EditQuestionButton button : editButton) {
-                    if (editId == button.getEditButtonId())
-                        button.setBackground(Button.BUTTON_COLOR_IDLE);
-                }
-                break;
-            case ClickableObject.DELETE_QUESTION:
-                int deleteId = ((DeleteQuestionButton) e.getSource()).getDeleteButtonId();
-                for (DeleteQuestionButton button : deleteButton) {
-                    if (deleteId == button.getDeleteButtonId())
-                        button.setBackground(Button.BUTTON_COLOR_IDLE);
-                }
-                break;*/
         }
     }
 
-    /***
+    /**
      * Creates the assignment based on selected questions and assignment name,
      * and adds it to the database.
      */
     private void createAssignment() {
         List<Integer> selectedQuestion = new ArrayList<>();
-        for (CheckBox cb : questionCheckBoxes){
+        for (CheckBox cb : questionCheckBoxes) {
             if (cb.isSelected()) {
                 int index = questionCheckBoxes.indexOf(cb);
                 if (questionList.get(index).id != -1) {
@@ -263,29 +232,20 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         DatabaseManager.addAssignment(new Assignment(assignName, CurrentSession.user.courseID, selectedQuestion, dueDate));
     }
 
-    /***
-     * Shows the question selected.
-     * 
-     * @param question the question to view
-     */
-    private void gotoViewQuestionPage(Question question) {
-        UIManager.switchToQuestionView(question);
-    }
-
-    /***
+    /**
      * Ensures the name of the assignment and due date are filled out.
-     * 
+     *
      * @return true if filled out, false otherwise
      */
-    private boolean validateInput(){
+    private boolean validateInput() {
         assignName = assignmentInput.getText();
         dueDate = dueDateInput.getText();
-        return !(assignName.equals("")  && dueDate.equals(""));
+        return !(assignName.equals("") && dueDate.equals(""));
 
 
     }
 
-    /***
+    /**
      * Notifies the user to enter the proper information.
      */
     private void showErrorMessage() {
@@ -295,15 +255,12 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         title.setBackground(Color.RED);
         title.setOpaque(true);
 
-        Timer t = new Timer(5000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                title.setText("Create Assignment");
-                title.setPreferredSize(new Dimension(800, 50));
-                title.setFont(getFont().deriveFont(24f));
-                title.setForeground(Color.BLACK);
-                title.setBackground(Color.WHITE);
-            }
+        Timer t = new Timer(5000, (actionEvent) -> {
+            title.setText("Create Assignment");
+            title.setPreferredSize(new Dimension(800, 50));
+            title.setFont(getFont().deriveFont(24f));
+            title.setForeground(Color.BLACK);
+            title.setBackground(Color.WHITE);
         });
         t.setRepeats(false);
         t.start();

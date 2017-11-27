@@ -34,7 +34,7 @@ public class CheckBox extends JComponent implements ClickableObject {
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
         g.setColor(Color.BLACK);
-        g.fillRect(0,0,WIDTH,HEIGHT);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
 
         g.setColor(Color.WHITE);
         g.fillRect(2, 2, WIDTH - 4, HEIGHT - 4);

@@ -1,5 +1,6 @@
 import ui.UIManager;
 import backend.DatabaseManager;
+
 public class Main {
 
     private static UIManager uiManager;

@@ -4,11 +4,8 @@ import javax.swing.*;
 
 public interface ClickableObject {
 
-    int STUDENT_BUTTON = -10;
-    int INSTRUCTOR_BUTTON = -11;
     int SAVE_QUESTION = 1;
     int VIEW_QUESTION = 2;
-    int DELETE_QUESTION = 3;
     int ADD_QUESTION = 4;
     int NEXT_QUESTION = 5;
     int ADD_ASSIGNMENT = 6;
@@ -26,13 +23,8 @@ public interface ClickableObject {
     int USER_TYPE_1 = 41;
     int USER_TYPE_2 = 42;
     int USER_TYPE_3 = 43;
-    int BACK_TO_VIEW_ALL_ASSIGN = 52;
-    int BACK_TO_VIEW_ASSIGN = 53;
-    int BACK_TO_ADD_ASSIGN = 54;
-    int NEXT_BUTTON = 61;
     int LOGIN_BUTTON = 62;
     int LOGOUT_BUTTON = 63;
-    int RAND_BUTTON = 64;
     int RAND_OPTION = 65;
     int RMC_BUTTON = 66;
     int RSA_BUTTON = 67;
@@ -49,7 +41,7 @@ public interface ClickableObject {
 
     int[] RAND_BUTTONS = {RMC_BUTTON, RSA_BUTTON};
 
-    int[] USER_TYPE_OPTIONS = {USER_TYPE_1,USER_TYPE_2,USER_TYPE_3};
+    int[] USER_TYPE_OPTIONS = {USER_TYPE_1, USER_TYPE_2, USER_TYPE_3};
 
 
     int getID();

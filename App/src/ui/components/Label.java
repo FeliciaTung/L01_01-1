@@ -23,13 +23,14 @@ public class Label extends JLabel implements ClickableObject {
 
     /**
      * Set an index if Label is initialized as a list. Index is to help to identify the label when an event occurs.
-     * @param index
+     *
+     * @param index index of the label in the list
      */
-    public void setIndex(int index){
+    public void setIndex(int index) {
         this.index = index;
     }
 
-    public int getIndex(){
+    public int getIndex() {
         return this.index;
     }
 

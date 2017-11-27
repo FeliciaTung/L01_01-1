@@ -6,8 +6,9 @@ import holders.Assignment;
 import holders.Question;
 import ui.UIManager;
 import ui.components.Button;
-import ui.components.*;
+import ui.components.ClickableObject;
 import ui.components.Label;
+import ui.components.ScrollPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-/***
+/**
  * Page to view an assignment.
  */
 public class ViewAssignmentPage extends JPanel implements MouseListener {
@@ -32,9 +33,9 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
     private Label assignmentLabel;
     private JPanel questionPanel;
 
-    /***
+    /**
      * Prepares the page to display the questions in the assignment.
-     * 
+     *
      * @param assignment the assignment to load information from
      */
     public ViewAssignmentPage(Assignment assignment) {
@@ -61,6 +62,7 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
         add(UIManager.getSpacing(WINDOW_WIDTH, 40));
 
         assignmentLabel = new Label("Assignment: " + assignment.name, SwingConstants.CENTER);
+        assignmentLabel.setPreferredSize(new Dimension(LABEL_WIDTH, 50));
         assignmentLabel.setFont(getFont().deriveFont(18f));
         add(assignmentLabel);
 
@@ -74,20 +76,15 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
         add(backButton);
     }
 
-    /***
+    /**
      * Adds the questions to display in the page.
      */
-    private void addQuestions(){
+    private void addQuestions() {
         int totalHeight = 10;
         for (int i = 0; i < questionList.size(); i++) {
             // increase label height to deal with long question
             String text = "<html>" + (i + 1) + ". " + questionList.get(i).question + "</html>";
-            int labelHeight = 25;
-            if (text.length() > 199) {
-                labelHeight = 65;
-            } else if (text.length() > 99) {
-                labelHeight = 45;
-            }
+            int labelHeight = UIManager.getLabelHeight(text);
 
             questionLabels[i] = new Label(text, SwingConstants.LEFT);
             questionLabels[i].setIndex(i);
@@ -118,8 +115,7 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
                 break;
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
-                UIManager.switchToQuestionView(questionList.get(index));
-
+                UIManager.switchView(new ViewQuestionPage(questionList.get(index)));
         }
     }
 
@@ -145,21 +141,6 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
                 int index = ((Label) e.getSource()).getIndex();
                 questionLabels[index].setForeground(Label.LABEL_COLOR_PRESSED);
                 break;
-
-            /*case ClickableObject.EDIT_QUESTION:
-                int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
-                for (EditQuestionButton button : editButton) {
-                    if (editId == button.getEditButtonId())
-                        button.setBackground(Button.BUTTON_COLOR_PRESSED);
-                }
-                break;
-            case ClickableObject.DELETE_QUESTION:
-                int deleteId = ((DeleteQuestionButton) e.getSource()).getDeleteButtonId();
-                for (DeleteQuestionButton button : deleteButton) {
-                    if (deleteId == button.getDeleteButtonId())
-                        button.setBackground(Button.BUTTON_COLOR_PRESSED);
-                }
-                break;*/
         }
     }
 
@@ -172,30 +153,6 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
                 questionLabels[index].setForeground(Label.LABEL_COLOR_IDLE);
-            /*case ClickableObject.EDIT_QUESTION:
-                int editId = ((EditQuestionButton) e.getSource()).getEditButtonId();
-                for (EditQuestionButton button : editButton) {
-                    if (editId == button.getEditButtonId())
-                        button.setBackground(Button.BUTTON_COLOR_IDLE);
-                }
-                break;
-            case ClickableObject.DELETE_QUESTION:
-                int deleteId = ((DeleteQuestionButton) e.getSource()).getDeleteButtonId();
-                for (DeleteQuestionButton button : deleteButton) {
-                    if (deleteId == button.getDeleteButtonId())
-                        button.setBackground(Button.BUTTON_COLOR_IDLE);
-                }
-                break;*/
         }
-    }
-
-    private void editQuestion() {
-        //TODO: switch to edit question page
-    }
-
-
-    private void deleteQuestion() {
-        //TODO: trigger delete question function
-
     }
 }

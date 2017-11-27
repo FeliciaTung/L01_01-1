@@ -2,23 +2,16 @@ package ui.pages;
 
 import backend.DatabaseManager;
 import holders.Question;
-import ui.components.Button;
-import ui.components.ClickableObject;
-import ui.components.InputField;
-import ui.components.RadioButton;
-import ui.components.SaveQuestionButton;
 import ui.UIManager;
+import ui.components.Button;
+import ui.components.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import java.util.Random;
-
-/***
+/**
  * Page to add questions, not accessible by students.
  */
 public class AddQuestionPage extends JPanel implements MouseListener {
@@ -39,7 +32,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     private int WINDOW_HEIGHT = 680;
     String[] randLabels = {"Simple Math", "Intermediate Statistics Question", "Expert Statistics Question"};
 
-    /***
+    /**
      * Prepares the page by adding the required buttons.
      */
     public AddQuestionPage() {
@@ -60,14 +53,14 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         addContent(false);
     }
 
-    /***
+    /**
      * Prepares the page to add a question based on selection. Used for
      * multiple choice or short answer selection.
-     * 
+     *
      * @param typeChose determines whether a question will be added or not
      */
     private void addContent(boolean typeChose) {
-        // clear everything
+        // clear everything to show different question type interfaces
         removeAll();
         backButton.id = ClickableObject.BACK_BUTTON;
         backButton.addMouseListener(this);
@@ -91,22 +84,17 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         addQuestionTypeSelection();
         add(UIManager.getSpacing(WINDOW_WIDTH, 30));
 
-        // user decided which type of question they want
-        // show them the add question page for the selected question type
+        // displays the add question fields for the selected question type
         if (typeChose) {
             if (questionType == ClickableObject.MC_BUTTON) {
                 addMultipleChoice();
-                add(UIManager.getSpacing(WINDOW_WIDTH, 30));
-                add(saveButton);
             } else if (questionType == ClickableObject.SA_BUTTON) {
                 addShortAnswer();
-                add(UIManager.getSpacing(WINDOW_WIDTH, 30));
-                add(saveButton);
             } else {
                 addRandom();
-                add(UIManager.getSpacing(WINDOW_WIDTH, 30));
-                add(saveButton);
             }
+            add(UIManager.getSpacing(WINDOW_WIDTH, 30));
+            add(saveButton);
         }
 
         saveMessage.setPreferredSize(new Dimension(WINDOW_WIDTH, 30));
@@ -116,10 +104,10 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
     }
 
-    /***
+    /**
      * Selects whether it will be a short answer or multiple choice.
      */
-    private void addQuestionTypeSelection(){
+    private void addQuestionTypeSelection() {
         add(UIManager.getSpacing(100, 1));
         for (int i = 0; i < topMenuOptions.length; i++) {
             topMenuOptions[i] = new RadioButton(ClickableObject.QUESTION_OPTIONS[i]);
@@ -130,27 +118,22 @@ public class AddQuestionPage extends JPanel implements MouseListener {
                 topMenuOptions[i].select();
             }
             add(topMenuOptions[i]);
-
+            JLabel menuText = new JLabel("", SwingConstants.LEFT);
             if (optionId == ClickableObject.MC_BUTTON) {
-                JLabel menuText = new JLabel("Multiple Choice", SwingConstants.LEFT);
-                menuText.setFont(getFont().deriveFont(16f));
-                menuText.setPreferredSize(new Dimension(InputField.WIDTH - 100, 25));
-                add(menuText);
+                menuText.setText("Multiple Choice");
             } else if (optionId == ClickableObject.SA_BUTTON) {
-                JLabel menuText = new JLabel("Short Answer", SwingConstants.LEFT);
-                menuText.setFont(getFont().deriveFont(16f));
-                menuText.setPreferredSize(new Dimension(InputField.WIDTH - 100, 25));
-                add(menuText);
+                menuText.setText("Short Answer");
             } else {
-                JLabel menuText = new JLabel("Random", SwingConstants.LEFT);
-                menuText.setFont(getFont().deriveFont(16f));
-                menuText.setPreferredSize(new Dimension(InputField.WIDTH - 100, 25));
-                add(menuText);
+                menuText.setText("Random");
             }
+            menuText.setFont(getFont().deriveFont(16f));
+            menuText.setPreferredSize(new Dimension(InputField.WIDTH - 100, 25));
+            add(menuText);
+
         }
     }
 
-    /***
+    /**
      * Interface for multiple choice questions. Allows the addition of
      * multiple choice options.
      */
@@ -192,7 +175,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
     }
 
-    /***
+    /**
      * Interface for short answer questions.
      */
     public void addShortAnswer() {
@@ -204,6 +187,9 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         add(answerInput);
     }
 
+    /**
+     * Interface for randomized questions
+     */
     public void addRandom() {
         remove(typeQuestion);
         remove(questionInput);
@@ -239,20 +225,18 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         for (int i = 0; i < randButtonOptions.length; i++) {
             randButtonOptions[i] = new RadioButton(ClickableObject.RAND_BUTTONS[i]);
             randButtonOptions[i].addMouseListener(this);
-            int optionId = randButtonOptions[i].getID();
             add(randButtonOptions[i]);
 
-            if (optionId == ClickableObject.RMC_BUTTON) {
-                JLabel menuText = new JLabel("Multiple Choice", SwingConstants.LEFT);
-                menuText.setFont(getFont().deriveFont(16f));
-                menuText.setPreferredSize(new Dimension(InputField.WIDTH - 135, 20));
-                add(menuText);
+            JLabel menuText = new JLabel("", SwingConstants.LEFT);
+            ;
+            if (randButtonOptions[i].getID() == ClickableObject.RMC_BUTTON) {
+                menuText.setText("Multiple Choice");
             } else {
-                JLabel menuText = new JLabel("Short Answer", SwingConstants.LEFT);
-                menuText.setFont(getFont().deriveFont(16f));
-                menuText.setPreferredSize(new Dimension(InputField.WIDTH-100, 20));
-                add(menuText);
+                menuText.setText("Short Answer");
             }
+            menuText.setFont(getFont().deriveFont(16f));
+            menuText.setPreferredSize(new Dimension(InputField.WIDTH - 135, 20));
+            add(menuText);
         }
     }
 
@@ -356,7 +340,7 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         }
     }
 
-    /***
+    /**
      * Saves the question and adds it to the database.
      */
     private void saveQuestion() {
@@ -374,7 +358,6 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
                 multipleChoiceOptions[i].setText("");
             }
-            DatabaseManager.addQuestion(new Question(question, correctAnswer, "", answerChoices));
         } else if (questionType == ClickableObject.SA_BUTTON) {
             correctAnswer = answerInput.getText();
             answerInput.setText("");
@@ -387,12 +370,13 @@ public class AddQuestionPage extends JPanel implements MouseListener {
                 }
             }
             if (randButtonOptions[0].isSelected()) {
-                answerChoices[0] = "0"; answerChoices[1] = "0"; answerChoices[2] = "0";
+                answerChoices[0] = "0";
+                answerChoices[1] = "0";
+                answerChoices[2] = "0";
             } else {
                 answerChoices = null;
             }
         }
-
 
         DatabaseManager.addQuestion(new Question(question, correctAnswer, "", answerChoices));
         saveMessage.setText("Question Saved");

@@ -15,7 +15,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/***
+/**
  * Page to show all available assignments previously created.
  * Also has an option to add a new assignment.
  */
@@ -34,9 +34,9 @@ public class AvailableAssignments extends JPanel implements MouseListener {
     private JPanel assignmentPanel;
     private int assignPanelHeight = WINDOW_HEIGHT - 200;
 
-    /***
+    /**
      * Prepares the page to display all assignments passed.
-     * 
+     *
      * @param assignments the list of assignments to display
      */
     public AvailableAssignments(List<Assignment> assignments) {
@@ -68,7 +68,7 @@ public class AvailableAssignments extends JPanel implements MouseListener {
         addAssignments();
     }
 
-    /***
+    /**
      * Section to add assignments to the page.
      */
     private void addAssignments() {
@@ -124,10 +124,12 @@ public class AvailableAssignments extends JPanel implements MouseListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) { }
+    public void mousePressed(MouseEvent e) {
+    }
 
     @Override
-    public void mouseReleased(MouseEvent e) { }
+    public void mouseReleased(MouseEvent e) {
+    }
 
     @Override
     public void mouseEntered(MouseEvent e) {

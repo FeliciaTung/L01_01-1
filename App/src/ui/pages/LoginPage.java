@@ -11,28 +11,24 @@ import ui.components.Label;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import ui.components.ClickableObject;
 
-/***
+/**
  * Page for logging in. The type of user is then determined by ID.
  */
 public class LoginPage extends JPanel implements MouseListener {
 
-    //private Button studentButton;
-    //private Button instructorButton;
     private Button loginButton;
     private InputField[] input;
     private String[] userInfo;
     private JPasswordField password;
     private Label title;
-    private Label newuser;
+    private Label newUser;
 
-    /***
+    /**
      * Prepares the page for the user to input their information.
      */
     public LoginPage() {
@@ -49,7 +45,7 @@ public class LoginPage extends JPanel implements MouseListener {
         add(UIManager.getSpacing(800, 30));
     }
 
-    /***
+    /**
      * Adds the content to display for the login page.
      */
     private void addContent() {
@@ -72,7 +68,7 @@ public class LoginPage extends JPanel implements MouseListener {
             if (i == 0) {
                 input[i] = new InputField();
                 add(input[i]);
-            } else{
+            } else {
                 password.setPreferredSize(new Dimension(InputField.WIDTH, InputField.HEIGHT));
                 password.setBackground(new Color(240, 240, 240));
                 password.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -89,11 +85,11 @@ public class LoginPage extends JPanel implements MouseListener {
 
         add(UIManager.getSpacing(800, 40));
 
-        newuser = new Label("Not a user? Click here", SwingConstants.CENTER);
-        newuser.setPreferredSize(new Dimension(250, 45));
-        newuser.setFont(getFont().deriveFont(24f));
-        newuser.addMouseListener(this);
-        add(newuser);
+        newUser = new Label("Not a user? Click here", SwingConstants.CENTER);
+        newUser.setPreferredSize(new Dimension(250, 45));
+        newUser.setFont(getFont().deriveFont(24f));
+        newUser.addMouseListener(this);
+        add(newUser);
     }
 
     @Override
@@ -111,7 +107,7 @@ public class LoginPage extends JPanel implements MouseListener {
                         case ClickableObject.USER_TYPE_1:
                             UIManager.switchView(new InstructorHomePage());
                             break;
-                        }
+                    }
                 } else {
                     showErrorMessage();
                 }
@@ -129,15 +125,12 @@ public class LoginPage extends JPanel implements MouseListener {
         title.setBackground(Color.RED);
         title.setOpaque(true);
 
-        Timer t = new Timer(5000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                title.setText("Login");
-                title.setPreferredSize(new Dimension(800, 50));
-                title.setFont(getFont().deriveFont(24f));
-                title.setForeground(Color.BLACK);
-                title.setBackground(Color.WHITE);
-            }
+        Timer t = new Timer(5000, actionEvent -> {
+            title.setText("Login");
+            title.setPreferredSize(new Dimension(800, 50));
+            title.setFont(getFont().deriveFont(24f));
+            title.setForeground(Color.BLACK);
+            title.setBackground(Color.WHITE);
         });
         t.setRepeats(false);
         t.start();
@@ -154,9 +147,9 @@ public class LoginPage extends JPanel implements MouseListener {
         return valid;
     }
 
-    /***
+    /**
      * Login button to determine user type.
-     * 
+     *
      * @return the type of user logging in.
      */
     private int loginButton() {
@@ -186,7 +179,7 @@ public class LoginPage extends JPanel implements MouseListener {
                 loginButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
             case ClickableObject.LABEL:
-                newuser.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                newUser.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 break;
         }
     }
@@ -196,6 +189,6 @@ public class LoginPage extends JPanel implements MouseListener {
             case ClickableObject.LOGIN_BUTTON:
                 loginButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
-            }
         }
+    }
 }
