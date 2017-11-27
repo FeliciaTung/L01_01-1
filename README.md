@@ -7,9 +7,9 @@ This project is to build an encouraging assignment system for statistic students
 
 This [file](https://github.com/CSCC01F17/L01_01/blob/master/project_documentation/ProjectTeamAgreement.pdf) is an introduction to cRAFTers (our team for this project).
 
-We have identified the key personas and developed user stories from the personas, which can be found [here](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/userpersonas+stories_v3.pdf) (Updated 11-20-2017).
+We have identified the key personas and developed user stories from the personas, which can be found [here](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/userpersonas+stories_v4_FINAL.pdf) (Updated 11-27-2017).
 
-You may also view our report on how we describe our strategies in verifying, validating, and reviewing our code [here](https://github.com/CSCC01F17/L01_01/blob/master/project_documentation/verify-validate-review.pdf).
+You may also view our report on how we describe our strategies in verifying, validating, and reviewing our code [here](https://github.com/CSCC01F17/L01_01/blob/master/project_documentation/verify-validate-review_v2_FINAL.pdf).
 
 Our Sprints can be found here:
 
@@ -18,6 +18,7 @@ Our Sprints can be found here:
 [Sprint 2](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint2.pdf)  
 [Sprint 3](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint3.pdf)  
 [Sprint 4](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint4.pdf)  
+[Sprint 5](https://github.com/CSCC01F17/L01_01/blob/master/product_backlog/product_backlog_sprint5.pdf)  
 
 [Code Review Debriefing Video](https://www.youtube.com/watch?v=XfbQsTs4Va4) 
 
