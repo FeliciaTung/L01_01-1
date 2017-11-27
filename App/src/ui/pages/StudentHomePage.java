@@ -11,6 +11,9 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/***
+ * Home page for the student upon login.
+ */
 public class StudentHomePage extends JPanel implements MouseListener {
 
     private static int WINDOW_WIDTH = 800;
@@ -19,6 +22,9 @@ public class StudentHomePage extends JPanel implements MouseListener {
     private JLabel title;
     private Button viewAssignmentsButton;
 
+    /***
+     * Prepares the page for the student to access assignments.
+     */
     public StudentHomePage() {
         title = new JLabel("Welcome \"Student\"", SwingConstants.CENTER);
         viewAssignmentsButton = new Button("View Assignments");

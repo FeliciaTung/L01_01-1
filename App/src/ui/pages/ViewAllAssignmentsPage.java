@@ -14,7 +14,9 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/***
+ * Page to display all existing assignments.
+ */
 public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
 
     /*
@@ -37,6 +39,11 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
     private Button backButton;
     private JPanel assignPanel;
 
+    /***
+     * Prepares the page to display all assignments.
+     * 
+     * @param assignments the list of assignments to be displayed
+     */
     public ViewAllAssignmentsPage(List<Assignment> assignments) {
         super();
         numOfAssignments = assignments.size();
@@ -87,6 +94,9 @@ public class ViewAllAssignmentsPage extends JPanel implements MouseListener {
         addAssignmentPanel();
     }
 
+    /***
+     * Small panel to add more assignments to the database.
+     */
     private void addAssignmentPanel(){
         int totalHeight = 0;
         for (int i = 0; i < numOfAssignments; i++) {

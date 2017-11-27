@@ -11,7 +11,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+/***
+ * Class to perform all SQL related functions. Used mainly for the purpose of
+ * adding objects to the database (users, questions, assignments), retrieving
+ * information to construct objects in the UI, and update records like marks.
+ */
 public class DatabaseManager {
     public static Connection conn;
     private static String sql;
@@ -28,6 +32,13 @@ public class DatabaseManager {
         }
     }
 
+    /***
+     * Adds a new question to the database based on the question object attributes.
+     * Also checks if a multiple choice question, to appropriately populate the
+     * list of multiple choice answers.
+     * 
+     * @param question the question object to be added
+     */
     public static void addQuestion(Question question) {
         // SQL Query
         int questionType = (question.multipleChoices == null)? 2: 1;
@@ -74,6 +85,13 @@ public class DatabaseManager {
         }
     }
 
+    /***
+     * Gets a question and constructs the question object before returning,
+     * based on the provided questionID.
+     * 
+     * @param questionID 	the id of the question to retrieve
+     * @return 				the question object for the given id, or null not existing
+     */
     public static Question getQuestion(int questionID) {
 
 
@@ -168,6 +186,12 @@ public class DatabaseManager {
         return null;
     }
 
+    /***
+     * Adds a new user into the database, based on the attributes of the user
+     * object passed.
+     * 
+     * @param user	the user to be added into the database
+     */
     public static void addUser(User user) {
     	try {
             sql = "INSERT INTO users(uname, email, password, cid, type) VALUES(?, ?, ?, ?, ?)";
@@ -185,6 +209,14 @@ public class DatabaseManager {
         }
     }
 
+    /***
+     * Gets a user based on specified user and password inputs. This only
+     * returns the user if both are correct.
+     * 
+     * @param user 	the name of the user
+     * @param pass 	the password of the user
+     * @return		the user object to load information for
+     */
     public static User getUser(String user, String pass) {
         try {
             sql = "SELECT uid, uname, email, password, cid, type FROM users WHERE uname=? AND password=?";
@@ -210,6 +242,11 @@ public class DatabaseManager {
         return null;
     }
 
+    /***
+     * Adds an assignment to the database based on the assignment object attributes.
+     * 
+     * @param assignment the assignment object to store
+     */
     public static void addAssignment(Assignment assignment) {
         int aid = -1;
 
@@ -246,6 +283,13 @@ public class DatabaseManager {
         }
     }
 
+    /***
+     * Gets an assignment based on specified assignment id. Returns the object
+     * with the appropriate assignment attributes.
+     * 
+     * @param assignmentID	id of the assignment to retrieve
+     * @return				the assignment object with appropriate attributes
+     */
     public static Assignment getAssignment(int assignmentID) {
         String aname = "";
         String date = "";

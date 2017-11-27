@@ -16,6 +16,9 @@ import java.awt.event.MouseListener;
 
 import ui.components.ClickableObject;
 
+/***
+ * Page for logging in. The type of user is then determined by ID.
+ */
 public class LoginPage extends JPanel implements MouseListener {
 
     //private Button studentButton;
@@ -26,6 +29,9 @@ public class LoginPage extends JPanel implements MouseListener {
     private JPasswordField password;
     private Label title;
 
+    /***
+     * Prepares the page for the user to input their information.
+     */
     public LoginPage() {
 
         loginButton = new LoginButton();
@@ -40,6 +46,9 @@ public class LoginPage extends JPanel implements MouseListener {
         add(UIManager.getSpacing(800, 30));
     }
 
+    /***
+     * Adds the content to display for the login page.
+     */
     private void addContent() {
         // clear everything
         removeAll();
@@ -90,6 +99,9 @@ public class LoginPage extends JPanel implements MouseListener {
         }
     }
 
+    /***
+     * Error message for invalid passwords.
+     */
     private void pwErrorMessage() {
         title.setText("Please enter a valid password");
         title.setForeground(Color.WHITE);
@@ -111,6 +123,9 @@ public class LoginPage extends JPanel implements MouseListener {
         */
     }
 
+    /***
+     * Error message for inexisting user.
+     */
     private void loginErrorMessage() {
         title.setText("User not found, please try again");
         title.setForeground(Color.WHITE);
@@ -138,6 +153,11 @@ public class LoginPage extends JPanel implements MouseListener {
     }
     */
 
+    /***
+     * Login button to determine user type.
+     * 
+     * @return the type of user logging in.
+     */
     private int loginButton() {
         String uname = input[0].getText();
         String pw = new String(password.getPassword());
