@@ -11,6 +11,8 @@ import ui.components.Label;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -28,6 +30,7 @@ public class LoginPage extends JPanel implements MouseListener {
     private String[] userInfo;
     private JPasswordField password;
     private Label title;
+    private Label newuser;
 
     /***
      * Prepares the page for the user to input their information.
@@ -83,31 +86,49 @@ public class LoginPage extends JPanel implements MouseListener {
 
         loginButton.addMouseListener(this);
         add(loginButton);
+
+        add(UIManager.getSpacing(800, 40));
+
+        newuser = new Label("Not a user? Click here", SwingConstants.CENTER);
+        newuser.setPreferredSize(new Dimension(250, 45));
+        newuser.setFont(getFont().deriveFont(24f));
+        newuser.addMouseListener(this);
+        add(newuser);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int id = loginButton() + 40;
+        int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
-            case ClickableObject.USER_TYPE_3:
-                UIManager.switchView(new StudentHomePage());
+            case ClickableObject.LOGIN_BUTTON:
+                if (validatePassword()) {
+                    int login = loginButton() + 40;
+                    switch (login) {
+                        case ClickableObject.USER_TYPE_3:
+                            UIManager.switchView(new StudentHomePage());
+                            break;
+                        case ClickableObject.USER_TYPE_2:
+                        case ClickableObject.USER_TYPE_1:
+                            UIManager.switchView(new InstructorHomePage());
+                            break;
+                        }
+                } else {
+                    showErrorMessage();
+                }
                 break;
-            case ClickableObject.USER_TYPE_2:
-            case ClickableObject.USER_TYPE_1:
-                UIManager.switchView(new InstructorHomePage());
+            case ClickableObject.LABEL:
+                UIManager.switchView(new RegisterPage());
                 break;
         }
     }
 
-    /***
-     * Error message for invalid passwords.
-     */
-    private void pwErrorMessage() {
-        title.setText("Please enter a valid password");
+    private void showErrorMessage() {
+
+        title.setText("Please enter a valid username and password");
         title.setForeground(Color.WHITE);
         title.setBackground(Color.RED);
         title.setOpaque(true);
-        /*
+
         Timer t = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -120,38 +141,18 @@ public class LoginPage extends JPanel implements MouseListener {
         });
         t.setRepeats(false);
         t.start();
-        */
     }
 
-    /***
-     * Error message for inexisting user.
-     */
-    private void loginErrorMessage() {
-        title.setText("User not found, please try again");
-        title.setForeground(Color.WHITE);
-        title.setBackground(Color.RED);
-        title.setOpaque(true);
-        /*
-        Timer t = new Timer(5000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                title.setText("Login");
-                title.setPreferredSize(new Dimension(800, 50));
-                title.setFont(getFont().deriveFont(24f));
-                title.setForeground(Color.BLACK);
-                title.setBackground(Color.WHITE);
-            }
-        });
-        t.setRepeats(false);
-        t.start();
-        */
-    }
-
-    /*
     private boolean validatePassword() {
-        // TODO: validate password from backend
+        boolean valid = true;
+        String uname = input[0].getText();
+        String pw = new String(password.getPassword());
+        User user = DatabaseManager.getUser(uname, pw);
+        if (user == null) {
+            valid = false;
+        }
+        return valid;
     }
-    */
 
     /***
      * Login button to determine user type.
@@ -161,7 +162,6 @@ public class LoginPage extends JPanel implements MouseListener {
     private int loginButton() {
         String uname = input[0].getText();
         String pw = new String(password.getPassword());
-
         User user = DatabaseManager.getUser(uname, pw);
         CurrentSession.user = user;
         int type = user.type;
@@ -184,6 +184,9 @@ public class LoginPage extends JPanel implements MouseListener {
         switch (id) {
             case ClickableObject.LOGIN_BUTTON:
                 loginButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
+            case ClickableObject.LABEL:
+                newuser.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 break;
         }
     }

@@ -235,7 +235,11 @@ public class DatabaseManager {
                 type = rs.getInt(6);
             }
             User res_user = new User(userid, uname, email, password, cid, type);
-            return res_user;
+            if (userid == -1) {
+                return null;
+            } else {
+                return res_user;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

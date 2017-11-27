@@ -222,6 +222,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             case ClickableObject.LABEL:
                 int index = ((Label) e.getSource()).getIndex();
                 questionLabels[index].setForeground(Label.LABEL_COLOR_IDLE);
+                break;
             case ClickableObject.BACK_BUTTON:
                 backButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;

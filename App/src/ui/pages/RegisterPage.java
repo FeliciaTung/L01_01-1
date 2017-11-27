@@ -23,6 +23,7 @@ import java.util.Arrays;
 public class RegisterPage extends JPanel implements MouseListener {
 
     private Button saveButton;
+    private Button backButton;
     private InputField[] input;
     private JPasswordField[] password;
     private String[] labelText;
@@ -37,6 +38,7 @@ public class RegisterPage extends JPanel implements MouseListener {
      */
     public RegisterPage() {
         super();
+        backButton = new Button("Return to login page");
         saveButton = new SaveQuestionButton();
         input = new InputField[4]; //name, UTmail, UTORid, course and password
         password = new JPasswordField[2];
@@ -59,12 +61,18 @@ public class RegisterPage extends JPanel implements MouseListener {
     private void addContent() {
         // clear everything
         removeAll();
+
+        backButton.id = ClickableObject.BACK_BUTTON;
+        backButton.addMouseListener(this);
+        add(backButton);
+        add(UIManager.getSpacing(580, 1));
+
         title = new Label("Sign Up ", SwingConstants.CENTER);
         title.setPreferredSize(new Dimension(800, 50));
         title.setFont(getFont().deriveFont(24f));
         add(title);
 
-        add(UIManager.getSpacing(800, 40));
+        add(UIManager.getSpacing(800, 20));
 
         // add "name", "UTORid", "enrolled course", "UTmail", "password", "confirm password"
         int pwCount = 0;
@@ -132,6 +140,9 @@ public class RegisterPage extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int id = ((ClickableObject) e.getSource()).getID();
         switch (id) {
+            case ClickableObject.BACK_BUTTON:
+                UIManager.switchView(new LoginPage());
+                break;
             case ClickableObject.SAVE_QUESTION:
                 if (validateInput()) {
                     saveUser();
@@ -214,6 +225,9 @@ public class RegisterPage extends JPanel implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
+            case ClickableObject.BACK_BUTTON:
+                backButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
             case ClickableObject.SAVE_QUESTION:
                 saveButton.setBackground(Button.BUTTON_COLOR_PRESSED);
                 break;
@@ -224,6 +238,9 @@ public class RegisterPage extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         switch (((ClickableObject) e.getSource()).getID()) {
+            case ClickableObject.BACK_BUTTON:
+                backButton.setBackground(Button.BUTTON_COLOR_IDLE);
+                break;
             case ClickableObject.SAVE_QUESTION:
                 saveButton.setBackground(Button.BUTTON_COLOR_IDLE);
                 break;
