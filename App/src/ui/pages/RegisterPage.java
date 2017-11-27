@@ -29,6 +29,9 @@ public class RegisterPage extends JPanel implements MouseListener {
     private String[] userType;
     private String selectedType;
     private Label title;
+    private JLabel saveMessage;
+    private int WINDOW_WIDTH = 800;
+
 
     /**
      * Registration page for users. Contains fields to input the required
@@ -43,13 +46,14 @@ public class RegisterPage extends JPanel implements MouseListener {
         labelText = new String[]{"name", "UTORid", "enrolled course", "UTmail", "password", "confirm password"};
         userType = new String[]{"Instructor", "TA", "Student"};
         selectedType = new String();
+        saveMessage = new JLabel("", SwingConstants.CENTER);
         userTypeButtons = new RadioButton[3];
-        setPreferredSize(new Dimension(800, 680));
+        setPreferredSize(new Dimension(WINDOW_WIDTH, 680));
         setBackground(Color.WHITE);
 
         addContent();
 
-        add(UIManager.getSpacing(800, 30));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 30));
 
 
     }
@@ -67,18 +71,18 @@ public class RegisterPage extends JPanel implements MouseListener {
         add(UIManager.getSpacing(580, 1));
 
         title = new Label("Sign Up ", SwingConstants.CENTER);
-        title.setPreferredSize(new Dimension(800, 50));
+        title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
         title.setFont(getFont().deriveFont(24f));
         add(title);
 
-        add(UIManager.getSpacing(800, 20));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 20));
 
         // add "name", "UTORid", "enrolled course", "UTmail", "password", "confirm password"
         int pwCount = 0;
         for (int i = 0; i < labelText.length; i++) {
             if (i % 2 == 0) {
                 if (i > 0) {
-                    add(UIManager.getSpacing(800, 20));
+                    add(UIManager.getSpacing(WINDOW_WIDTH, 20));
                 }
 
 
@@ -114,7 +118,7 @@ public class RegisterPage extends JPanel implements MouseListener {
             }
 
         }
-        add(UIManager.getSpacing(800, 40));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 40));
 
         for (int i = 0; i < userTypeButtons.length; i++) {
             userTypeButtons[i] = new RadioButton(ClickableObject.USER_TYPE_OPTIONS[i]);
@@ -127,10 +131,13 @@ public class RegisterPage extends JPanel implements MouseListener {
             add(userTypeText);
         }
         userTypeButtons[0].select();
-        add(UIManager.getSpacing(800, 40));
+        add(UIManager.getSpacing(WINDOW_WIDTH, 20));
 
         saveButton.addMouseListener(this);
         add(saveButton);
+
+        saveMessage.setPreferredSize(new Dimension(WINDOW_WIDTH, 30));
+        add(saveMessage);
 
     }
 
@@ -168,14 +175,14 @@ public class RegisterPage extends JPanel implements MouseListener {
      */
     private void showErrorMessage() {
 
-        title.setText("Please make sure your passwords are the same");
+        title.setText("Please make sure no field is empty and passwords match");
         title.setForeground(Color.WHITE);
         title.setBackground(Color.RED);
         title.setOpaque(true);
 
         Timer t = new Timer(5000, e -> {
             title.setText("Sign Up");
-            title.setPreferredSize(new Dimension(800, 50));
+            title.setPreferredSize(new Dimension(WINDOW_WIDTH, 50));
             title.setFont(getFont().deriveFont(24f));
             title.setForeground(Color.BLACK);
             title.setBackground(Color.WHITE);
@@ -196,14 +203,20 @@ public class RegisterPage extends JPanel implements MouseListener {
         for (int i = 0; i < userTypeButtons.length; i++) {
             if (userTypeButtons[i].isSelected()) {
                 selectedType = userType[i];
+                break;
             }
         }
-
-        // TODO: validate user type
-
         // check password
         if (Arrays.equals(password[0].getPassword(), password[1].getPassword())) {
             result = true;
+        }
+
+        // check other fields are not empty
+        for (int i = 0; i < input.length; i++) {
+            if (input[i].getText().trim().equals("") || input[i].getText() == null) {
+                result = false;
+                break;
+            }
         }
         return result;
     }
@@ -266,7 +279,12 @@ public class RegisterPage extends JPanel implements MouseListener {
                 type = -1;
                 break;
         }
-
         DatabaseManager.addUser(new User(UTORid, email, pw, DatabaseManager.getCourseID(course), type));
+        saveMessage.setText("Registered!");
+        Timer timer = new Timer(4000, (actionEvent) -> saveMessage.setText(""));
+        timer.setRepeats(false);
+        timer.setCoalesce(true);
+        timer.start();
+
     }
 }

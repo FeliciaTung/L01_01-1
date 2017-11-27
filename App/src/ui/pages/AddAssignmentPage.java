@@ -24,7 +24,6 @@ import java.util.List;
 public class AddAssignmentPage extends JPanel implements MouseListener {
 
     private Button saveButton;
-
     private InputField assignmentInput;
     private List<Question> questionList;
     private Label[] questionLabels;
@@ -39,6 +38,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
     private InputField dueDateInput;
     private Button backButton;
     private JPanel questionPanel;
+    private JLabel saveMessage;
 
     /**
      * Prepares the page to select questions for an assignment.
@@ -58,6 +58,7 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         questionPanel = new JPanel();
         questionPanel.setBackground(Color.WHITE);
         typeDueDate = "Due Date (yyyy/mm/dd)";
+        saveMessage = new JLabel("", SwingConstants.CENTER);
 
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setBackground(Color.WHITE);
@@ -99,6 +100,8 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
         saveButton.addMouseListener(this);
         add(saveButton);
 
+        saveMessage.setPreferredSize(new Dimension(WINDOW_WIDTH, 30));
+        add(saveMessage);
     }
 
     /**
@@ -230,6 +233,11 @@ public class AddAssignmentPage extends JPanel implements MouseListener {
             }
         }
         DatabaseManager.addAssignment(new Assignment(assignName, CurrentSession.user.courseID, selectedQuestion, dueDate));
+        saveMessage.setText("Assignment Saved!");
+        Timer timer = new Timer(4000, (actionEvent) -> saveMessage.setText(""));
+        timer.setRepeats(false);
+        timer.setCoalesce(true);
+        timer.start();
     }
 
     /**
