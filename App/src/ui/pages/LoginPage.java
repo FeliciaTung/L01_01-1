@@ -81,7 +81,7 @@ public class LoginPage extends JPanel implements MouseListener {
         add(UIManager.getSpacing(800, 40));
 
         newuser = new Label("Not a user? Click here", SwingConstants.CENTER);
-        newuser.setPreferredSize(new Dimension(800, 50));
+        newuser.setPreferredSize(new Dimension(250, 45));
         newuser.setFont(getFont().deriveFont(24f));
         newuser.addMouseListener(this);
         add(newuser);
@@ -170,6 +170,9 @@ public class LoginPage extends JPanel implements MouseListener {
         switch (id) {
             case ClickableObject.LOGIN_BUTTON:
                 loginButton.setBackground(Button.BUTTON_COLOR_PRESSED);
+                break;
+            case ClickableObject.LABEL:
+                newuser.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 break;
         }
     }

@@ -140,32 +140,31 @@ public class AssignmentPage extends JPanel implements MouseListener {
     }
 
     private void statsTwo(Question q) {
-        int num1 = rand.nextInt(50) + 1;
-        int num2 = rand.nextInt(50) + 1;
-        int num3 = rand.nextInt(50) + 1;
-        int num4 = rand.nextInt(50) + 1;
-        int num5 = rand.nextInt(50) + 1;
-        int num6 = rand.nextInt(50) + 1;
-        int num7 = rand.nextInt(50) + 1;
-        int num8 = rand.nextInt(50) + 1;
-        int num9 = rand.nextInt(50) + 1;
-        int num10 = rand.nextInt(50) + 1;
-        int sum = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 + num10;
+        ArrayList<Integer> nums = new ArrayList<>();
+        int j = 0;
+        while (j < 10) {
+            nums.add(rand.nextInt(50)+1);
+            j++;
+        }
+        int sum = 0;
+        for (Integer i : nums) {
+            sum += i;
+        }
         int mean = sum/10;
         String[] answerChoices = new String[3];
 
         String question = String.format("Find x and y such that the data set S has " +
                 "a mean of %d. S = {%d, %d, %d, %d, %d, x, %d, %d, %d, y}. " +
-                        "Answer should be in the form: x = ?, y = ?", mean, num1, num2, num3, num4, num5, num7,
-                num8, num9);
+                        "Answer should be in the form: x = ?, y = ?", mean, nums.get(0), nums.get(1), nums.get(2),
+                nums.get(3), nums.get(4), nums.get(6), nums.get(7), nums.get(8));
         q.question = question;
-        String correctAnswer = "x = " + Integer.toString(num6) + ", y = " + Integer.toString(num10);
+        String correctAnswer = "x = " + Integer.toString(nums.get(5)) + ", y = " + Integer.toString(nums.get(9));
         q.answer = correctAnswer;
 
         String op1, op2, op3;
-        op1 = "x = " + Integer.toString(num6-3) + ", y = " + Integer.toString(num10+7);
-        op2 = "x = " + Integer.toString(num6+6) + ", y = " + Integer.toString(num10+1);
-        op3 = "x = " + Integer.toString(num6-4) + ", y = " + Integer.toString(num10+3);
+        op1 = "x = " + Integer.toString(nums.get(5)-3) + ", y = " + Integer.toString(nums.get(9)+7);
+        op2 = "x = " + Integer.toString(nums.get(5)+6) + ", y = " + Integer.toString(nums.get(9)+1);
+        op3 = "x = " + Integer.toString(nums.get(5)-4) + ", y = " + Integer.toString(nums.get(9)+3);
 
         answerChoices[0] = op1;
         answerChoices[1] = op2;

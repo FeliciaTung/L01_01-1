@@ -197,11 +197,6 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         for (int i = 0; i < randMenuOptions.length; i++) {
             randMenuOptions[i] = new RadioButton(ClickableObject.RAND_OPTIONS[i]);
             randMenuOptions[i].addMouseListener(this);
-            int optionId = randMenuOptions[i].getID();
-            // radio button resets to deselected when question type is updated
-            if (optionId == questionType) {
-                randMenuOptions[i].select();
-            }
 
             add(UIManager.getSpacing(WINDOW_WIDTH / 20, 1));
             add(randMenuOptions[i]);
@@ -223,10 +218,6 @@ public class AddQuestionPage extends JPanel implements MouseListener {
             randButtonOptions[i] = new RadioButton(ClickableObject.RAND_BUTTONS[i]);
             randButtonOptions[i].addMouseListener(this);
             int optionId = randButtonOptions[i].getID();
-            // radio button resets to deselected when question type is updated
-            if (optionId == questionType) {
-                randButtonOptions[i].select();
-            }
             add(randButtonOptions[i]);
 
             if (optionId == ClickableObject.RMC_BUTTON) {
