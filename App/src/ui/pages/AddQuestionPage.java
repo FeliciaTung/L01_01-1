@@ -18,6 +18,9 @@ import java.awt.event.MouseListener;
 
 import java.util.Random;
 
+/***
+ * Page to add questions, not accessible by students.
+ */
 public class AddQuestionPage extends JPanel implements MouseListener {
 
     private Button saveButton;
@@ -36,6 +39,9 @@ public class AddQuestionPage extends JPanel implements MouseListener {
     private int WINDOW_HEIGHT = 680;
     String[] randLabels = {"Simple Math", "Intermediate Statistics Question", "Expert Statistics Question"};
 
+    /***
+     * Prepares the page by adding the required buttons.
+     */
     public AddQuestionPage() {
         super();
         saveButton = new SaveQuestionButton();
@@ -54,6 +60,12 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         addContent(false);
     }
 
+    /***
+     * Prepares the page to add a question based on selection. Used for
+     * multiple choice or short answer selection.
+     * 
+     * @param typeChose determines whether a question will be added or not
+     */
     private void addContent(boolean typeChose) {
         // clear everything
         removeAll();
@@ -104,6 +116,9 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
     }
 
+    /***
+     * Selects whether it will be a short answer or multiple choice.
+     */
     private void addQuestionTypeSelection(){
         add(UIManager.getSpacing(100, 1));
         for (int i = 0; i < topMenuOptions.length; i++) {
@@ -135,6 +150,10 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         }
     }
 
+    /***
+     * Interface for multiple choice questions. Allows the addition of
+     * multiple choice options.
+     */
     public void addMultipleChoice() {
         for (int i = 0; i < multipleChoiceOptions.length; i++) {
             if (i % 2 == 0) {
@@ -173,6 +192,9 @@ public class AddQuestionPage extends JPanel implements MouseListener {
 
     }
 
+    /***
+     * Interface for short answer questions.
+     */
     public void addShortAnswer() {
         add(UIManager.getSpacing(100, 1));
 
@@ -334,6 +356,9 @@ public class AddQuestionPage extends JPanel implements MouseListener {
         }
     }
 
+    /***
+     * Saves the question and adds it to the database.
+     */
     private void saveQuestion() {
         String question = questionInput.getText();
         questionInput.setText("");

@@ -15,7 +15,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-
+/***
+ * Page to view an assignment.
+ */
 public class ViewAssignmentPage extends JPanel implements MouseListener {
 
 
@@ -30,6 +32,11 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
     private Label assignmentLabel;
     private JPanel questionPanel;
 
+    /***
+     * Prepares the page to display the questions in the assignment.
+     * 
+     * @param assignment the assignment to load information from
+     */
     public ViewAssignmentPage(Assignment assignment) {
         super();
         questionList = assignment.getQuestions();
@@ -67,6 +74,9 @@ public class ViewAssignmentPage extends JPanel implements MouseListener {
         add(backButton);
     }
 
+    /***
+     * Adds the questions to display in the page.
+     */
     private void addQuestions(){
         int totalHeight = 10;
         for (int i = 0; i < questionList.size(); i++) {

@@ -17,6 +17,10 @@ import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 
+/***
+ * Page to take an assignment. Also displays correct and wrong answers
+ * by using colors.
+ */
 public class AssignmentPage extends JPanel implements MouseListener {
 
     private List<Question> questions;
@@ -31,6 +35,12 @@ public class AssignmentPage extends JPanel implements MouseListener {
     private InputField shortAnswerInput;
     Random rand = new Random();
 
+    /***
+     * Creates the page and displays the first question. Goes through to show
+     * other questions too on clicks.
+     * 
+     * @param assignment the assignment object to get information from
+     */
     public AssignmentPage(Assignment assignment) {
         super();
         this.assignment = assignment;
@@ -224,6 +234,12 @@ public class AssignmentPage extends JPanel implements MouseListener {
         }
     }
 
+    /***
+     * Highlights the background depending on the answer selected, to show
+     * whether it was correct or not.
+     * 
+     * @param selectedAnswer the answer selected by the user
+     */
     private void answerSelected(MultipleChoiceAnswer selectedAnswer) {
         if (questions.get(currentQuestion).answer.equals(selectedAnswer.getText())) {
             selectedAnswer.setBackground(Color.green);
@@ -240,6 +256,9 @@ public class AssignmentPage extends JPanel implements MouseListener {
         nextQuestion.setVisible(true);
     }
 
+    /***
+     * Sets the next question and displays it after the one previously was completed.
+     */
     private void setNextQuestion() {
         if (shortAnswerInput.getText() != null && !shortAnswerInput.getText().equals("")) {
             if (questions.get(currentQuestion).answer.equals(shortAnswerInput.getText())) {
@@ -278,6 +297,9 @@ public class AssignmentPage extends JPanel implements MouseListener {
         repaint();
     }
 
+    /***
+     * Shows the possible answers for multiple choice questions.
+     */
     private void showMultipleChoiceQuestion() {
         List<String> answers = new ArrayList<>(Arrays.asList(questions.get(currentQuestion).multipleChoices));
         answers.add(questions.get(currentQuestion).answer);
@@ -291,12 +313,18 @@ public class AssignmentPage extends JPanel implements MouseListener {
         nextQuestion.setVisible(false);
     }
 
+    /***
+     * Shows the short answer question, making it visible.
+     */
     private void showShortAnswerQuestion() {
         shortAnswerInput.setText("");
         add(shortAnswerInput);
         nextQuestion.setVisible(true);
     }
 
+    /***
+     * Displays the finished page after all the information has been determined.
+     */
     private void showFinishedPage() {
         float mark = Math.round((float) correctAnswers / currentQuestion * 100);
         saveMark(mark);
@@ -310,10 +338,18 @@ public class AssignmentPage extends JPanel implements MouseListener {
         nextQuestion.setVisible(true);
     }
 
+    /***
+     * Saves the mark to the database.
+     * 
+     * @param mark the mark to be saved
+     */
     private void saveMark(float mark) {
         DatabaseManager.updateAssignmentMark(assignment.id, mark);
     }
 
+    /***
+     * Resizes the UI bounds to fit the displayed elements.
+     */
     private void resize() {
         progress.setBounds(0, 0, getPreferredSize().width, 50);
         question.setBounds(0, 50, getPreferredSize().width, 125);

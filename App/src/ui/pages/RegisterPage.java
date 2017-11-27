@@ -16,6 +16,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 
+/***
+ * Registration page. Allows for registering a user and adding them
+ * to the database.
+ */
 public class RegisterPage extends JPanel implements MouseListener {
 
     private Button saveButton;
@@ -28,6 +32,10 @@ public class RegisterPage extends JPanel implements MouseListener {
     private String selectedType;
     private Label title;
 
+    /***
+     * Registration page for users. Contains fields to input the required
+     * information.
+     */
     public RegisterPage() {
         super();
         backButton = new Button("Return to login page");
@@ -47,6 +55,9 @@ public class RegisterPage extends JPanel implements MouseListener {
 
     }
 
+    /***
+     * Sets up content for the user to provide their information.
+     */
     private void addContent() {
         // clear everything
         removeAll();
@@ -153,6 +164,9 @@ public class RegisterPage extends JPanel implements MouseListener {
         }
     }
 
+    /***
+     * Error message for differing passwords.
+     */
     private void showErrorMessage() {
 
         title.setText("Please make sure your passwords are the same");
@@ -174,6 +188,11 @@ public class RegisterPage extends JPanel implements MouseListener {
         t.start();
     }
 
+    /***
+     * Checks to see whether the passwords inserted match.
+     * 
+     * @return true for matching passwords, false otherwise
+     */
     private boolean validateInput() {
 
         boolean result = false;
@@ -228,6 +247,9 @@ public class RegisterPage extends JPanel implements MouseListener {
         }
     }
 
+    /***
+     * Finishes registration and adds the user to the database.
+     */
     private void saveUser(){
         String UTORid = input[1].getText();
         String course = input[2].getText();
